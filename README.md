@@ -1,10 +1,16 @@
-# rtopng
+<h1 align="center"><code>rtopng</code></h1>
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/atsyplenkov/rtopng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/atsyplenkov/rtopng/actions/workflows/R-CMD-check.yaml)
+<p align="center">
+  <a href="https://github.com/atsyplenkov/rtopng/actions/workflows/R-CMD-check.yaml"><img src="https://img.shields.io/github/actions/workflow/status/atsyplenkov/rtopng/R-CMD-check.yaml?style=flat&labelColor=1C2C2E&color=256bc0&logo=GitHub%20Actions&logoColor=white"></a>
+  <a href="https://app.codecov.io/gh/atsyplenkov/rtopng"><img src="https://img.shields.io/codecov/c/gh/atsyplenkov/rtopng?style=flat&labelColor=1C2C2E&color=256bc0&logo=Codecov&logoColor=white"></a>
+</p>
 <!-- badges: end -->
 
-`rtopng` is a fork and continuation of the original [`rtop` package](https://CRAN.R-project.org/package=rtop). It keeps the core top-kriging functionality for interpolation with variable spatial support while modernising the package internals and extending the feature set.
+> [!warning] 
+> This package is still in development and API is subject to change.
+
+`rtopng` is a nextgen fork and continuation of the original [`rtop` package](https://CRAN.R-project.org/package=rtop). It keeps the core top-kriging functionality for interpolation with variable spatial support while modernising the package internals and extending the feature set.
 
 This fork is intended to be rewritten using more modern R tooling, including `mirai` for parallel processing, `S7` for a more explicit object system, and `stars` for spatiotemporal datasets in place of the deprecated `spacetime` package. It also aims to add broader support for universal kriging (hope so!).
 
@@ -28,7 +34,7 @@ pak::pak("atsyplenkov/rtopng")
 
 ## Acknowledgements
 
-`rtopng` builds on the original `rtop` package by Jon Olav Skøien and the method description published in Skøien et al. ([2014](doi:10.1016/j.cageo.2014.02.009)).
+`rtopng` builds on the original `rtop` package by Jon Olav Skøien and the method description published in Skøien et al. ([2014](https://doi.org/10.1016/j.cageo.2014.02.009)).
 
 ## License
 
