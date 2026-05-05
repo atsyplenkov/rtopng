@@ -11,7 +11,7 @@ createRtopObject = function(observations, predictionLocations,
     object = observations
     object$params = getRtopParams(params, 
           observations = object$observations, formulaString = 
-            ifelse(missing(formulaString), object$formulaString, formulaString), ...)
+            if (missing(formulaString)) object$formulaString else formulaString, ...)
     return(object)
   }
   object = list()

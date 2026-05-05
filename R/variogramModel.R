@@ -1,7 +1,8 @@
 rtopVariogramModel = function(model = "Ex1", sill = NULL, range = NULL, exp = NULL,
     nugget = NULL, exp0 = NULL,
     observations = NULL, formulaString = obs~1) {
-if (model == "ex1") {
+if (tolower(model) == "ex1") {
+  model = "Ex1"
   if (!is.null(observations)) {
     parInit = findParInit(formulaString, observations, model)$par0
     if (is.null(sill)) sill = parInit[1]
