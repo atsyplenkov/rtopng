@@ -1,4 +1,4 @@
-test_that("spatial workflow matches legacy outputs", {
+test_that("kriging returns expected prediction structures", {
   fixtures <- rtopng_spatial_fixtures()
 
   set.seed(1501)
@@ -14,6 +14,31 @@ test_that("spatial workflow matches legacy outputs", {
 
   rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
   rtop_pred <- rtopKrige(rtop_obj)
+
+  expect_s4_class(rtop_cv$predictions, "SpatialPolygonsDataFrame")
+  expect_s4_class(rtop_pred$predictions, "SpatialPolygonsDataFrame")
+  expect_equal(nrow(rtop_cv$predictions), 30)
+  expect_equal(nrow(rtop_pred$predictions), 2)
+  expect_true(all(
+    c("observed", "var1.pred", "var1.var") %in% names(rtop_cv$predictions)
+  ))
+  expect_true(all(c("var1.pred", "var1.var") %in% names(rtop_pred$predictions)))
+})
+
+test_that("kriging reuses the legacy semivariance path consistently", {
+  fixtures <- rtopng_spatial_fixtures()
+
+  set.seed(1501)
+  rtop_obj <- createRtopObject(
+    fixtures$observations,
+    fixtures$prediction_locations,
+    params = fixtures$params,
+    formulaString = "obs ~ 1"
+  )
+  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
+
+  rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
+  rtop_pred <- rtopKrige(rtop_obj)
   varmat <- varMat(
     fixtures$observations,
     fixtures$prediction_locations,
@@ -25,25 +50,44 @@ test_that("spatial workflow matches legacy outputs", {
   )
   rtop_reuse <- rtopKrige(rtop_cv)
 
-  expect_s4_class(rtop_cv$predictions, "SpatialPolygonsDataFrame")
-  expect_s4_class(rtop_pred$predictions, "SpatialPolygonsDataFrame")
   expect_s4_class(rtop_reuse$predictions, "SpatialPolygonsDataFrame")
-  expect_equal(nrow(rtop_cv$predictions), 30)
-  expect_equal(nrow(rtop_pred$predictions), 2)
   expect_equal(nrow(rtop_reuse$predictions), 2)
-  expect_true(all(
-    c("observed", "var1.pred", "var1.var") %in% names(rtop_cv$predictions)
-  ))
-  expect_true(all(c("var1.pred", "var1.var") %in% names(rtop_pred$predictions)))
   expect_true(isTRUE(all.equal(varmat$varMatObs, rtop_cv$varMatObs)))
   expect_true(isTRUE(all.equal(rtop_reuse$predictions, rtop_pred$predictions)))
-  expect_lt(
-    abs(
-      cor(rtop_cv$predictions$observed, rtop_cv$predictions$var1.pred) -
-        0.1678744283
-    ),
-    1e-7
+})
+
+test_that("spatial cross-validation keeps the legacy correlation anchor", {
+  fixtures <- rtopng_spatial_fixtures()
+
+  set.seed(1501)
+  rtop_obj <- createRtopObject(
+    fixtures$observations,
+    fixtures$prediction_locations,
+    params = fixtures$params,
+    formulaString = "obs ~ 1"
   )
+  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
+  rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
+
+  expect_equal(
+    cor(rtop_cv$predictions$observed, rtop_cv$predictions$var1.pred),
+    0.1678744283,
+    tolerance = 1e-7
+  )
+})
+
+test_that("spatial variogram updates rebuild semivariance matrices", {
+  fixtures <- rtopng_spatial_fixtures()
+
+  set.seed(1501)
+  rtop_obj <- createRtopObject(
+    fixtures$observations,
+    fixtures$prediction_locations,
+    params = fixtures$params,
+    formulaString = "obs ~ 1"
+  )
+  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
+  rtop_reuse <- rtopKrige(rtopKrige(rtop_obj, cv = TRUE))
 
   rtop_updated <- varMat(rtop_reuse)
   rtop_updated <- updateRtopVariogram(rtop_updated, exp = 1.5, action = "mult")
@@ -53,6 +97,11 @@ test_that("spatial workflow matches legacy outputs", {
     rtop_updated$varMatObs,
     rtop_updated_mat$varMatObs
   )))
+  expect_true(!is.null(rtop_updated_mat$varMatObs))
+})
+
+test_that("spatial simulation stays anchored to the seeded legacy run", {
+  fixtures <- rtopng_spatial_fixtures()
 
   set.seed(1501)
   rtop_obj <- createRtopObject(
@@ -79,15 +128,39 @@ test_that("spatial workflow matches legacy outputs", {
     debug.level = -1
   )
 
-  expect_lt(abs(rtop_sim_5$simulations@data$sim1[1] - 0.01161453402), 1e-7)
-  expect_lt(abs(rtop_sim_5$simulations@data$sim2[1] - 0.01064349883), 1e-7)
-  expect_lt(abs(rtop_sim_5$simulations@data$sim4[2] - 0.01376182189), 1e-7)
-  expect_lt(abs(rtop_sim_10$simulations@data$sim1[1] - 0.0139201299), 1e-7)
-  expect_lt(abs(rtop_sim_10$simulations@data$sim6[1] - 0.0142161127), 1e-7)
-  expect_lt(abs(rtop_sim_10$simulations@data$sim7[14] - 0.02216472038), 1e-7)
+  expect_equal(
+    rtop_sim_5$simulations@data$sim1[1],
+    0.01161453402,
+    tolerance = 1e-7
+  )
+  expect_equal(
+    rtop_sim_5$simulations@data$sim2[1],
+    0.01064349883,
+    tolerance = 1e-7
+  )
+  expect_equal(
+    rtop_sim_5$simulations@data$sim4[2],
+    0.01376182189,
+    tolerance = 1e-7
+  )
+  expect_equal(
+    rtop_sim_10$simulations@data$sim1[1],
+    0.0139201299,
+    tolerance = 1e-7
+  )
+  expect_equal(
+    rtop_sim_10$simulations@data$sim6[1],
+    0.0142161127,
+    tolerance = 1e-7
+  )
+  expect_equal(
+    rtop_sim_10$simulations@data$sim7[14],
+    0.02216472038,
+    tolerance = 1e-7
+  )
 })
 
-test_that("intamap branch matches the direct kriging output", {
+test_that("intamap interpolation matches direct spatial kriging", {
   skip_if_not_installed("intamap")
   probe <- try(useRtopWithIntamap(), silent = TRUE)
   if (inherits(probe, "try-error")) {
