@@ -1,4 +1,6 @@
 .Rprofile
+^\.Renviron$
+^\.R($|/)
 docs/
 ^LICENSE\.md$
 ^\.github$

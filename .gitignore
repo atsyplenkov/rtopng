@@ -1,8 +1,12 @@
 .Rprofile
+.Renviron
+.R/
 
 # Build artifacts
 src/*.o
 src/*.so
+src/*.gcda
+src/*.gcno
 
 # Agent artefacts
 docs/
