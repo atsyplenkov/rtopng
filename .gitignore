@@ -1,1 +1,8 @@
 .Rprofile
+
+# Build artifacts
+src/*.o
+src/*.so
+
+# Agent artefacts
+docs/
