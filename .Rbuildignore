@@ -1,3 +1,5 @@
 .Rprofile
 docs/
 ^LICENSE\.md$
+^\.github$
+^README\.Rmd$
