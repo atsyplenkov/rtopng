@@ -8,7 +8,7 @@ Download additional example data from Vienna University of Technology
 }
 \usage{
 downloadRtopExampleData(folder = system.file("extdata",
-                        package="rtop"))
+                        package="rtopng"))
 }
 \arguments{
 \item{folder}{the folder to which the downloaded data set will be copied}
@@ -20,7 +20,7 @@ case replace the existing example data-set in the \code{rtop} package. Alternati
 the user can specify a separate directory for the data set.
 }
 
-\references{ 
+\references{
 Skoien J. O., R. Merz, and G. Bloschl. Top-kriging - geostatistics on stream networks.
 Hydrology and Earth System Sciences, 10:277-287, 2006.
 
@@ -32,9 +32,9 @@ Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione, A., 2
 \examples{
 \dontrun{
   downloadRtopExampleData()
-  rpath = system.file("extdata",package="rtop")
+  rpath = system.file("extdata",package="rtopng")
   library(sf)
-  observations = st_read(rpath,"observations") 
+  observations = st_read(rpath,"observations")
 }
 }
 \keyword{plot}

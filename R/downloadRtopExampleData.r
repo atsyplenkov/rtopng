@@ -1,4 +1,4 @@
-downloadRtopExampleData = function(folder = system.file("extdata",package="rtop")) {
+downloadRtopExampleData = function(folder = system.file("extdata",package="rtopng")) {
   wd = getwd()
   setwd(folder)
   download.file("http://www.hydro.tuwien.ac.at/fileadmin/mediapool-hydro/Downloads/rtopData.zip", 

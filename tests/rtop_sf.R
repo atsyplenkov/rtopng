@@ -1,9 +1,9 @@
 ## IGNORE_RDIFF_BEGIN
-library(rtop)
+library(rtopng)
 library(sf)
 set.seed(1)
 options(error = recover)
-rpath = system.file("extdata",package="rtop")
+rpath = system.file("extdata",package="rtopng")
 observations = st_read(rpath,"observations")
 # Create a column with the specific runoff:
 observations$obs = observations$QSUMMER_OB/observations$AREASQKM

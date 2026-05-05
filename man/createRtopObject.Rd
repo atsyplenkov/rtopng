@@ -1,9 +1,9 @@
 \name{createRtopObject}
 \alias{createRtopObject}
-\title{Create an object for interpolation within the rtop package}
+\title{Create an object for interpolation within the rtopng package}
 \description{
-This is a help function for creating an object (see \code{\link{rtop-package}}
- to be used for interpolation within the rtop package
+This is a help function for creating an object (see \code{\link{rtopng-package}}
+ to be used for interpolation within the rtopng package
 }
 \usage{
 createRtopObject(observations, predictionLocations,
@@ -13,20 +13,20 @@ createRtopObject(observations, predictionLocations,
 
 \arguments{
 \item{observations}{\code{\link[sp]{SpatialPolygonsDataFrame}} or \code{\link[sf]{sf}}-polygons with observations}
-\item{predictionLocations}{a \code{\link[sp]{SpatialPolygons}},  
-      \code{\link[sp]{SpatialPolygonsDataFrame}}-object or 
-       \code{\link[sf]{sf}}-polygons with 
+\item{predictionLocations}{a \code{\link[sp]{SpatialPolygons}},
+      \code{\link[sp]{SpatialPolygonsDataFrame}}-object or
+       \code{\link[sf]{sf}}-polygons with
                  prediction locations}
-\item{formulaString}{formula that defines the dependent variable as a linear model 
-      of independent variables; suppose the dependent variable has name \code{z}, 
-      for ordinary and simple kriging use the formula \code{z~1}; 
-      for universal kriging, suppose \code{z} is linearly dependent on 
+\item{formulaString}{formula that defines the dependent variable as a linear model
+      of independent variables; suppose the dependent variable has name \code{z},
+      for ordinary and simple kriging use the formula \code{z~1};
+      for universal kriging, suppose \code{z} is linearly dependent on
       \code{x} and \code{y}, use the formula \code{z~x+y}. The formulaString defaults
-      to \code{"value~1"} if \code{value} is a part of the data set. 
-      If not, the first column of the data set is used. Universal kriging 
-      is not yet properly implemented in the \code{rtop}-package, this 
+      to \code{"value~1"} if \code{value} is a part of the data set.
+      If not, the first column of the data set is used. Universal kriging
+      is not yet properly implemented in the \code{rtopng}-package, this
       element is mainly used for defining the dependent variable.}
-\item{params}{parameters to modify the default parameters of the rtop-package, 
+\item{params}{parameters to modify the default parameters of the rtopng-package,
         set internally in this function by a call to \code{\link{getRtopParams}} }
 
 \item{overlapObs}{matrix with observations that overlap each other}
@@ -36,15 +36,15 @@ createRtopObject(observations, predictionLocations,
        to pass depreceted arguments}
 }
 
-\value{ 
-An object of class \code{rtop} with observations, prediction locations, 
-parameters and possible other elements useful for interpolation in the rtop-package.
-Most other externally visible functions in the package will be able to 
+\value{
+An object of class \code{rtop} with observations, prediction locations,
+parameters and possible other elements useful for interpolation in the rtopng-package.
+Most other externally visible functions in the package will be able to
 work with this object, and add the results as a new element.
 }
 
 
-\references{ 
+\references{
 Skoien J. O., R. Merz, and G. Bloschl. Top-kriging - geostatistics on stream networks.
 Hydrology and Earth System Sciences, 10:277-287, 2006.
 
@@ -57,7 +57,7 @@ Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione, A., 2
 
 \examples{
 \donttest{
-rpath = system.file("extdata",package="rtop")
+rpath = system.file("extdata",package="rtopng")
 library(sf)
 observations = st_read(rpath, "observations")
 predictionLocations = st_read(rpath,"predictionLocations")
@@ -65,12 +65,12 @@ predictionLocations = st_read(rpath,"predictionLocations")
 # Create a column with the specific runoff:
 observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 
-# Setting some parameters 
+# Setting some parameters
 params = list(gDist = TRUE, cloud = FALSE)
 # Create a column with the specific runoff:
 observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 # Build an object
-rtopObj = createRtopObject(observations, predictionLocations, 
+rtopObj = createRtopObject(observations, predictionLocations,
                            params = params)
 }
 

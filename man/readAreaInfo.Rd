@@ -3,14 +3,14 @@
 \title{ create SpatialPointsDataFrame with observations
 of data with a spatial support }
 \description{
-readAreaInfo will read a text file with observations and descriptions of 
+readAreaInfo will read a text file with observations and descriptions of
 data with a spatial support.
 }
 \usage{
 readAreaInfo(fname = "ainfo.txt", id = "id",
                 iobs = "iobs", obs = "obs", unc = "unc",
-                filenames= "filenames", sep = "\t", 
-                debug.level = 1, moreCols = list(NULL)) 
+                filenames= "filenames", sep = "\t",
+                debug.level = 1, moreCols = list(NULL))
 }
 \arguments{
 \item{fname}{ name of file with areal information}
@@ -23,9 +23,9 @@ be used.}
 \item{sep}{separator in csv-file}
 \item{debug.level}{used for giving additional output}
 \item{moreCols}{name of other column names the user wants included in ainfo}
-} 
+}
 
-\value{ 
+\value{
 \code{\link[sp:SpatialPoints]{SpatialPointDataFrame}} with information about observations and/or
 predictionLocations.
 }
@@ -35,7 +35,7 @@ The function is of particular use when data are not available as
 shape-files, or when the observations are not part of the shape-files.
 This function is mainly for compatibility with the former FORTRAN-version.
 The simplest way to read the data in that case is through \code{\link[sf]{st_read}}. See
-also \code{\link{rtop-package}}.
+also \code{\link{rtopng-package}}.
 }
 
 \author{ Jon Olav Skoien }

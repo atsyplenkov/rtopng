@@ -1,7 +1,7 @@
 \name{useRtopWithIntamap}
 \alias{useRtopWithIntamap}
 \title{
-Integrates the rtop package with the \code{intamap} package
+Integrates the rtopng package with the \code{intamap} package
 }
 \description{
 This function makes it possible to use \code{rtop}-objects in the functions of the package.

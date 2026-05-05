@@ -18,14 +18,14 @@ Type 'q()' to quit R.
 > set.seed(1501)
 > #-----------------------------
 > ## IGNORE_RDIFF_BEGIN
-> library(rtop)
+> library(rtopng)
 > if (interactive()) options(error = recover)
 >   # Read directly from shape-files in data directory
->   rpath = system.file("extdata",package="rtop")
+>   rpath = system.file("extdata",package="rtopng")
 >   library(sf)
 Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE
 >   observations = st_read(rpath, "observations")
-Reading layer `observations' from data source 
+Reading layer `observations' from data source
   `/storage/skoiejo/Documents/R/rtop.Rcheck/rtop/extdata' using driver `ESRI Shapefile'
 Simple feature collection with 57 features and 7 fields
 Geometry type: POLYGON
@@ -33,7 +33,7 @@ Dimension:     XY
 Bounding box:  xmin: 392041.1 ymin: 454983.1 xmax: 512819.5 ymax: 543984.4
 Projected CRS: Lambert_Conformal_Conic
 >   predictionLocations = st_read(rpath, "predictionLocations")
-Reading layer `predictionLocations' from data source 
+Reading layer `predictionLocations' from data source
   `/storage/skoiejo/Documents/R/rtop.Rcheck/rtop/extdata' using driver `ESRI Shapefile'
 Simple feature collection with 235 features and 5 fields
 Geometry type: POLYGON
@@ -41,18 +41,18 @@ Dimension:     XY
 Bounding box:  xmin: 393416.8 ymin: 454919.1 xmax: 519903.3 ymax: 543984.4
 Projected CRS: Lambert_Conformal_Conic
 > ## IGNORE_RDIFF_END
->   
->   
+>
+>
 >   observations = as(observations, "Spatial")
 >   predictionLocations = as(predictionLocations, "Spatial")
 > #Finding a few prediction locations of them
->   
+>
 >   observations = observations[1:30,]
 >   predictionLocations = predictionLocations[1:2,]
->   
+>
 >   observations$obs = observations$QSUMMER_OB/observations$AREASQKM
->   
->   # Setting some parameters 
+>
+>   # Setting some parameters
 >   params = list(gDist = TRUE, cloud = FALSE, rresol = 25, hresol = 3, debug.level = -1)
 >   # Build an object
 >   rtopObj = createRtopObject(observations,predictionLocations, params = params, formulaString = "obs ~ 1" )
@@ -74,8 +74,8 @@ attr(,"criterion")
 >   #rtopObj = checkVario(rtopObj)
 >   rtopObj2 = rtopKrige(rtopObj, cv = TRUE)
 [1] "Sampling points from  30 areas"
-> 
-> 
+>
+>
 >   print(attr(rtopObj2$varMatObs,"variogramModel"), 3)
 $model
 [1] "Ex1"
@@ -89,61 +89,61 @@ attr(,"SSErr")
 [1] 0.557
 attr(,"criterion")
 [1] 0.0981
->   
+>
 >   rtopObj3 = rtopKrige(rtopObj)
 [1] "Sampling points from  30 areas"
 [1] "Sampling points from  2 areas"
 [1] "Creating prediction semivariance matrix. This can take some time."
-> 
-> 
->  varmat = varMat(observations, predictionLocations, variogramModel = rtopObj$variogramModel, 
+>
+>
+>  varmat = varMat(observations, predictionLocations, variogramModel = rtopObj$variogramModel,
 +                  gDistEst = TRUE, gDistPred = TRUE, rresol = 25, hresol = 3)
 [1] "Sampling points from  30 areas"
 [1] "Sampled on average 54.2 points from 30 areas"
 [1] "Sampling points from  2 areas"
 [1] "Sampled on average 77 points from 2 areas"
-> 
+>
 > all.equal(varmat$varMatObs, rtopObj2$varMatObs)
 [1] TRUE
 > rtopObj4 = rtopKrige(rtopObj2)
 [1] "Sampling points from  2 areas"
 [1] "Creating prediction semivariance matrix. This can take some time."
-> 
+>
 > #debug(rtop:::rtopDisc.SpatialPolygons)
 > #  rtopObj5 = rtopKrige(rtopObj, params = list(cnAreas = 5, cDlim = 10, nclus = 2))
->   
+>
 >   print(summary(rtopObj2$predictions))
-                  Length                    Class                     Mode 
-                      30 SpatialPolygonsDataFrame                       S4 
+                  Length                    Class                     Mode
+                      30 SpatialPolygonsDataFrame                       S4
 >   print(summary(rtopObj3$predictions))
-                  Length                    Class                     Mode 
-                       2 SpatialPolygonsDataFrame                       S4 
+                  Length                    Class                     Mode
+                       2 SpatialPolygonsDataFrame                       S4
 >   print(summary(rtopObj4$predictions))
-                  Length                    Class                     Mode 
-                       2 SpatialPolygonsDataFrame                       S4 
+                  Length                    Class                     Mode
+                       2 SpatialPolygonsDataFrame                       S4
 >   print(all.equal(rtopObj4$predictions, rtopObj3$predictions))
 [1] TRUE
 >   #spplot(rtopObj$predictions,col.regions = bpy.colors(), c("var1.pred","var1.var"))
->   
+>
 >   # Cross-validation
 >   #spplot(rtopObj2$predictions,col.regions = bpy.colors(), c("observed","var1.pred"))
 >   print(cor(rtopObj2$predictions$observed,rtopObj2$predictions$var1.pred))
 [1] 0.1678744
->   
-> 
-> 
-> 
+>
+>
+>
+>
 >   set.seed(1501)
 > ## IGNORE_RDIFF_BEGIN
 >   if (require(intamap)) {
 +   useRtopWithIntamap()
 +   output = interpolate(observations,predictionLocations,
-+      optList = list(formulaString = obs~1, gDist = TRUE, cloud = FALSE, nmax = 10, rresol = 25, hresol = 3), 
++      optList = list(formulaString = obs~1, gDist = TRUE, cloud = FALSE, nmax = 10, rresol = 25, hresol = 3),
 +         methodName = "rtop", iprint = -1)
 +   }
 Loading required package: intamap
 Loading required package: sp
-Loading optional package: intamap 
+Loading optional package: intamap
 
 R 2025-07-30 18:27:56.986237 interpolating 30 observations, 2 prediction locations
 [1] "rgdal has been retired. \n                           As a result of this, some of the checks on projections in the \n                           intamap package have  disappeared"
@@ -155,9 +155,9 @@ Checking object ... OK
 [1] "Creating prediction semivariance matrix. This can take some time."
 Warning messages:
 1: In predictTime(nObs = dim(observations)[1], nPred = nPred, formulaString = formulaString,  :
-  
- using standard model for estimating time. For better 
- platform spesific predictions, please run 
+
+ using standard model for estimating time. For better
+ platform spesific predictions, please run
  timeModels <- generateTimeModels()
   and save the workspace
 2: In predictTime(nObs = dim(observations)[1], nPred = nPred, formulaString = formulaString,  :
@@ -165,28 +165,28 @@ Warning messages:
 3: In interpolate(observations, predictionLocations, optList = list(formulaString = obs ~  :
   was not able to estimate prediction time for methodName rtop
 > ## IGNORE_RDIFF_END
->   
-> 
-> 
+>
+>
+>
 > # Updating variogramModel
->   
+>
 >   rtopObj5 = varMat(rtopObj4)
 >   rtopObj6 = updateRtopVariogram(rtopObj5, exp = 1.5, action = "mult")
 >   rtopObj7 = varMat(rtopObj6)
 [1] "Creating prediction semivariance matrix. This can take some time."
-> 
-> 
->   
->   
+>
+>
+>
+>
 > #  observations$obs = log(observations$obs)
->   
->   # Setting some parameters 
+>
+>   # Setting some parameters
 >   # Build an object
 >   rtopObj = createRtopObject(observations,predictionLocations, params = params, formulaString = "obs~1")
 >   # Fit a variogram (function also creates it)
 >   rtopObj = rtopFitVariogram(rtopObj, iprint = -1)
 >   #rtopObj = checkVario(rtopObj)
-> 
+>
 > rtopObj10 = rtopSim(rtopObj, nsim = 5, logdist = TRUE, debug.level = -1)
 [1] "Sampling points from  30 areas"
 [1] "Sampling points from  2 areas"
@@ -215,7 +215,7 @@ Warning messages:
 [1] "8. simulation of 30 areas"
 [1] "9. simulation of 30 areas"
 [1] "10. simulation of 30 areas"
-> 
+>
 > print(rtopObj10$simulations@data, digits = 3)
   ID EZGID AREASQKM XSTATION YSTATION     area   sim1   sim2   sim3   sim4
 1 76    76     36.0   490602   523496 35982138 0.0123 0.0106 0.0112 0.0117
@@ -317,13 +317,13 @@ Warning messages:
 28 0.02334 0.01921 0.02014
 29 0.01327 0.01246 0.01032
 30 0.01140 0.01101 0.00949
-> 
+>
 >  if (require(intamap)) {
 +     stopifnot(all.equal(rtopObj4$predictions@data$var1.pred, output$predictions@data$var1.pred))
 +     stopifnot(all.equal(rtopObj4$predictions@data$var1.var, output$predictions@data$var1.var))
 +   }
-> 
-> 
+>
+>
 > proc.time()
-   user  system elapsed 
- 25.740   3.935  26.254 
+   user  system elapsed
+ 25.740   3.935  26.254

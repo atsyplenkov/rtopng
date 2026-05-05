@@ -1,10 +1,10 @@
 set.seed(1501)
 #-----------------------------
 ## IGNORE_RDIFF_BEGIN
-library(rtop)
+library(rtopng)
 if (interactive()) options(error = recover)
   # Read directly from shape-files in data directory
-  rpath = system.file("extdata",package="rtop")
+  rpath = system.file("extdata",package="rtopng")
   library(sf)
   observations = st_read(rpath, "observations")
   predictionLocations = st_read(rpath, "predictionLocations")

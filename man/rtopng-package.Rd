@@ -1,5 +1,5 @@
-\name{rtop-package}
-\alias{rtop-package}
+\name{rtopng-package}
+\alias{rtopng-package}
 
 \title{A package providing methods for analysis and spatial interpolation
 of data with an irregular support }
@@ -20,7 +20,7 @@ The work flow within the package suggests that the user is interested in
 a prediction of a process at a series of locations where observations have not been made.
 The example below shows a regionalization of mean annual runoff in Austria.
 
-Although it is possible to perform each step with all necessary arguments, 
+Although it is possible to perform each step with all necessary arguments,
 the easiest interface to
 the method is to store all variables (such as observations, prediction locations
 and parameters) in an rtop-object, which is created by a call to
@@ -29,11 +29,11 @@ changes to the default parameters. A further description can be found
 in \code{\link{getRtopParams}}. The changes below means that
 the functions will use geostatistical distance instead of full regularization,
 and that the variogram model will be fitted to the variogram cloud.
-Most other functions in the \code{rtop}-package can take this object as an argument,
+Most other functions in the \code{rtopng}-package can take this object as an argument,
 and will add the results as one or more new element(s) to this object.
 
 The data in the example below are stored as shape-files
-in the extdata-directory of the rtop-pacakge, use the directory of your own data instead. 
+in the extdata-directory of the rtopng-package, use the directory of your own data instead.
 The observations consist of mean summer runoff
 from 138 catchments in Upper Austria. The predictionLocations are 863 catchments
 in the same region. observations and predictionLocations can either be stored as
@@ -41,7 +41,7 @@ in the same region. observations and predictionLocations can either be stored as
 
 
 \preformatted{
-rpath = system.file("extdata",package="rtop")
+rpath = system.file("extdata",package="rtopng")
 library(sf)
 observations = st_read(rpath, "observations")
 predictionLocations = st_read(rpath,"predictionLocations")
@@ -50,7 +50,7 @@ predictionLocations = st_read(rpath,"predictionLocations")
 # Create a column with the specific runoff:
 observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 params = list(gDist = TRUE, cloud = TRUE)
-rtopObj = createRtopObject(observations, predictionLocations, 
+rtopObj = createRtopObject(observations, predictionLocations,
           params = params)
 }
 
@@ -90,23 +90,23 @@ rtopObj = rtopKrige(rtopObj)
 if (is(rtopObj$predictions, "Spatial")) {
   spplot(rtopObj$predictions, col.regions = bpy.colors(), c("var1.pred"))
 } else {
-# the plotting order to get small polygons on top is not automatic with sf, 
+# the plotting order to get small polygons on top is not automatic with sf,
 # but here is a method that works without modifying the predictions
   library(dplyr)
 # Arrange according to areas attribute in descending order
   rtopObj$predictions |> arrange(desc(AREASQKM)) |>
   # Make ggplot and set fill color to var1.pred
-  ggplot(aes(fill = var1.pred)) + geom_sf() 
+  ggplot(aes(fill = var1.pred)) + geom_sf()
 }
 rtopObj = rtopKrige(rtopObj, cv = TRUE)
 
 if (is(rtopObj$predictions, "Spatial")) {
   spplot(rtopObj$predictions, col.regions = bpy.colors(), c("var1.pred","var1.var"))
 } else {
-# Here is an alternative method for plotting small polygons on top of the larger ones, 
-# modifying the predictions 
+# Here is an alternative method for plotting small polygons on top of the larger ones,
+# modifying the predictions
   rtopObj$predictions = rtopObj$predictions[order(rtopObj$predictions$AREASQ, decreasing = TRUE), ]
-# It is also possible to change the order of the polygons 
+# It is also possible to change the order of the polygons
   ggplot(rtopObj$predictions) + aes(fill = var1.pred) + geom_sf() + scale_fill_distiller(palette = "YlOrRd")
 }
 }

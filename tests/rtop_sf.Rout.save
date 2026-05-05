@@ -16,12 +16,12 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > ## IGNORE_RDIFF_BEGIN
-> library(rtop)
+> library(rtopng)
 > library(sf)
 Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE
 > set.seed(1)
 > options(error = recover)
-> rpath = system.file("extdata",package="rtop")
+> rpath = system.file("extdata",package="rtopng")
 > observations = st_read(rpath,"observations")
 Reading layer `observations' from data source 
   `/storage/skoiejo/Documents/R/rtop.Rcheck/rtop/extdata' using driver `ESRI Shapefile'

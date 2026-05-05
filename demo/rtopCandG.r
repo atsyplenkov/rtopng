@@ -1,10 +1,10 @@
-library(rtop)
+library(rtopng)
 library(rgdal)
 set.seed(1)
 
 
 # Read data sets
-rpath = system.file("extdata",package="rtop")
+rpath = system.file("extdata",package="rtopng")
 observations = readOGR(rpath, "observations")
 predictionLocations = readOGR(rpath, "predictionLocations")
 observations$obs = observations$QSUMMER_OB/observations$AREASQKM

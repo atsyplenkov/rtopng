@@ -35,13 +35,13 @@ shown, e.g. to plot to hardcopy }
 }
 \note{
 This function is mainly a wrapper around \code{\link[gstat]{plot.variogramCloud}},
-necessary because of different column names and different class names. The 
+necessary because of different column names and different class names. The
 description of arguments and value can therefore be found in
 the help page of \code{\link[gstat]{plot.variogramCloud}}.}
 
 
 
-\references{ 
+\references{
 \url{http://www.gstat.org/}
 }
 \author{ Jon Olav Skoien }
@@ -50,7 +50,7 @@ the help page of \code{\link[gstat]{plot.variogramCloud}}.}
 }
 \examples{
 \donttest{
-rpath = system.file("extdata",package="rtop")
+rpath = system.file("extdata",package="rtopng")
 library(sf)
 observations = st_read(rpath, "observations")
 
