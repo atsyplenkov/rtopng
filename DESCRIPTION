@@ -26,3 +26,4 @@ Description: Data with irregular spatial support, such as runoff related data or
 License: GPL (>= 2)
 NeedsCompilation: yes
 Encoding: UTF-8
+RoxygenNote: 7.3.3
