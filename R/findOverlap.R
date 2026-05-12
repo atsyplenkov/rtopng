@@ -1,5 +1,10 @@
 
 findOverlap = function(areas1, areas2, debug.level = 1, ...) {
+  # ST* objects (spacetime) store the geometry in the @sp slot, not at the
+  # top level. Extract it first so downstream code can safely access
+  # @polygons.
+  if (inherits(areas1, "ST")) areas1 = areas1@sp
+  if (!missing(areas2) && inherits(areas2, "ST")) areas2 = areas2@sp
   params = getRtopParams(...)
   olim = params$olim
   partialOverlap = params$partialOverlap

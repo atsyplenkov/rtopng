@@ -61,8 +61,12 @@ rtopKrige.STSDF = function(object, predictionLocations = NULL, varMatObs, varMat
       isind = sinds[istat]
       ttinds = which(indx[,1] == isind)
       lweight = weight[istat,]
-      preds = lweight %*% as.matrix(obs[,2:dim(obs)[2]])
-      diffs = sweep(obs[,2:dim(obs)[2]], 2, preds )
+      # sweep() on a data.frame returns a data.frame, but the subsequent
+      # matrix multiplication requires a numeric matrix. Convert early and
+      # drop the 1-row prediction matrix to a plain vector for sweep().
+      obs_mat = as.matrix(obs[,2:dim(obs)[2]])
+      preds = lweight %*% obs_mat
+      diffs = sweep(obs_mat, 2, drop(preds))
       var1.yam = t(lweight) %*% (diffs^2)
       #      var1.var = t(lweights) %*% ((as.matrix(Obs[iobs,depVar]@data)-as.numeric(var1.pred))^2)
       

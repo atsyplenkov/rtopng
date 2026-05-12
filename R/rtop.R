@@ -237,18 +237,26 @@ findParInitDefault = function(model) {
 
 #########################################
 findParInit = function(formulaString,observations,model) {
-  if (!"area" %in% names(observations)) {
-    if (inherits(observations, "Spatial") | inherits(observations, "STS")) {
+  # For spacetime objects the geometry lives in @sp, so area must be read
+  # from there. Also add it there when it is missing.
+  has_area = if (inherits(observations, "STS")) "area" %in% names(observations@sp) else "area" %in% names(observations)
+  if (!has_area) {
+    if (inherits(observations, "Spatial")) {
       observations$area = sapply(slot(observations, "polygons"), function(i) slot(i, "area"))
+    } else if (inherits(observations, "STS")) {
+      observations@sp$area = sapply(slot(observations@sp, "polygons"), function(i) slot(i, "area"))
     } else {
-      predictionLocations$area = set_units(st_area(predictionLocations), NULL)
+      observations$area = set_units(st_area(observations), NULL)
     }
   }
   if (inherits(observations, "STS")) {
     ntime = dim(observations)[2]
-    observations = observations[sample(1:ntime, 20),]
+    # ST* indexing is [space, time]; sampling only time preserves all
+    # spatial locations, which is required for a valid sample variogram.
+    observations = observations[, sample(1:ntime, min(20, ntime))]
     vario = rtopVariogram(observations, formulaString = formulaString)
-    aObs = observations$area
+    # $area does not fall through to @sp for ST* objects.
+    aObs = observations@sp$area
   } else {
     vario = variogram (formulaString, observations)
     aObs = observations$area
