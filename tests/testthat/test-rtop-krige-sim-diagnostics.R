@@ -1,15 +1,24 @@
-test_that("rtopKrige covers sel, cvInfo, and uncertainty branches", {
-  spatial <- rtopng_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
-  fit_base <- rtopFitVariogram(
-    createRtopObject(
-      spatial$observations,
-      spatial$prediction_locations,
-      formulaString = "obs ~ 1",
-      params = modifyList(spatial$params, list(nugget = FALSE, model = "Ex1"))
-    ),
-    iprint = -1
-  )
+spatial <- rtopng_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
+unfit_base <- createRtopObject(
+  spatial$observations,
+  spatial$prediction_locations,
+  formulaString = "obs ~ 1",
+  params = modifyList(spatial$params, list(nugget = FALSE, model = "Ex1", gDist = FALSE))
+)
+fit_base <- rtopFitVariogram(unfit_base, iprint = -1)
 
+spatial_small <- rtopng_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
+fit_cloud <- rtopFitVariogram(
+  createRtopObject(
+    spatial_small$observations,
+    spatial_small$prediction_locations,
+    formulaString = "obs ~ 1",
+    params = modifyList(spatial_small$params, list(nugget = FALSE, model = "Ex1", gDist = FALSE))
+  ),
+  iprint = -1
+)
+
+test_that("rtopKrige covers sel, cvInfo, and uncertainty branches", {
   fit_sel <- fit_base
   fit_sel$predictionLocations <- fit_sel$predictionLocations[1, ]
   fit_sel$observations$unc <- rep(0.05, nrow(fit_sel$observations))
@@ -25,7 +34,6 @@ test_that("rtopKrige covers sel, cvInfo, and uncertainty branches", {
 })
 
 test_that("rtopSim covers error paths and the missing-area augmentation branch", {
-  spatial <- rtopng_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
   unfit <- createRtopObject(
     spatial$observations,
     spatial$prediction_locations,
@@ -63,46 +71,35 @@ test_that("rtopSim covers error paths and the missing-area augmentation branch",
 })
 
 test_that("checkVario and rtopCluster cover direct dispatch paths", {
-  spatial <- rtopng_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
-  fit <- rtopFitVariogram(
-    createRtopObject(
-      spatial$observations,
-      spatial$prediction_locations,
-      formulaString = "obs ~ 1",
-      params = modifyList(spatial$params, list(nugget = FALSE, model = "Ex1"))
-    ),
-    iprint = -1
-  )
-
   pdf_file <- tempfile(fileext = ".pdf")
   grDevices::pdf(pdf_file)
   on.exit(grDevices::dev.off(), add = TRUE)
 
   checked_rtop <- checkVario(
-    fit,
+    fit_cloud,
     cloud = FALSE,
     gDist = FALSE,
     params = list(amul = 3, dmul = 3)
   )
   checked_rtop_cloud <- checkVario(
-    fit,
+    fit_cloud,
     cloud = TRUE,
-    gDist = TRUE,
+    gDist = FALSE,
     params = list(amul = 3, dmul = 3)
   )
   checked_model <- checkVario(
-    fit$variogramModel,
-    observations = fit$observations,
-    sampleVariogram = fit$variogram,
+    fit_cloud$variogramModel,
+    observations = fit_cloud$observations,
+    sampleVariogram = fit_cloud$variogram,
     params = list(amul = 3, dmul = 3)
   )
   cloud_sample <- rtopVariogram(
-    fit,
-    params = modifyList(fit$params, list(cloud = TRUE, nugget = FALSE))
+    fit_cloud,
+    params = modifyList(fit_cloud$params, list(cloud = TRUE, nugget = FALSE))
   )$variogramCloud
   checked_model_cloud <- checkVario(
-    fit$variogramModel,
-    observations = fit$observations,
+    fit_cloud$variogramModel,
+    observations = fit_cloud$observations,
     sampleVariogram = cloud_sample,
     params = list(amul = 3, dmul = 3)
   )

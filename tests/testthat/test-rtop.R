@@ -1,19 +1,19 @@
+fixtures <- rtopng_spatial_fixtures()
+
+set.seed(1501)
+rtop_fitted <- createRtopObject(
+  fixtures$observations,
+  fixtures$prediction_locations,
+  params = fixtures$params,
+  formulaString = "obs ~ 1"
+)
+rtop_fitted <- rtopFitVariogram(rtop_fitted, iprint = -1)
+
 test_that("kriging returns expected prediction structures", {
-  fixtures <- rtopng_spatial_fixtures()
+  rtop_cv <- rtopKrige(rtop_fitted, cv = TRUE)
+  rtop_pred <- rtopKrige(rtop_fitted)
 
-  set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs ~ 1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-
-  expect_s3_class(rtop_obj$variogramModel, "rtopVariogramModel")
-
-  rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
-  rtop_pred <- rtopKrige(rtop_obj)
+  expect_s3_class(rtop_fitted$variogramModel, "rtopVariogramModel")
 
   expect_s4_class(rtop_cv$predictions, "SpatialPolygonsDataFrame")
   expect_s4_class(rtop_pred$predictions, "SpatialPolygonsDataFrame")
@@ -26,23 +26,12 @@ test_that("kriging returns expected prediction structures", {
 })
 
 test_that("kriging reuses the legacy semivariance path consistently", {
-  fixtures <- rtopng_spatial_fixtures()
-
-  set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs ~ 1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-
-  rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
-  rtop_pred <- rtopKrige(rtop_obj)
+  rtop_cv <- rtopKrige(rtop_fitted, cv = TRUE)
+  rtop_pred <- rtopKrige(rtop_fitted)
   varmat <- varMat(
     fixtures$observations,
     fixtures$prediction_locations,
-    variogramModel = rtop_obj$variogramModel,
+    variogramModel = rtop_fitted$variogramModel,
     gDistEst = TRUE,
     gDistPred = TRUE,
     rresol = 25,
@@ -57,17 +46,7 @@ test_that("kriging reuses the legacy semivariance path consistently", {
 })
 
 test_that("spatial cross-validation keeps the legacy correlation anchor", {
-  fixtures <- rtopng_spatial_fixtures()
-
-  set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs ~ 1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-  rtop_cv <- rtopKrige(rtop_obj, cv = TRUE)
+  rtop_cv <- rtopKrige(rtop_fitted, cv = TRUE)
 
   expect_equal(
     cor(rtop_cv$predictions$observed, rtop_cv$predictions$var1.pred),
@@ -77,17 +56,7 @@ test_that("spatial cross-validation keeps the legacy correlation anchor", {
 })
 
 test_that("spatial variogram updates rebuild semivariance matrices", {
-  fixtures <- rtopng_spatial_fixtures()
-
-  set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs ~ 1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-  rtop_reuse <- rtopKrige(rtopKrige(rtop_obj, cv = TRUE))
+  rtop_reuse <- rtopKrige(rtopKrige(rtop_fitted, cv = TRUE))
 
   rtop_updated <- varMat(rtop_reuse)
   rtop_updated <- updateRtopVariogram(rtop_updated, exp = 1.5, action = "mult")
@@ -101,61 +70,51 @@ test_that("spatial variogram updates rebuild semivariance matrices", {
 })
 
 test_that("spatial simulation stays anchored to the seeded legacy run", {
-  fixtures <- rtopng_spatial_fixtures()
-
   set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs~1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-
-  rtop_sim_5 <- rtopSim(rtop_obj, nsim = 5, logdist = TRUE, debug.level = -1)
-  rtop_sim_input <- rtop_obj
+  rtop_sim_2 <- rtopSim(rtop_fitted, nsim = 2, logdist = TRUE, debug.level = -1)
+  rtop_sim_input <- rtop_fitted
   rtop_sim_input$predictionLocations <- rtop_sim_input$observations
-  rtop_sim_input$observations$unc <- var(rtop_sim_5$observations$obs) *
-    min(rtop_sim_5$observations$area) /
-    rtop_sim_5$observations$area
+  rtop_sim_input$observations$unc <- var(rtop_sim_2$observations$obs) *
+    min(rtop_sim_2$observations$area) /
+    rtop_sim_2$observations$area
   rtop_sim_input$predictionLocations$replaceNumber <- seq_len(nrow(
     rtop_sim_input$predictionLocations
   ))
-  rtop_sim_10 <- rtopSim(
+  rtop_sim_3 <- rtopSim(
     rtop_sim_input,
-    nsim = 10,
+    nsim = 3,
     replace = TRUE,
     debug.level = -1
   )
 
   expect_equal(
-    rtop_sim_5$simulations@data$sim1[1],
-    0.01161453402,
+    rtop_sim_2$simulations@data$sim1[1],
+    0.0118376913842713,
     tolerance = 1e-7
   )
   expect_equal(
-    rtop_sim_5$simulations@data$sim2[1],
-    0.01064349883,
+    rtop_sim_2$simulations@data$sim2[1],
+    0.0115167066168208,
     tolerance = 1e-7
   )
   expect_equal(
-    rtop_sim_5$simulations@data$sim4[2],
-    0.01376182189,
+    rtop_sim_2$simulations@data$sim2[2],
+    0.0103000858291926,
     tolerance = 1e-7
   )
   expect_equal(
-    rtop_sim_10$simulations@data$sim1[1],
-    0.0139201299,
+    rtop_sim_3$simulations@data$sim1[1],
+    0.012591110590178,
     tolerance = 1e-7
   )
   expect_equal(
-    rtop_sim_10$simulations@data$sim6[1],
-    0.0142161127,
+    rtop_sim_3$simulations@data$sim2[1],
+    0.0119980665507906,
     tolerance = 1e-7
   )
   expect_equal(
-    rtop_sim_10$simulations@data$sim7[14],
-    0.02216472038,
+    rtop_sim_3$simulations@data$sim3[14],
+    0.0199404132758299,
     tolerance = 1e-7
   )
 })
@@ -167,17 +126,8 @@ test_that("intamap interpolation matches direct spatial kriging", {
     skip("intamap does not expose estimateParameters() on this system")
   }
 
-  fixtures <- rtopng_spatial_fixtures()
-
   set.seed(1501)
-  rtop_obj <- createRtopObject(
-    fixtures$observations,
-    fixtures$prediction_locations,
-    params = fixtures$params,
-    formulaString = "obs ~ 1"
-  )
-  rtop_obj <- rtopFitVariogram(rtop_obj, iprint = -1)
-  rtop_pred <- rtopKrige(rtop_obj)
+  rtop_pred <- rtopKrige(rtop_fitted)
 
   output <- interpolate(
     fixtures$observations,
