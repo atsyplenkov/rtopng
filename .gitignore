@@ -10,3 +10,4 @@ src/*.gcno
 
 # Agent artefacts
 docs/
+AGENTS.md
