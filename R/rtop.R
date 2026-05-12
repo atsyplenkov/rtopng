@@ -51,8 +51,8 @@
 #' \donttest{
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' observations <- sf::st_read(rpath, "observations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #'
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -113,7 +113,7 @@ createRtopObject <- function(
       function(i) slot(i, "area")
     )
   } else if (inherits(observations, "sf") && !"area" %in% names(observations)) {
-    observations$area <- set_units(st_area(observations), NULL)
+    observations$area <- units::set_units(sf::st_area(observations), NULL)
   }
 
   object$observations <- observations
@@ -134,13 +134,13 @@ createRtopObject <- function(
       areas <- sapply(slot(predictionLocations, "polygons"), function(i) {
         slot(i, "area")
       })
-      predictionLocations <- SpatialPolygonsDataFrame(
+      predictionLocations <- sp::SpatialPolygonsDataFrame(
         predictionLocations,
         data = data.frame(area = areas),
         match.ID = TRUE
       )
       #    } else if (!"length" %in% names(observations) && inherits(predictionLocations,"SpatialLines")) {
-      #       predictionLocations$length = SpatialLinesLengths(predictionLocations)
+      #       predictionLocations$length = sp::SpatialLinesLengths(predictionLocations)
     } else if (
       inherits(predictionLocations, "STS") &&
         !"area" %in% names(predictionLocations@sp)
@@ -153,7 +153,7 @@ createRtopObject <- function(
       !"area" %in% names(predictionLocations) &&
         inherits(predictionLocations, "sf")
     ) {
-      predictionLocations$area <- set_units(st_area(predictionLocations), NULL)
+      predictionLocations$area <- units::set_units(sf::st_area(predictionLocations), NULL)
     }
     if ((inherits(observations, "Spatial") | inherits(observations, "STS"))) {
       p4o <- proj4string(observations)
@@ -171,20 +171,20 @@ createRtopObject <- function(
                           sp-objects. Please convert to sf"
         ))
       }
-    } else if (inherits(observations, "sf") && !is.na(st_crs(observations))) {
+    } else if (inherits(observations, "sf") && !is.na(sf::st_crs(observations))) {
       if (
         !isTRUE(all.equal(
-          is.na(st_crs(observations)),
-          is.na(st_crs(predictionLocations))
+          is.na(sf::st_crs(observations)),
+          is.na(sf::st_crs(predictionLocations))
         ))
       ) {
         stop("only one of observations and predictionLocations have projection")
       }
-      if (st_crs(observations) != st_crs(predictionLocations)) {
+      if (sf::st_crs(observations) != sf::st_crs(predictionLocations)) {
         stop(paste(
           "observations and predictionLocations have different projections:",
-          st_crs(observations),
-          st_crs(predictionLocations)
+          sf::st_crs(observations),
+          sf::st_crs(predictionLocations)
         ))
       }
     }
@@ -508,8 +508,8 @@ getRtopDefaultParams <- function(
   formulaString
 ) {
   #if (!missing(observations) & missing(cutoff)) {
-  #  x = coordinates(observations)[, 1]
-  #  y = coordinates(observations)[, 2]
+  #  x = sp::coordinates(observations)[, 1]
+  #  y = sp::coordinates(observations)[, 2]
   #  cutoff = (0.35 * sqrt((max(x) - min(x))^2 + (max(y) - min(y))^2)/100)
   #}
   list(
@@ -590,7 +590,7 @@ findParInit <- function(formulaString, observations, model) {
         function(i) slot(i, "area")
       )
     } else {
-      observations$area <- set_units(st_area(observations), NULL)
+      observations$area <- units::set_units(sf::st_area(observations), NULL)
     }
   }
   if (inherits(observations, "STS")) {
@@ -602,7 +602,7 @@ findParInit <- function(formulaString, observations, model) {
     # $area does not fall through to @sp for ST* objects.
     aObs <- observations@sp$area
   } else {
-    vario <- variogram(formulaString, observations)
+    vario <- gstat::variogram(formulaString, observations)
     aObs <- observations$area
   }
   parInit <- data.frame(parl = c(1:5), paru = 1, par0 = 1)

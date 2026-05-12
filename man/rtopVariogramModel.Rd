@@ -79,15 +79,15 @@ This gives an easier interface to the parameters of the variogram model
 
 \dontrun{
 library(sf)
-rpath = system.file("extdata",package="rtopng")
-observations = st_read(rpath,"observations")
+rpath <- system.file("extdata",package="rtopng")
+observations <- sf::st_read(rpath,"observations")
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-predictionLocations = st_read(rpath,"predictionLocations")
-rtopObj = createRtopObject(observations,predictionLocations)
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+predictionLocations <- sf::st_read(rpath,"predictionLocations")
+rtopObj <- createRtopObject(observations,predictionLocations)
  # Fit a variogram (function also creates it)
-rtopObj = rtopFitVariogram(rtopObj)
-rtopObj = updateRtopVariogram(rtopObj, exp = 1.5, action = "mult",
+rtopObj <- rtopFitVariogram(rtopObj)
+rtopObj <- updateRtopVariogram(rtopObj, exp = 1.5, action = "mult",
               checkVario = TRUE)
 }
 }

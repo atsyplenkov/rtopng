@@ -221,7 +221,10 @@ rtopKrige.STSDF <- function(
       }
       itot <- 0
       objsp <- object@sp
-      objsp <- SpatialPointsDataFrame(SpatialPoints(objsp), data = objsp@data)
+      objsp <- sp::SpatialPointsDataFrame(
+        sp::SpatialPoints(objsp),
+        data = objsp@data
+      )
       newkrige <- 0
       obs2 <- obs
       for (istat in 1:pspace) {
@@ -230,8 +233,11 @@ rtopKrige.STSDF <- function(
         ispace <- predictionLocations@sp@data$sindex[istat]
         pxts <- as.data.frame(predictionLocations[istat, ])
         stpred <- predictionLocations@sp[istat, ]
-        distm <- spDistsN1(coordinates(object@sp), coordinates(stpred))
-        ppred <- SpatialPoints(stpred)
+        distm <- sp::spDistsN1(
+          sp::coordinates(object@sp),
+          sp::coordinates(stpred)
+        )
+        ppred <- sp::SpatialPoints(stpred)
         rolags <- olags - plags[istat] # longer lags will be positive, i.e., use future observations
         nbefore <- -floor(min(rolags))
         nafter <- ceiling(max(c(rolags, 1)))

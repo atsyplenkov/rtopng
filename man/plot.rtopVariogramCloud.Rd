@@ -36,14 +36,14 @@ value can therefore be found in the help page of
 \examples{
 
 \donttest{
-rpath = system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="rtopng")
 library(sf)
-observations = st_read(rpath, "observations")
+observations <- sf::st_read(rpath, "observations")
 
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 
 # Create the sample variogram
-rtopVario = rtopVariogram(observations, params = list(cloud = TRUE))
+rtopVario <- rtopVariogram(observations, params = list(cloud = TRUE))
 plot(rtopVario)
 
 }

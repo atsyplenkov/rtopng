@@ -34,10 +34,10 @@ findOverlap <- function(areas1, areas2, debug.level = 1, ...) {
     ndim <- length(areas1@polygons)
     t0 <- proc.time()[[3]]
     ptdim <- 25
-    pts1 <- SpatialPoints(coordinates(areas1))
+    pts1 <- sp::SpatialPoints(sp::coordinates(areas1))
     if (!missing(areas2)) {
       mdim <- length(areas2@polygons)
-      pts2 <- SpatialPoints(coordinates(areas2))
+      pts2 <- sp::SpatialPoints(sp::coordinates(areas2))
       sym <- FALSE
     } else {
       mdim <- ndim
@@ -49,7 +49,7 @@ findOverlap <- function(areas1, areas2, debug.level = 1, ...) {
     plist2 <- list()
     for (ib in 1:mdim) {
       poly2 <- areas2@polygons[[ib]]
-      plist2[[ib]] <- SpatialPolygons(list(poly2))
+      plist2[[ib]] <- sp::SpatialPolygons(list(poly2))
     }
     nnover <- 0
     t1 <- proc.time()[[3]]
@@ -59,10 +59,10 @@ findOverlap <- function(areas1, areas2, debug.level = 1, ...) {
     for (ia in 1:(ndim - sym)) {
       t1 <- proc.time()[[3]]
       poly1 <- areas1@polygons[[ia]]
-      SP1 <- SpatialPolygons(list(poly1))
+      SP1 <- sp::SpatialPolygons(list(poly1))
       a1 <- SP1@polygons[[1]]@Polygons[[1]]@area
       #    pls_SP1 = slot(SP1, "polygons")
-      #    lb_SP1 <- lapply(pls_SP1, function(x) as.double(bbox(x)))
+      #    lb_SP1 <- lapply(pls_SP1, function(x) as.double(sp::bbox(x)))
 
       pt1 <- pts1[ia, ]
       ifi <- ifelse(sym, ia + 1, 1)
@@ -71,17 +71,17 @@ findOverlap <- function(areas1, areas2, debug.level = 1, ...) {
         SP2 <- plist2[[ib]]
         a2 <- areas2@polygons[[ib]]@Polygons[[1]]@area
         #   pls_SP2 = slot(SP2, "polygons")
-        #      lb_SP2 <- lapply(pls_SP2, function(x) as.double(bbox(x)))
+        #      lb_SP2 <- lapply(pls_SP2, function(x) as.double(sp::bbox(x)))
         if (max(unlist(commonArea(SP1, SP2))) > 0.1) {
           if (a2 < a1) {
             pt2 <- pts2[ib, ]
-            nover <- over(pt2, SP1)
+            nover <- sp::over(pt2, SP1)
             if (!is.na(nover)) {
               overlap[ia, ib] <- min(a1, a2)
             }
             nnover <- nnover + 1
           } else {
-            nover <- over(pt1, SP2)
+            nover <- sp::over(pt1, SP2)
             if (!is.na(nover)) {
               overlap[ia, ib] <- min(a1, a2)
             }
@@ -124,7 +124,7 @@ findVarioOverlap <- function(vario) {
         y1 <- pt1[2] - ad[i]
         y2 <- pt1[2] + ad[i]
         boun <- data.frame(x = c(x1, x2, x2, x1, x1), y = c(y1, y1, y2, y2, y1))
-        Srl[[i]] <- Polygon(SpatialPoints(boun))
+        Srl[[i]] <- sp::Polygon(sp::SpatialPoints(boun))
       }
       cArea <- commonArea(Srl[[1]], Srl[[2]])
     } else {
@@ -144,8 +144,8 @@ bbArea <- function(bb) {
 }
 #' @noRd
 commonArea <- function(objecti, objectj) {
-  bi <- bbox(objecti)
-  bj <- bbox(objectj)
+  bi <- sp::bbox(objecti)
+  bj <- sp::bbox(objectj)
   iarea <- bbArea(bi)
   jarea <- bbArea(bj)
   sdim <- sqrt((iarea + jarea) / 2)

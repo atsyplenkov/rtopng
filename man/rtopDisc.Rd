@@ -13,11 +13,11 @@
 
 \method{rtopDisc}{rtop}(object, params = list(), ...)
 
-\method{rtopDisc}{sf}(object, params = list(), bb = st_bbox(object), ...)
+\method{rtopDisc}{sf}(object, params = list(), bb = sf::st_bbox(object), ...)
 
-\method{rtopDisc}{SpatialPolygonsDataFrame}(object, params = list(), bb = bbox(object), ...)
+\method{rtopDisc}{SpatialPolygonsDataFrame}(object, params = list(), bb = sp::bbox(object), ...)
 
-\method{rtopDisc}{SpatialPolygons}(object, params = list(), bb = bbox(object), ...)
+\method{rtopDisc}{SpatialPolygons}(object, params = list(), bb = sp::bbox(object), ...)
 
 rtopDisc(object, ...)
 }

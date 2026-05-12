@@ -70,7 +70,7 @@
 #' \dontrun{
 #' library(sf)
 #' rpath <- system.file("extdata",package="rtopng")
-#' observations <- st_read(rpath,"observations")
+#' observations <- sf::st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 #'
@@ -154,8 +154,8 @@ rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 #' \donttest{
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' observations <- sf::st_read(rpath, "observations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #'
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -249,8 +249,8 @@ rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #' library(gstat)
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' observations <- sf::st_read(rpath, "observations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #'
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -261,8 +261,8 @@ rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #' # Fit a variogram (function also creates it)
 #' rtopObj <- rtopFitVariogram(rtopObj, maxn = 2000)
 #' checkVario(rtopObj,
-#'     compVars = list(first = vgm(5e-6, "Sph", 30000,5e-8),
-#'                    second = vgm(2e-6, "Sph", 30000,5e-8)))
+#'     compVars = list(first = gstat::vgm(5e-6, "Sph", 30000,5e-8),
+#'                    second = gstat::vgm(2e-6, "Sph", 30000,5e-8)))
 #'
 #' rtopObj <- checkVario(rtopObj, acor = 0.000001,
 #'           acomp = data.frame(acl1 = c(2,2,2,2,3,3,3,4,4),
@@ -359,7 +359,7 @@ checkVario <- function(object, ...) UseMethod("checkVario")
 #' \donttest{
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
+#' observations <- sf::st_read(rpath, "observations")
 #' gDist <- gDist(observations)
 #' }
 #'
@@ -510,7 +510,7 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #' \dontrun{
 #' library(sf)
 #' rpath <- system.file("extdata",package="rtopng")
-#' observations <- st_read(rpath,"observations")
+#' observations <- sf::st_read(rpath,"observations")
 #' vmod <- list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
 #' vm <- varMat(observations, variogramModel = vmod)
 #' }
@@ -656,8 +656,8 @@ varMat <- function(object, ...) UseMethod("varMat")
 #'
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' observations <- sf::st_read(rpath, "observations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #'
 #' # Setting some parameters; nclus > 1 will start a cluster with nclus
 #' # workers for parallel processing
@@ -777,8 +777,8 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #'
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' observations <- sf::st_read(rpath, "observations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #'
 #' # Setting some parameters; nclus > 1 will start a cluster with nclus
 #' # workers for parallel processing
@@ -807,8 +807,8 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' rtopObj12 <- rtopSim(rtopObj11, nsim = 10, beta = 0.01,
 #'                     varMatUpdate = TRUE)
 #'
-#' summary(data.frame(rtopObj10$simulations))
-#' summary(data.frame(rtopObj12$simulations))
+#' sp::summary(data.frame(rtopObj10$simulations))
+#' sp::summary(data.frame(rtopObj12$simulations))
 #'
 #' }
 #'

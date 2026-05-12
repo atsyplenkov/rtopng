@@ -72,7 +72,7 @@ rtopSim.rtop <- function(
       aPred <- sapply(slot(predictions, "polygons"), function(i) {
         slot(i, "area")
       })
-      predictions <- SpatialPolygonsDataFrame(
+      predictions <- sp::SpatialPolygonsDataFrame(
         predictions,
         data = data.frame(area = aPred)
       )
@@ -83,12 +83,12 @@ rtopSim.rtop <- function(
     }
   } else if (inherits(predictions, "sf")) {
     if (!("area" %in% names(predictions))) {
-      predictions$area <- set_units(st_area(predictions), NULL)
+      predictions$area <- units::set_units(sf::st_area(predictions), NULL)
     }
   } else if (inherits(predictions, "sfc_POLYGON")) {
-    predictions <- st_sf(
+    predictions <- sf::st_sf(
       predictions,
-      area = set_units(st_area(predictions)),
+      area = units::set_units(sf::st_area(predictions)),
       NULL
     )
   }
@@ -118,9 +118,9 @@ rtopSim.rtop <- function(
       obsall <- data.frame(observations)
       obs <- obsall[, as.character(object$formulaString[[2]])]
       if (inherits(observations, "Spatial")) {
-        obscors <- coordinates(observations)
+        obscors <- sp::coordinates(observations)
       } else {
-        obscors <- suppressWarnings(st_coordinates(st_centroid(observations)))
+        obscors <- suppressWarnings(sf::st_coordinates(sf::st_centroid(observations)))
       }
       #      if (params$unc && "unc" %in% names(observations)) {
       #        unc0 = observations$unc
@@ -172,9 +172,9 @@ rtopSim.rtop <- function(
         setTxtProgressBar(pb, ip)
       }
       if (inherits(predictionLocations, "Spatial")) {
-        newcor <- coordinates(predictionLocations[inew, ])
+        newcor <- sp::coordinates(predictionLocations[inew, ])
       } else {
-        newcor <- suppressWarnings(st_coordinates(st_centroid(predictionLocations[
+        newcor <- suppressWarnings(sf::st_coordinates(sf::st_centroid(predictionLocations[
           inew,
         ])))
       }
@@ -184,12 +184,12 @@ rtopSim.rtop <- function(
         }
         if (inherits(predictionLocations, "Spatial")) {
           c0 <- varioEx(
-            sqrt(bbArea(bbox(predictionLocations[in2, ]))),
+            sqrt(bbArea(sp::bbox(predictionLocations[in2, ]))),
             variogramModel
           )
         } else {
           c0 <- varioEx(
-            sqrt(bbArea(st_bbox(predictionLocations[in2, ]))),
+            sqrt(bbArea(sf::st_bbox(predictionLocations[in2, ]))),
             variogramModel
           )
         }

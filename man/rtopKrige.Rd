@@ -189,30 +189,30 @@ predictionLocations.
 # downloadRtopExampleData()
 # observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 
-rpath = system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="rtopng")
 library(sf)
-observations = st_read(rpath, "observations")
-predictionLocations = st_read(rpath,"predictionLocations")
+observations <- sf::st_read(rpath, "observations")
+predictionLocations <- sf::st_read(rpath,"predictionLocations")
 
 # Setting some parameters; nclus > 1 will start a cluster with nclus
 # workers for parallel processing
-params = list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
+params <- list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
 
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 
 # Build an object
-rtopObj = createRtopObject(observations, predictionLocations,
-           params = params)
+rtopObj <- createRtopObject(observations, predictionLocations,
+                           params = params)
 
 # Fit a variogram (function also creates it)
-rtopObj = rtopFitVariogram(rtopObj)
+rtopObj <- rtopFitVariogram(rtopObj)
 
 # Predicting at prediction locations
-rtopObj = rtopKrige(rtopObj)
+rtopObj <- rtopKrige(rtopObj)
 
 # Cross-validation
-rtopObj = rtopKrige(rtopObj,cv=TRUE)
+rtopObj <- rtopKrige(rtopObj,cv=TRUE)
 cor(rtopObj$predictions$observed,rtopObj$predictions$var1.pred)
 }
 

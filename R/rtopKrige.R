@@ -126,17 +126,21 @@ rtopKrige.default <- function(
   obs0 <- observations[[depVar]]
   nobs <- dim(object)[1]
   if (inherits(observations, "sf")) {
-    obscors <- st_coordinates(observations)
+    obscors <- sf::st_coordinates(observations)
     if (cv) {
       newcors <- obscors
     } else {
-      newcors <- suppressWarnings(st_coordinates(st_centroid(
+      newcors <- suppressWarnings(sf::st_coordinates(sf::st_centroid(
         predictionLocations
       )))
     }
   } else {
-    obscors <- coordinates(observations)
-    if (cv) newcors <- obscors else newcors <- coordinates(predictionLocations)
+    obscors <- sp::coordinates(observations)
+    if (cv) {
+      newcors <- obscors
+    } else {
+      newcors <- sp::coordinates(predictionLocations)
+    }
   }
 
   npred <- ifelse(cv, nobs, ifelse(!missing(sel), length(sel), dim(newcors)[1]))
@@ -150,9 +154,9 @@ rtopKrige.default <- function(
   }
   #
   if (inherits(observations, "Spatial")) {
-    mdist <- sqrt(bbArea(bbox(observations)))
+    mdist <- sqrt(bbArea(sp::bbox(observations)))
   } else {
-    mdist <- sqrt(bbArea(st_bbox(observations)))
+    mdist <- sqrt(bbArea(sf::st_bbox(observations)))
   }
   if (nobs < nmax && mdist < maxdist && !cv) {
     varMat <- rbind(varMatObs, 1)
@@ -291,7 +295,7 @@ rtopKrige.default <- function(
     unc <- ret$unc
     c0arr <- ret$c0arr
     if (debug.level > 1) {
-      distm <- spDistsN1(obscors, newcor)[neigh]
+      distm <- sp::spDistsN1(obscors, newcor)[neigh]
       lobs <- observations@data[neigh, ]
       lobs <- rbind(lobs, mu = rep(0, (dim(lobs)[2])))
       lobs <- cbind(
@@ -362,7 +366,7 @@ rtopKrige.default <- function(
       predictionLocations@data <- cbind(predictionLocations@data, predictions)
       predictions <- predictionLocations
     } else {
-      predictions <- addAttrToGeom(
+      predictions <- sp::addAttrToGeom(
         predictionLocations,
         predictions,
         match.ID = FALSE

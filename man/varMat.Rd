@@ -124,10 +124,10 @@ on the spatial properties of the object.
 
 \dontrun{
 library(sf)
-rpath = system.file("extdata",package="rtopng")
-observations = st_read(rpath,"observations")
-vmod = list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
-vm = varMat(observations, variogramModel = vmod)
+rpath <- system.file("extdata",package="rtopng")
+observations <- sf::st_read(rpath,"observations")
+vmod <- list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
+vm <- varMat(observations, variogramModel = vmod)
 }
 
 }

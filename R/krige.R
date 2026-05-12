@@ -57,7 +57,7 @@ rkrige <- function(
     } else {
       #  There are limits on distance or numbers
       if (mdist > maxdist) {
-        distm <- spDistsN1(obscors, newcor)
+        distm <- sp::spDistsN1(obscors, newcor)
         neigh <- which(distm < maxdist)
       }
       if (cv) {
@@ -231,7 +231,7 @@ rkrige <- function(
   #  krigingError = sum(lambda*c0arr)
 
   if (debug.level > 1) {
-    distm <- spDistsN1(obscors, newcor)[neigh]
+    distm <- sp::spDistsN1(obscors, newcor)[neigh]
     if (simul) {
       lobs <- obs
     } else {

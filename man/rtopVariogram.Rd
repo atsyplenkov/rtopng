@@ -97,12 +97,12 @@ gravity.
 
 \dontrun{
 library(sf)
-rpath = system.file("extdata",package="rtopng")
-observations = st_read(rpath,"observations")
+rpath <- system.file("extdata",package="rtopng")
+observations <- sf::st_read(rpath,"observations")
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 
-vario = rtopVariogram(observations, cloud = TRUE)
+vario <- rtopVariogram(observations, cloud = TRUE)
 }
 
 }

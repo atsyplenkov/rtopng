@@ -59,20 +59,20 @@ package
 \examples{
 
 \donttest{
-rpath = system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="rtopng")
 library(sf)
-observations = st_read(rpath, "observations")
-predictionLocations = st_read(rpath,"predictionLocations")
+observations <- sf::st_read(rpath, "observations")
+predictionLocations <- sf::st_read(rpath,"predictionLocations")
 
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 
 # Setting some parameters
-params = list(gDist = TRUE, cloud = FALSE)
+params <- list(gDist = TRUE, cloud = FALSE)
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 # Build an object
-rtopObj = createRtopObject(observations, predictionLocations,
+rtopObj <- createRtopObject(observations, predictionLocations,
                            params = params)
 }
 

@@ -121,27 +121,27 @@ fitted to sample variograms of data with support
 
 \donttest{
 library(gstat)
-rpath = system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="rtopng")
 library(sf)
-observations = st_read(rpath, "observations")
-predictionLocations = st_read(rpath,"predictionLocations")
+observations <- sf::st_read(rpath, "observations")
+predictionLocations <- sf::st_read(rpath,"predictionLocations")
 
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-params = list(cloud = TRUE, gDist = TRUE)
-rtopObj = createRtopObject(observations, predictionLocations,
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+params <- list(cloud = TRUE, gDist = TRUE)
+rtopObj <- createRtopObject(observations, predictionLocations,
                            params = params)
 
 # Fit a variogram (function also creates it)
-rtopObj = rtopFitVariogram(rtopObj, maxn = 2000)
+rtopObj <- rtopFitVariogram(rtopObj, maxn = 2000)
 checkVario(rtopObj,
-    compVars = list(first = vgm(5e-6, "Sph", 30000,5e-8),
-                   second = vgm(2e-6, "Sph", 30000,5e-8)))
+    compVars = list(first = gstat::vgm(5e-6, "Sph", 30000,5e-8),
+                   second = gstat::vgm(2e-6, "Sph", 30000,5e-8)))
 
-rtopObj = checkVario(rtopObj, acor = 0.000001,
+rtopObj <- checkVario(rtopObj, acor = 0.000001,
           acomp = data.frame(acl1 = c(2,2,2,2,3,3,3,4,4),
           acl2 = c(2,3,4,5,3,4,5,4,5)))
-rtopObj = checkVario(rtopObj, cloud = TRUE, identify = TRUE,
+rtopObj <- checkVario(rtopObj, cloud = TRUE, identify = TRUE,
           acor = 0.000001)
 }
 

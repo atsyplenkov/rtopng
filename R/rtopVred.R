@@ -25,16 +25,16 @@ vred <- function(
       a2 <- a1
     }
     if (inherits(a1, "Spatial")) {
-      a1 <- coordinates(a1)
+      a1 <- sp::coordinates(a1)
     }
     if (inherits(a2, "Spatial")) {
-      a2 <- coordinates(a2)
+      a2 <- sp::coordinates(a2)
     }
     if (inherits(a1, "sf") || inherits(a1, "sfc")) {
-      a1 <- st_coordinates(a1)
+      a1 <- sf::st_coordinates(a1)
     }
     if (inherits(a2, "sf") || inherits(a2, "sfc")) {
-      a2 <- st_coordinates(a2)
+      a2 <- sf::st_coordinates(a2)
     }
     ip1 <- dim(a1)[1]
     ip2 <- dim(a2)[1]

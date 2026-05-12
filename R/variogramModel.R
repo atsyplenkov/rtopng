@@ -39,10 +39,10 @@
 #' \dontrun{
 #' library(sf)
 #' rpath <- system.file("extdata",package="rtopng")
-#' observations <- st_read(rpath,"observations")
+#' observations <- sf::st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
-#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' predictionLocations <- sf::st_read(rpath,"predictionLocations")
 #' rtopObj <- createRtopObject(observations,predictionLocations)
 #'  # Fit a variogram (function also creates it)
 #' rtopObj <- rtopFitVariogram(rtopObj)
@@ -218,7 +218,7 @@ updateRtopVariogram.rtopVariogramModel <- function(
 #' \donttest{
 #' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations <- st_read(rpath, "observations")
+#' observations <- sf::st_read(rpath, "observations")
 #'
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 #'

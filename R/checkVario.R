@@ -284,12 +284,12 @@ checkVario.rtopVariogramModel <- function(
       y1 <- -cs
       y2 <- cs
       boun <- cbind(x = c(x1, x2, x2, x1, x1), y = c(y1, y1, y2, y2, y1))
-      polyBoun <- Polygon(boun)
-      Srl[[icomb]] <- Polygons(list(polyBoun), ID = as.character(icomb))
+      polyBoun <- sp::Polygon(boun)
+      Srl[[icomb]] <- sp::Polygons(list(polyBoun), ID = as.character(icomb))
     }
   }
 
-  polys <- SpatialPolygons(Srl)
+  polys <- sp::SpatialPolygons(Srl)
   vmats <- list()
   iplot <- 0
   na <- length(areas)
@@ -325,7 +325,7 @@ checkVario.rtopVariogramModel <- function(
     ld <- length(adists)
     poly1 <- polys[unique(c((i1 - 1) * ld + 1, ((i2 - 1) * ld + 1):(i2 * ld)))]
     lobject <- createRtopObject(
-      SpatialPolygonsDataFrame(
+      sp::SpatialPolygonsDataFrame(
         poly1,
         data = data.frame(obs = c(seq_along(poly1))),
         match.ID = FALSE
@@ -482,7 +482,7 @@ checkVario.rtopVariogramModel <- function(
       if (curveSmooth) {
         xx <- sort(c(xx, seq(min(xx), max(xx), length.out = 1000)))
       }
-      clines <- variogramLine(cvar[[1]], dist_vector = xx)
+      clines <- gstat::variogramLine(cvar[[1]], dist_vector = xx)
       lines(clines, lty = 3, lwd = 2, col = cols2[ic])
       legende$text <- c(legende$text, names(cvar))
       legende$col <- c(legende$col, cols2[ic])

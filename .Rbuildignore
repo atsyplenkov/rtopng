@@ -5,3 +5,7 @@ docs/
 ^LICENSE\.md$
 ^\.github$
 ^README\.Rmd$
+
+air.toml
+jarl.toml
+AGENTS.md

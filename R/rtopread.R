@@ -56,7 +56,7 @@ readAreaInfo <- function(
   }
   ainfot <- read.csv(fname, header = TRUE, sep = sep)
   if (debug.level > 1) {
-    print(summary(ainfot))
+    print(sp::summary(ainfot))
   }
   ainfo <- data.frame(
     id = ainfot[, names(ainfot) == id],
@@ -151,13 +151,13 @@ readAreas <- function(object, adir = ".", ftype = "xy", projection = NA, ...) {
       cat(paste("reading first polygon", i, length(fnames), "\n"))
       boun <- read.table(fnames[i], header = FALSE)
       names(boun) <- c("x", "y")
-      coordinates(boun) <- ~ x + y
-      boun <- Polygon(boun)
+      sp::coordinates(boun) <- ~ x + y
+      boun <- sp::Polygon(boun)
       cat(paste("adding data to ainfo", i, boun@area, boun@labpt[1], "\n"))
       cat(paste(" Finished polygon\n"))
-      Srl[[i]] <- Polygons(list(boun), ID = as.character(i))
+      Srl[[i]] <- sp::Polygons(list(boun), ID = as.character(i))
     }
-    Sr <- SpatialPolygons(Srl, proj4string = CRS(as.character(projection)))
+    Sr <- sp::SpatialPolygons(Srl, proj4string = sp::CRS(as.character(projection)))
     #  } else if (ftype == "shp") {
     # This part is when each file has a single shape
     # NOT PROPERLY IMPLEMENTED - need testing with real shapes
@@ -168,16 +168,16 @@ readAreas <- function(object, adir = ".", ftype = "xy", projection = NA, ...) {
     #    Srl = list()
     #    for (i in 1:dim(fnames)) {
     #      boun = readShapePoly(fnames[i])
-    #      Srl[[i]] = Polygons(boun,ID = as.character(i))
+    #      Srl[[i]] = sp::Polygons(boun,ID = as.character(i))
     #    }
-    #    Sr = SpatialPolygons(Srl, proj4string=CRS(as.character(projection)))
+    #    Sr = sp::SpatialPolygons(Srl, proj4string=sp::CRS(as.character(projection)))
     #  } else if (ftype == "shps") {
     #This clause is when one shapefile includes all the shapes
     # NOT properly tested yet
     # Necessary to split all shapes into single Polygons
     #    require(maptools)
     #    Sr = readShapePoly(adir)
-    #    SPDF = SpatialPolygonsDataFrame(Sr,data = ainfo)
+    #    SPDF = sp::SpatialPolygonsDataFrame(Sr,data = ainfo)
   } else {
     stop(paste("Filetype", ftype, "not recognized"))
   }
@@ -185,6 +185,6 @@ readAreas <- function(object, adir = ".", ftype = "xy", projection = NA, ...) {
   ainfo$labx <- unlist(lapply(Sr@polygons, FUN = function(poly) poly@labpt[1]))
   ainfo$laby <- unlist(lapply(Sr@polygons, FUN = function(poly) poly@labpt[2]))
   ainfo$bdim <- unlist(lapply(Sr@polygons, FUN = function(poly) dim(poly)[1]))
-  SPDF <- SpatialPolygonsDataFrame(Sr, data = ainfo, match.ID = TRUE)
+  SPDF <- sp::SpatialPolygonsDataFrame(Sr, data = ainfo, match.ID = TRUE)
   SPDF
 }

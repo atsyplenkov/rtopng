@@ -31,7 +31,7 @@ varMat.rtop <- function(
   if (inherits(observations, "Spatial")) {
     aObs <- sapply(slot(observations, "polygons"), function(i) slot(i, "area"))
   } else if (inherits(observations, "sf")) {
-    aObs <- set_units(st_area(observations), NULL)
+    aObs <- units::set_units(sf::st_area(observations), NULL)
   } else {
     stop(paste(
       "varMat: not able to find area from object of type:",
@@ -120,7 +120,7 @@ varMat.rtop <- function(
       }
       object$varMatObs <- varMat(
         dObs,
-        coor1 = coordinates(observations),
+        coor1 = sp::coordinates(observations),
         variogramModel = variogramModel,
         debug.level = debug.level,
         newPar = params
@@ -161,6 +161,7 @@ varMat.rtop <- function(
       if ("gDistPred" %in% names(object)) {
         gDistPred <- object$gDistPred
       } else {
+        # FIXME:
         object$gDistPred <- gDistPred <- gDist(
           dPred,
           diag = !fullPred,
@@ -170,6 +171,7 @@ varMat.rtop <- function(
       if ("gDistPredObs" %in% names(object)) {
         gDistPredObs <- object$gDistPredObs
       } else {
+        # FIXME:
         object$gDistPredObs <- gDistPredObs <- gDist(
           dObs,
           dPred,
@@ -178,6 +180,8 @@ varMat.rtop <- function(
       }
 
       print("Creating prediction semivariance matrix. This can take some time.")
+      # FIXME:
+      # ugly construction
       object$varMatPred <- varMatPred <- matrix(
         mapply(FUN = varioEx, gDistPred, MoreArgs = list(variogramModel)),
         nrow = nPred,
@@ -236,7 +240,7 @@ varMat.rtop <- function(
       # Do full integration over variograms
       object$varMatPred <- varMat(
         dPred,
-        coor1 = coordinates(predictionLocations),
+        coor1 = sp::coordinates(predictionLocations),
         diag = TRUE,
         variogramModel = variogramModel,
         debug.level = debug.level,
@@ -245,8 +249,8 @@ varMat.rtop <- function(
       object$varMatPredObs <- varMat(
         dObs,
         dPred,
-        coor1 = coordinates(observations),
-        coor2 = coordinates(predictionLocations),
+        coor1 = sp::coordinates(observations),
+        coor2 = sp::coordinates(predictionLocations),
         variogramModel = variogramModel,
         sub1 = diag(object$varMatObs),
         sub2 = object$varMatPred,
@@ -295,7 +299,7 @@ varMat.rtop <- function(
           slot(i, "area")
         })
       } else {
-        aPred <- set_units(st_area(predictionLocations), NULL)
+        aPred <- units::set_units(sf::st_area(predictionLocations), NULL)
       }
       fPredObs <- matrix(rep(aObs, nPred), ncol = nPred)
       sPredObs <- t(matrix(rep(aPred, nObs), ncol = nObs))
@@ -583,16 +587,18 @@ varMat.list <- function(
       }
       a1 <- d1[[ia]]
       if (inherits(a1, "Spatial")) {
-        a1 <- coordinates(a1)
+        a1 <- sp::coordinates(a1)
       } else if (inherits(a1, "sf")) {
-        a1 <- st_coordinates(a1)
+        a1 <- sf::st_coordinates(a1)
       }
 
       ip1 <- dim(a1)[1]
       first <- ifelse(equal, ia, 1)
       lorder <- c(first:mdim)
       if (!is.null(coor1) && !is.null(coor2) && maxdist < Inf) {
-        lorder <- lorder[spDistsN1(coor2[first:mdim, ], coor1[ia, ]) < maxdist]
+        lorder <- lorder[
+          sp::spDistsN1(coor2[first:mdim, ], coor1[ia, ]) < maxdist
+        ]
       }
       if (length(lorder) > 0) {
         if (equal) {
@@ -601,9 +607,9 @@ varMat.list <- function(
           a2 <- d2[lorder]
         }
         if (inherits(a2, "Spatial")) {
-          a2 <- coordinates(a2)
+          a2 <- sp::coordinates(a2)
         } else if (inherits(a2, "sf")) {
-          a2 <- st_coordinates(a2)
+          a2 <- sf::st_coordinates(a2)
         }
 
         lmat <- mapply(
@@ -668,15 +674,17 @@ varMat.list <- function(
       t1 <- proc.time()[[3]]
       a1 <- d1[[ia]]
       if (inherits(a1, "Spatial")) {
-        a1 <- coordinates(a1)
+        a1 <- sp::coordinates(a1)
       } else if (inherits(a1, "sf")) {
-        a1 <- st_coordinates(a1)
+        a1 <- sf::st_coordinates(a1)
       }
       ip1 <- dim(a1)[1]
       first <- ifelse(equal, ia, 1)
       lorder <- c(first:mdim)
       if (!missing(coor1) && !missing(coor2) && maxdist < Inf) {
-        lorder <- lorder[spDistsN1(coor2[first:mdim, ], coor1[ia, ]) < maxdist]
+        lorder <- lorder[
+          sp::spDistsN1(coor2[first:mdim, ], coor1[ia, ]) < maxdist
+        ]
       }
       if (length(lorder) > 0) {
         a2 <- d2[lorder]

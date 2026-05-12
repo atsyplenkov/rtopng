@@ -59,7 +59,7 @@ complex shuffling}
 complexes is allowed to reduce as the optimization proceeds}
 
 \item{iniflg}{flag on whether to include the initial point in population.
-iniflg = 0, not included. iniflg= 1, included}
+iniflg <- 0, not included. iniflg= 1, included}
 
 \item{iprint}{flag for controlling print-out after each shuffling loop.
 iprint < 0: no output. iprint = 1: print information on the best point of
@@ -144,21 +144,21 @@ then the function will be implicit = function(pars) \code{(2*pars[4] + pars[5]) 
 set.seed(1)
 # generate example data from a function with three parameters
 # with some random noise
-fun = function(x, pars) pars[2]*sin(x*pars[1])+pars[3]
-x = rnorm(50, sd = 3)
-y = fun(x, pars = c(5, 2, 3)) +  rnorm(length(x), sd = 0.3)
+fun <- function(x, pars) pars[2]*sin(x*pars[1])+pars[3]
+x <- rnorm(50, sd = 3)
+y <- fun(x, pars = c(5, 2, 3)) +  rnorm(length(x), sd = 0.3)
 plot(x,y)
-   
+
 # Objective function, summing up squared differences
-OFUN = function(pars, x, yobs) {
-  yvals = fun(x, pars)  
+OFUN <- function(pars, x, yobs) {
+  yvals <- fun(x, pars)
   sum((yvals-yobs)^2)
 }
 
-sceuares = sceua(OFUN, pars = c(0.1,0.1,0.1), lower = c(-10,0,-10), 
+sceuares <- sceua(OFUN, pars = c(0.1,0.1,0.1), lower = c(-10,0,-10),
                  upper = c(10,10,10), x = x, yobs = y)
 sceuares
-xx = seq(min(x), max(x), 0.1)
+xx <- seq(min(x), max(x), 0.1)
 lines(xx, fun(xx, pars = sceuares$par))
 
 

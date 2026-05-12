@@ -4,10 +4,10 @@ rtopVariogram.sf <- function(object, ...) {
   if (missing(object)) {
     stop("rtopVariogram: Observations are missing")
   }
-  obs <- st_drop_geometry(object)
-  coordinates(obs) <- suppressWarnings(st_coordinates(st_centroid(object)))
+  obs <- sf::st_drop_geometry(object)
+  sp::coordinates(obs) <- suppressWarnings(sf::st_coordinates(sf::st_centroid(object)))
   if (!"area" %in% names(obs)) {
-    obs$area <- set_units(st_area(object), NULL)
+    obs$area <- units::set_units(sf::st_area(object), NULL)
   }
   rtopVariogram(obs, ...)
 }
@@ -20,7 +20,7 @@ rtopVariogram.SpatialPolygonsDataFrame <- function(object, ...) {
     stop("rtopVariogram: Observations are missing")
   }
   obs <- object@data
-  coordinates(obs) <- coordinates(object)
+  sp::coordinates(obs) <- sp::coordinates(object)
   if ("Shape_Area" %in% names(object)) {
     obs$area <- object$Shape_Area
   } else {
@@ -83,7 +83,7 @@ rtopVariogram.SpatialPointsDataFrame <- function(
     formulaString <- as.formula(formulaString)
   }
 
-  clvar <- variogram(formulaString, observations, cloud = TRUE, ...)
+  clvar <- gstat::variogram(formulaString, observations, cloud = TRUE, ...)
   .BigInt <- attr(clvar, ".BigInt")
   clvar$ord <- clvar$np
   clvar <- as.data.frame(clvar)
@@ -286,7 +286,7 @@ rtopVariogram.STSDF <- function(
   }
   vmat <- vmat / indmat
   obssp <- observations@sp
-  dmat <- spDists(obssp, obssp)
+  dmat <- sp::spDists(obssp, obssp)
 
   vario <- matrix(NA, ncol = 7, nrow = nspace * (nspace - 1) / 2)
   icount <- 0

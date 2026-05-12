@@ -128,40 +128,40 @@ based on rainfall.
 # The following command will download  the complete example data set
 # downloadRtopExampleData()
 
-rpath = system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="rtopng")
 library(sf)
-observations = st_read(rpath, "observations")
-predictionLocations = st_read(rpath,"predictionLocations")
+observations <- sf::st_read(rpath, "observations")
+predictionLocations <- sf::st_read(rpath,"predictionLocations")
 
 # Setting some parameters; nclus > 1 will start a cluster with nclus
 # workers for parallel processing
-params = list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
+params <- list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
 
 # Create a column with the specific runoff:
-observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 
 # Build an object
-rtopObj = createRtopObject(observations, predictionLocations,
+rtopObj <- createRtopObject(observations, predictionLocations,
                            params = params, formulaString = "obs~1")
 
 # Fit a variogram (function also creates it)
-rtopObj = rtopFitVariogram(rtopObj)
+rtopObj <- rtopFitVariogram(rtopObj)
 
 # Conditional simulations for two new locations
-rtopObj10 = rtopSim(rtopObj, nsim = 5)
-rtopObj11 = rtopObj
+rtopObj10 <- rtopSim(rtopObj, nsim = 5)
+rtopObj11 <- rtopObj
 
 # Unconditional simulation at the observation locations
 # (These are moved to the predictionLocations)
-rtopObj11$predictionLocations = rtopObj11$observations
-rtopObj11$observations = NULL
+rtopObj11$predictionLocations <- rtopObj11$observations
+rtopObj11$observations <- NULL
 # Setting varMatUpdate to TRUE, to make sure that covariance
 # matrices are recomputed
-rtopObj12 = rtopSim(rtopObj11, nsim = 10, beta = 0.01,
+rtopObj12 <- rtopSim(rtopObj11, nsim = 10, beta = 0.01,
                     varMatUpdate = TRUE)
 
-summary(data.frame(rtopObj10$simulations))
-summary(data.frame(rtopObj12$simulations))
+sp::summary(data.frame(rtopObj10$simulations))
+sp::summary(data.frame(rtopObj12$simulations))
 
 }
 

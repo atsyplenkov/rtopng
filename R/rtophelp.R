@@ -45,8 +45,8 @@ adfunc <- function(sampleVariogram, observations, amul) {
 #' @noRd
 dfunc <- function(sampleVariogram, observations, dmul) {
   if (is.null(sampleVariogram)) {
-    dmax <- sqrt(bbArea(bbox(observations))) / 2
-    dmin <- min(dist(coordinates(observations)))
+    dmax <- sqrt(bbArea(sp::bbox(observations))) / 2
+    dmin <- min(dist(sp::coordinates(observations)))
   } else if (is(sampleVariogram, "rtopVariogramCloud")) {
     dmax <- max(sampleVariogram$dist)
     dmin <- min(sampleVariogram$dist)
