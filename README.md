@@ -36,6 +36,8 @@ pak::pak("atsyplenkov/rtopng")
 
 `rtopng` builds on the original `rtop` package by Jon Olav Skøien and the method description published in Skøien et al. ([2014](https://doi.org/10.1016/j.cageo.2014.02.009)).
 
+This project has made heavy use of AI-assisted pair programming (both `Kimi 2.6` and `Opus 4.7` via Opencode). It is highly doubtful that we would be able to put this together that quickly without AI help.
+
 ## License
 
 `rtopng` is distributed under GPL-3, consistent with the `rtop`. For the upstream package lineage and original package reference, see the original [`rtop` CRAN page](https://CRAN.R-project.org/package=rtop).
