@@ -2,6 +2,35 @@
 # Is it reasonable to have ainfo <<- read.area.info(finfo,...) to make sure that ainfo 
 # is also available at the top level after being delivered to function read.areas?
 
+
+
+#' create SpatialPointsDataFrame with observations of data with a spatial
+#' support
+#' 
+#' readAreaInfo will read a text file with observations and descriptions of
+#' data with a spatial support.
+#' 
+#' The function is of particular use when data are not available as
+#' shape-files, or when the observations are not part of the shape-files. This
+#' function is mainly for compatibility with the former FORTRAN-version. The
+#' simplest way to read the data in that case is through
+#' \code{\link[sf]{st_read}}. See also \code{\link{rtopng-package}}.
+#' 
+#' @param fname name of file with areal information
+#' @param id name of column with observation id
+#' @param iobs name of column with number of observations
+#' @param obs name of column with observations
+#' @param unc name of column with possible uncertainty of observation
+#' @param filenames name of column with filenames of areas if different names
+#' than id should be used.
+#' @param sep separator in csv-file
+#' @param debug.level used for giving additional output
+#' @param moreCols name of other column names the user wants included in ainfo
+#' @return \code{\link[sp:SpatialPoints]{SpatialPointDataFrame}} with
+#' information about observations and/or predictionLocations.
+#' @author Jon Olav Skoien
+#' @keywords spatial
+#' @export
 readAreaInfo = function(fname = "ainfo.txt", id = "id", 
             iobs = "iobs",obs="obs",unc="unc",
             filenames="filenames", sep = "\t", debug.level = 1, 
@@ -47,6 +76,40 @@ readAreaInfo = function(fname = "ainfo.txt", id = "id",
 
 
 
+
+
+#' help file for creating SpatialPolygonsDataFrame with observations and/or
+#' predictionLocations of data with a spatial support
+#' 
+#' readAreas will read area-files, add observations and convert the result to
+#' \cr \code{\link[sp]{SpatialPolygonsDataFrame}}
+#' 
+#' If \code{object} is a file name, \code{\link{readAreaInfo}} will be called.
+#' If it is a \cr \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} with
+#' observations and/or predictionLocations, the function will read areal data
+#' from files according to the ID associated with each
+#' observation/predictionLocation.
+#' 
+#' The function is of particular use when data are not available as
+#' shape-files, or when the observations are not part of the shape-files. This
+#' function is mainly for compatibility with the former FORTRAN-version. The
+#' simplest way to read the data in that case is through
+#' \code{\link[sf]{st_read}}. See also \code{\link{rtopng-package}}.
+#' 
+#' @param object either name of file with areal information or
+#' \code{\link[sp]{SpatialPointsDataFrame}} with observations
+#' @param adir directory where the files with areal information are to be found
+#' @param ftype type of file, the only type supported currently is "xy",
+#' referring to x- and y-coordinates of boundaries
+#' @param projection add projection to the object if input is boundary-files
+#' @param ... further parameters to be passed to \code{\link{readAreaInfo}}
+#' @return The function creates a
+#' \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} of observations
+#' and/or predictionLocations, depending on the information given in
+#' \code{object}.
+#' @author Jon Olav Skoien
+#' @keywords spatial
+#' @export
 readAreas = function(object, adir=".",ftype = "xy",projection = NA, ...)  {
 # ainfo is 1 - ainfo e.g. read by readAreaInfo
 #          2 - name of the file to pass to readAreaInfo. ainfo is in that case delivered as a top level data.frame

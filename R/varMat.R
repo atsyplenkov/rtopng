@@ -1,6 +1,8 @@
 
 # varMat.rtop hardly uses the functions further below, should be shortened
 
+#' @export
+#' @rdname varMat
 varMat.rtop = function(object, varMatUpdate = FALSE, fullPred = FALSE, params = list(), ...) {
   params = getRtopParams(object$params,  newPar = params, ...)
   observations = object$observations
@@ -159,6 +161,8 @@ varMat.rtop = function(object, varMatUpdate = FALSE, fullPred = FALSE, params = 
 }
     
 
+#' @export
+#' @rdname varMat
 varMat.matrix = function(object, variogramModel, diag = FALSE, sub1, sub2, ...) {
   ndim = dim(object)[1] 
   mdim = dim(object)[2]
@@ -175,6 +179,8 @@ varMat.matrix = function(object, variogramModel, diag = FALSE, sub1, sub2, ...) 
 }
 
 
+#' @export
+#' @rdname varMat
 varMat.SpatialPolygonsDataFrame = function(object,object2 = NULL,...) {
   if (is(object2,"SpatialPolygonsDataFrame")) object2 = as(object2,"SpatialPolygons")
   varMat(as(object,"SpatialPolygons"), object2, ...)
@@ -184,6 +190,8 @@ varMat.SpatialPolygonsDataFrame = function(object,object2 = NULL,...) {
 
 
 
+#' @export
+#' @rdname varMat
 varMat.SpatialPolygons = function(object,object2 = NULL,variogramModel,
        overlapObs, overlapPredObs, ...) {
   varMatDefault(object,object2,variogramModel,
@@ -191,6 +199,7 @@ varMat.SpatialPolygons = function(object,object2 = NULL,variogramModel,
 }
 
 
+#' @noRd
 varMatDefault = function(object1,object2 = NULL,variogramModel,
      overlapObs, overlapPredObs,  ...) {
   params = getRtopParams(...)
@@ -253,6 +262,8 @@ varMatDefault = function(object1,object2 = NULL,variogramModel,
 
 # object and object2 (as lists) are here discretized areas
 # coor1 and coor2 are coordinates of the areas, used for maximum distance
+#' @export
+#' @rdname varMat
 varMat.list = function(object, object2=NULL, coor1, coor2, maxdist = Inf, 
               variogramModel, diag=FALSE, sub1, sub2, debug.level = ifelse(interactive(), 1, 0), ...) {
   params = getRtopParams(...)
@@ -374,6 +385,8 @@ varMat.list = function(object, object2=NULL, coor1, coor2, maxdist = Inf,
   
 
 
+#' @export
+#' @rdname varMat
 varMat.STS = function(object, object2 = NULL, variogramModel, overlapObs, overlapPredObs, ...) {
   if (is(object2,"STS")) object2 = object2@sp
   object = object@sp

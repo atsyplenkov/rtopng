@@ -1,12 +1,15 @@
 #a) plot 3-d varios
 #b) plot upscaled point variograms
 
+#' @noRd
 errorBar <- function(x, y, upper, lower=upper, length=0.1,...){
  if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
  stop("vectors must be same length")
  arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
 }
 
+#' @export
+#' @rdname checkVario
 checkVario.rtop = function(object,  acor = 1, log = "xy", cloud = FALSE, gDist = TRUE, acomp = NULL, curveSmooth = FALSE, params = list(), ...) {
   params = getRtopParams(object$params, newPar = params, ...)
   dots = list(...)
@@ -119,6 +122,8 @@ checkVario.rtop = function(object,  acor = 1, log = "xy", cloud = FALSE, gDist =
 
 
 
+#' @export
+#' @rdname checkVario
 checkVario.rtopVariogramModel = function(object, 
            sampleVariogram = NULL, observations = NULL, areas = NULL, dists = NULL, acomp = NULL, 
            params = list(), compVars = list(), acor = 1, log = "xy", legx = NULL, legy = NULL, 
@@ -298,10 +303,14 @@ invisible(checkVarioRes)
 }
 
 
+#' @export
+#' @rdname checkVario
 checkVario.rtopVariogram = function(object, ...) {
 
 }
 
+#' @export
+#' @rdname checkVario
 checkVario.rtopVariogramCloud = function(object, ...) {
 
 

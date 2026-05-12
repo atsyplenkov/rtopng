@@ -1,3 +1,5 @@
+#' @export
+#' @rdname rtopKrige
 rtopKrige.rtop = function(object, varMatUpdate = FALSE, params = list(), ...) {
   params = getRtopParams(object$params, newPar = params, ...)
   if (!is.null(params$nsim) && params$nsim > 0) return(rtopSim(object, varMatUpdate, params = params))
@@ -22,6 +24,8 @@ rtopKrige.rtop = function(object, varMatUpdate = FALSE, params = list(), ...) {
 }  
 
 
+#' @export
+#' @rdname rtopKrige
 rtopKrige.SpatialPolygonsDataFrame = function(object, predictionLocations = NULL,
                                               varMatObs, varMatPredObs, varMat, params = list(), formulaString,  
                                               sel, ...) {
@@ -32,6 +36,8 @@ rtopKrige.SpatialPolygonsDataFrame = function(object, predictionLocations = NULL
 
 
 
+#' @export
+#' @rdname rtopKrige
 rtopKrige.default = function(object, predictionLocations = NULL,
                              varMatObs, varMatPredObs, varMat, params = list(), formulaString,  
                              sel, wret = FALSE, ...) {

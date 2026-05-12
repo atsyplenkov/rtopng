@@ -1,3 +1,5 @@
+#' @export
+#' @rdname rtopFitVariogram
 rtopFitVariogram.rtop = function(object, params = list(), iprint = 0, ...) {
 
   params = getRtopParams(object$params, newPar = params, ...)
@@ -43,6 +45,8 @@ rtopFitVariogram.rtop = function(object, params = list(), iprint = 0, ...) {
 # dObs
 # dsBin
 
+#' @export
+#' @rdname rtopFitVariogram
 rtopFitVariogram.rtopVariogram = function(object, observations, dists = NULL, params=list(), mr = FALSE, aOver = NULL,
                                           iprint = 0, ...){
   vario = object
@@ -86,6 +90,8 @@ rtopFitVariogram.rtopVariogram = function(object, observations, dists = NULL, pa
 # gDists
 # discAreas
 
+#' @export
+#' @rdname rtopFitVariogram
 rtopFitVariogram.rtopVariogramCloud = function(object, observations, dists = NULL, aOver = NULL, params=list(), 
                                                mr = FALSE, iprint = 0, ...) {
   vario = object
@@ -120,14 +126,26 @@ rtopFitVariogram.rtopVariogramCloud = function(object, observations, dists = NUL
   } else list(variogramModel ,varFit = varFit)
 }
 
-# There is nothing class dependent in any of these functions, this is handled 
+# There is nothing class dependent in any of these functions, this is handled
 # in rtopVariogram
-rtopFitVariogram.sf = 
-  rtopFitVariogram.SpatialPointsDataFrame =
-  rtopFitVariogram.SpatialPolygonsDataFrame = function(object, params=list(),...) {
+#' @export
+#' @rdname rtopFitVariogram
+rtopFitVariogram.sf = function(object, params=list(),...) {
   if (!inherits(params,"rtopParams")) params = getRtopParams(params, ...)
   vario = rtopVariogram(object,params = params,...)
   rtopFitVariogram(vario = vario, observations = object, params = params,...)
+}
+
+#' @export
+#' @rdname rtopFitVariogram
+rtopFitVariogram.SpatialPointsDataFrame = function(object, params=list(),...) {
+  rtopFitVariogram.sf(object, params, ...)
+}
+
+#' @export
+#' @rdname rtopFitVariogram
+rtopFitVariogram.SpatialPolygonsDataFrame = function(object, params=list(),...) {
+  rtopFitVariogram.sf(object, params, ...)
 }
 
 
@@ -135,6 +153,7 @@ rtopFitVariogram.sf =
 
 
 
+#' @noRd
 objfunc = function(pars, varioIn, gDistEst=FALSE, dists, aOver = NULL, model="Ex1",
                   bu, bl, fit.method = 8, debug.level = 0, resol = 5, nd =100,
                   last = FALSE, ...) {
@@ -227,6 +246,7 @@ objfunc = function(pars, varioIn, gDistEst=FALSE, dists, aOver = NULL, model="Ex
 
 
 
+#' @noRd
 goFit = function(gobs,gest,dist,np,fit.method = 8) {
   if (fit.method == 1) {
     ww = np
@@ -261,6 +281,7 @@ goFit = function(gobs,gest,dist,np,fit.method = 8) {
 
 
 
+#' @noRd
 varioEx = function(skor,variogramModel) {
   model = variogramModel$model
   params = variogramModel$params
@@ -271,11 +292,13 @@ varioEx = function(skor,variogramModel) {
   return(vres[[1]])
 }
 
+#' @noRd
 imodel = function(model) {
 #     The numbers should match the numbers of the Fortran-function vario
   as.integer(switch(model, Exp = 1, Ex1 = 2, Gau = 3, Ga1 = 4, Gho = 5, Sph = 6, Sp1 = 7, Fra = 8) )
 }
 
+#' @noRd
 nuggEx = function(ared,variogramModel) {
   model = variogramModel$model
   params = variogramModel$params

@@ -1,4 +1,5 @@
 
+#' @noRd
 findOverlap = function(areas1, areas2, debug.level = 1, ...) {
   # ST* objects (spacetime) store the geometry in the @sp slot, not at the
   # top level. Extract it first so downstream code can safely access
@@ -106,6 +107,7 @@ findOverlap = function(areas1, areas2, debug.level = 1, ...) {
 
 
 
+#' @noRd
 findVarioOverlap = function(vario) {
   overlap = function(a1,a2,dist) {
     ad = sqrt(a1)/2
@@ -130,11 +132,13 @@ findVarioOverlap = function(vario) {
 
 
 
+#' @noRd
 bbArea = function(bb) {
   xd = bb[[3]]-bb[[1]]
   yd = bb[[4]]-bb[[2]]
   abs(xd) * abs(yd)
 }
+#' @noRd
 commonArea = function(objecti,objectj) {
   bi = bbox(objecti)
   bj = bbox(objectj)

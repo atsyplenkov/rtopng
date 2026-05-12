@@ -1,3 +1,5 @@
+#' @export
+#' @rdname rtopVariogram
 rtopVariogram.sf = function(object, ... ) {
   if (missing(object))  stop("rtopVariogram: Observations are missing")
   obs = st_drop_geometry(object)
@@ -9,6 +11,8 @@ rtopVariogram.sf = function(object, ... ) {
 
 
 
+#' @export
+#' @rdname rtopVariogram
 rtopVariogram.SpatialPolygonsDataFrame = function(object, ... ) {
   if (missing(object))  stop("rtopVariogram: Observations are missing")
   obs = object@data
@@ -23,6 +27,8 @@ rtopVariogram.SpatialPolygonsDataFrame = function(object, ... ) {
 
 
 
+#' @export
+#' @rdname rtopVariogram
 rtopVariogram.SpatialPointsDataFrame = function(object, formulaString, params=list(), cloud, abins, dbins, ...) {
   # If params is intamapParams, they will here be included in rtopParams
   if (!inherits(params, "rtopParams"))  params = getRtopParams(params, ...)
@@ -109,6 +115,8 @@ rtopVariogram.SpatialPointsDataFrame = function(object, formulaString, params=li
 
 
 ###############################
+#' @export
+#' @rdname rtopVariogram
 rtopVariogram.rtop = function(object, params = list(), ... ) {
   params = getRtopParams(object$params, newPar = params, ...)
   observations = object$observations
@@ -124,6 +132,8 @@ rtopVariogram.rtop = function(object, params = list(), ... ) {
 ################################
 
 
+#' @export
+#' @rdname rtopVariogram
 rtopVariogram.STSDF = function(object, formulaString, params = list(), cloud, abins, 
                                dbins, data.table = FALSE, ...) {
   if (!requireNamespace("spacetime")) stop("spacetime not available")

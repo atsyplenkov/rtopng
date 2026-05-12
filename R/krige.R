@@ -1,8 +1,10 @@
+#' @noRd
 ffun = function(...) {
   rkrige(...)
 }
 
 
+#' @noRd
 rkrige = function(observations, obs0, obscors, newcor, vObs, c0arr, nmax, inew, cv, 
                   unc0, mdist, maxdist, singMat, varInv, singularSolve = FALSE, wlim, debug.level,
                   wlimMethod, simul = FALSE, BLUE = FALSE, varClean = FALSE, 

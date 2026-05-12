@@ -1,3 +1,4 @@
+#' @noRd
 bbArea = function(bb) {
   xd = bb[[3]]-bb[[1]]
   yd = bb[[4]]-bb[[2]]
@@ -5,6 +6,7 @@ bbArea = function(bb) {
 }
 
 
+#' @exportS3Method summary rtop
 summary.rtop = function(object,...) {
   summary.default(object,...)
 }
@@ -12,6 +14,7 @@ summary.rtop = function(object,...) {
 
 
 
+#' @noRd
 adfunc = function(sampleVariogram, observations, amul) {
   if (is.null(sampleVariogram)) {
     if ("area" %in% names(observations)) {
@@ -35,6 +38,7 @@ adfunc = function(sampleVariogram, observations, amul) {
 
 
 
+#' @noRd
 dfunc = function(sampleVariogram, observations, dmul) {
   if (is.null(sampleVariogram)) {
     dmax = sqrt(bbArea(bbox(observations)))/2

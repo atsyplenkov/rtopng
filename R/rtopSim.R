@@ -1,3 +1,5 @@
+#' @export
+#' @rdname rtopSim
 rtopSim.rtop = function(object, varMatUpdate = FALSE, beta = NA, largeFirst = TRUE, replace = FALSE, 
                         params = list(), dump = NULL, debug.level, ...) {
   params = getRtopParams(object$params, newPar = params,  ...)
@@ -199,6 +201,8 @@ rtopSim.rtop = function(object, varMatUpdate = FALSE, beta = NA, largeFirst = TR
 }
  
 
+#' @export
+#' @rdname rtopSim
 rtopSim.default = function(object = NULL, predictionLocations, 
                            varMatObs, varMatPredObs, varMatPred, 
                            variogramModel, ...) {

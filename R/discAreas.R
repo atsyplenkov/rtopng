@@ -1,5 +1,6 @@
 
 
+#' @noRd
 discBinAreas = function(object,object2,dist,resol,stype) {
   ad = sqrt(object)/2
   ad[2] = sqrt(object2)/2
@@ -20,6 +21,8 @@ discBinAreas = function(object,object2,dist,resol,stype) {
 
 
 
+#' @export
+#' @rdname rtopDisc
 rtopDisc.rtopVariogram = function(object, params = list(), ...) {
   params = getRtopParams(params, ...)
   resol = params$hresol ^2
@@ -44,6 +47,8 @@ rtopDisc.rtopVariogram = function(object, params = list(), ...) {
 
 
 
+#' @export
+#' @rdname rtopDisc
 rtopDisc.rtop = function(object, params = list(), ...) {
   object$params = getRtopParams(object$params, newPar = params, ...)
   observations = object$observations
@@ -65,6 +70,8 @@ rtopDisc.rtop = function(object, params = list(), ...) {
 
 
 
+#' @export
+#' @rdname rtopDisc
 rtopDisc.sf = function(object, params = list(), bb = st_bbox(object), ...) {
   params = getRtopParams(params, ...)
   stype = params$rstype
@@ -143,10 +150,14 @@ rtopDisc.sf = function(object, params = list(), bb = st_bbox(object), ...) {
 
 
 
+#' @export
+#' @rdname rtopDisc
 rtopDisc.SpatialPolygonsDataFrame = function(object, params = list(), bb = bbox(object), ...) {
   rtopDisc(as(object,"SpatialPolygons"), params = params, bb, ...)
 }
 
+#' @export
+#' @rdname rtopDisc
 rtopDisc.SpatialPolygons = function(object, params = list(), bb = bbox(object), ...) {
   params = getRtopParams(params, ...)
   stype = params$rstype

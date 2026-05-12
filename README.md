@@ -25,18 +25,20 @@ pak::pak("atsyplenkov/rtopng")
 
 ## Roadmap
 
-- [x] Migrate tests to testthat
+- [x] Migrate tests to `testthat`
+- [x] Migrate to `roxygen2` documentation
 - [ ] Replace spacetime with stars
-- [ ] Add a proper OOP structure through S7
-- [ ] Remove data.table and reshape2
-- [ ] Add mirai for parallel processing
-- [ ] Add universal kriging support
+- [ ] Add example data with timeseries
+- [ ] Remove data.table and reshape2 deps
+- [ ] Add mirai for parallel processing (?)
+- [ ] Add universal kriging support (!!)
+- [ ] Add a proper OOP structure through S7 (?)
 
 ## Acknowledgements
 
 `rtopng` builds on the original `rtop` package by Jon Olav Skøien and the method description published in Skøien et al. ([2014](https://doi.org/10.1016/j.cageo.2014.02.009)).
 
-This project has made heavy use of AI-assisted pair programming (both `Kimi 2.6` and `Opus 4.7` via Opencode). It is highly doubtful that we would be able to put this together that quickly without AI help.
+This project has made heavy use of AI-assisted pair programming (both `Kimi 2.6` and `Opus 4.7` via Opencode as of May 2026). It is highly doubtful that we would be able to put this together that quickly without AI help.
 
 ## License
 

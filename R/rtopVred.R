@@ -1,5 +1,6 @@
 
 
+#' @noRd
 vred = function(a1, a2=NULL, vredTyp = "hyp", variogramModel, 
          pdf1=NULL, pdf2=NULL, aover=NULL, dist=NULL, inner = 0, resol=5) {
 #  print(asdf)

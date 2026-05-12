@@ -1,4 +1,5 @@
-
+#' @export
+#' @rdname gDist
 gDist.rtop = function(object, params = list(), ...) {
   params = getRtopParams(object$params, newPar = params, ...)
   if (params$debug.level > 1) debug.level = params$debug.level else debug.level = 0
@@ -14,12 +15,16 @@ gDist.rtop = function(object, params = list(), ...) {
 
 
 
+#' @export
+#' @rdname gDist
 gDist.SpatialPolygonsDataFrame = function(object, object2=NULL, ...) {
   if (is(object2,"SpatialPolygonsDataFrame")) object2 = as(object2,"SpatialPolygons")
   gDist(as(object,"SpatialPolygons"),object2, ...)
 }
 
 
+#' @export
+#' @rdname gDist
 gDist.SpatialPolygons = function(object, object2=NULL, ...) {
   dObs = rtopDisc(object, ...)
   gDistObs = gDist(dObs, ...)
@@ -32,6 +37,8 @@ gDist.SpatialPolygons = function(object, object2=NULL, ...) {
 }
 
 
+#' @export
+#' @rdname gDist
 gDist.sf = function(object, object2=NULL, ...) {
   dObs = rtopDisc(object, ...)
   gDistObs = gDist(dObs, ...)
@@ -44,6 +51,8 @@ gDist.sf = function(object, object2=NULL, ...) {
 }
 
 
+#' @export
+#' @rdname gDist
 gDist.list = function(object,object2=NULL,diag = FALSE, debug.level = 0, ...) {
   variogramModel=list(model = "Gho",params = 0)
   if (debug.level == 1) print("Creating Ghos distances. This can take some time")

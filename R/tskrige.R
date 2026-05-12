@@ -1,4 +1,6 @@
 
+#' @export
+#' @rdname rtopKrige
 rtopKrige.STSDF = function(object, predictionLocations = NULL, varMatObs, varMatPredObs,
                    varMat, params = list(), formulaString, sel,  
                    olags = NULL, plags = NULL, lagExact = TRUE, ...) {

@@ -28,4 +28,5 @@ Description: Data with irregular spatial support, such as runoff related data or
 License: GPL (>= 3)
 NeedsCompilation: yes
 Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
