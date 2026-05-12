@@ -32,7 +32,13 @@ rtopng_spatial_fixtures <- function() {
   list(
     observations = observations,
     prediction_locations = prediction_locations,
-    params = list(gDist = TRUE, cloud = FALSE, rresol = 25, hresol = 3, debug.level = -1)
+    params = list(
+      gDist = TRUE,
+      cloud = FALSE,
+      rresol = 25,
+      hresol = 3,
+      debug.level = -1
+    )
   )
 }
 
@@ -48,7 +54,11 @@ rtopng_sf_fixtures <- function() {
   )
 }
 
-rtopng_sf_subset_fixtures <- function(n_obs = 10, n_pred = 5, params = list(gDist = TRUE, cloud = FALSE)) {
+rtopng_sf_subset_fixtures <- function(
+  n_obs = 10,
+  n_pred = 5,
+  params = list(gDist = TRUE, cloud = FALSE)
+) {
   observations <- rtopng_read_sf("observations")
   prediction_locations <- rtopng_read_sf("predictionLocations")
   observations$obs <- observations$QSUMMER_OB / observations$AREASQKM
@@ -60,7 +70,17 @@ rtopng_sf_subset_fixtures <- function(n_obs = 10, n_pred = 5, params = list(gDis
   )
 }
 
-rtopng_spatial_subset_fixtures <- function(n_obs = 10, n_pred = 2, params = list(gDist = TRUE, cloud = FALSE, rresol = 25, hresol = 3, debug.level = -1)) {
+rtopng_spatial_subset_fixtures <- function(
+  n_obs = 10,
+  n_pred = 2,
+  params = list(
+    gDist = TRUE,
+    cloud = FALSE,
+    rresol = 25,
+    hresol = 3,
+    debug.level = -1
+  )
+) {
   fixtures <- rtopng_spatial_fixtures()
 
   list(

@@ -1,13 +1,11 @@
 # this is needed to make R aware we're introducing new S3 methods:
 
-
-
 #' create variogram for data with spatial support
-#' 
+#'
 #' rtopVariogram will create binned variogram or cloud variogram of data with
 #' an areal support.
-#' 
-#' 
+#'
+#'
 #' @aliases rtopVariogram rtopVariogram.rtop
 #' rtopVariogram.SpatialPolygonsDataFrame rtopVariogram.SpatialPointsDataFrame
 #' rtopVariogram.STSDF
@@ -42,7 +40,7 @@
 #' additional information about the spatial size or length of the observations.
 #' An rtop-object with the variogram added is returned if the function is
 #' called with an rtop-object as argument.
-#' 
+#'
 #' For spatio-temporal objects (\code{\link[spacetime]{STSDF}}), the variogram
 #' is the spatially variogram, averaged for all time steps. There is a
 #' possibility to use data.table internally in this function, which can improve
@@ -54,41 +52,41 @@
 #' the log10-space of the distances and areas (lengths). The size of the bins
 #' is decided from the parameters \code{amul} and \code{dmul}, defining the
 #' number of bins per order of magnitude (1:10, 10:100, and so on).
-#' 
+#'
 #' The distances between areas are in this function based on the centre of
 #' gravity.
 #' @author Jon Olav Skoien
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
 #' Geosciences, 67.
 #' @keywords spatial
 #' @examples
-#' 
+#'
 #' \dontrun{
 #' library(sf)
-#' rpath = system.file("extdata",package="rtopng")
-#' observations = st_read(rpath,"observations")
+#' rpath <- system.file("extdata",package="rtopng")
+#' observations <- st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
-#' vario = rtopVariogram(observations, cloud = TRUE)
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#'
+#' vario <- rtopVariogram(observations, cloud = TRUE)
 #' }
-#' 
+#'
 #' @export
-rtopVariogram         <- function(object, ...) UseMethod("rtopVariogram")
+rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 
 
 #' Fit variogram model to sample variogram of data with spatial support
-#' 
+#'
 #' rtopFitVariogram will fit a variogram model to the estimated binned
 #' variogram or cloud variogram of data with an areal support.
-#' 
-#' 
+#'
+#'
 #' @aliases rtopFitVariogram rtopFitVariogram.rtop
 #' rtopFitVariogram.SpatialPolygonsDataFrame
 #' rtopFitVariogram.SpatialPointsDataFrame rtopFitVariogram.rtopVariogram
@@ -96,7 +94,7 @@ rtopVariogram         <- function(object, ...) UseMethod("rtopVariogram")
 #' @param object object of class \code{rtopVariogram} or
 #' \code{rtopVariogramCloud}, or an object with class \code{rtop} that includes
 #' the sample variograms.
-#' 
+#'
 #' The object can also be of class \code{\link[sp]{SpatialPolygonsDataFrame}}
 #' or \cr \code{\link[sp]{SpatialPointsDataFrame}} with observations. If
 #' \code{object} is a \cr \code{\link[sp]{SpatialPointsDataFrame}}, it must
@@ -142,50 +140,49 @@ rtopVariogram         <- function(object, ...) UseMethod("rtopVariogram")
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O. and G. Bloschl. Spatio-Temporal Top-Kriging of Runoff Time
 #' Series. Water Resources Research 43:W09419, 2007.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
 #' Geosciences, 67.
 #' @keywords spatial
 #' @examples
-#' 
+#'
 #' \donttest{
-#' rpath = system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' predictionLocations = st_read(rpath,"predictionLocations")
-#' 
+#' observations <- st_read(rpath, "observations")
+#' predictionLocations <- st_read(rpath,"predictionLocations")
+#'
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#'
 #' # Setting some parameters
-#' params = list(gDist = TRUE, cloud = FALSE)
+#' params <- list(gDist = TRUE, cloud = FALSE)
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
 #' # Build an object
-#' rtopObj = createRtopObject(observations,predictionLocations,
-#'                            params = params)
+#' rtopObj <- createRtopObject(observations,predictionLocations,
+#'            params = params)
 #' # Fit a variogram (function also creates it)
-#' rtopObj = rtopFitVariogram(rtopObj)
+#' rtopObj <- rtopFitVariogram(rtopObj)
 #' rtopObj$variogramModel
 #' }
-#' 
+#'
 #' @export
-rtopFitVariogram      <- function(object, ...) UseMethod("rtopFitVariogram")
+rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #estimateParameters      <- function(object, ...) UseMethod("estimateParameters")
 #spatialPredict      <- function(object, ...) UseMethod("spatialPredict")
 
-
 #' Plot variogram fitted to data with support
-#' 
+#'
 #' The function will create diagnostic plots for analysis of the variograms
 #' fitted to sample variograms of data with support
-#' 
-#' 
+#'
+#'
 #' @aliases checkVario checkVario.rtop checkVario.rtopVariogramModel
 #' @param object either: object of class \code{rtop} (see
 #' \code{\link{rtopng-package}}), or an object of type \cr \code{rtopVariogram}
@@ -240,40 +237,40 @@ rtopFitVariogram      <- function(object, ...) UseMethod("rtopFitVariogram")
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
 #' Geosciences, 67.
 #' @keywords spatial
 #' @examples
-#' 
+#'
 #' \donttest{
 #' library(gstat)
-#' rpath = system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' predictionLocations = st_read(rpath,"predictionLocations")
-#' 
+#' observations <- st_read(rpath, "observations")
+#' predictionLocations <- st_read(rpath,"predictionLocations")
+#'
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' params = list(cloud = TRUE, gDist = TRUE)
-#' rtopObj = createRtopObject(observations, predictionLocations,
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#' params <- list(cloud = TRUE, gDist = TRUE)
+#' rtopObj <- createRtopObject(observations, predictionLocations,
 #'                            params = params)
-#' 
+#'
 #' # Fit a variogram (function also creates it)
-#' rtopObj = rtopFitVariogram(rtopObj, maxn = 2000)
+#' rtopObj <- rtopFitVariogram(rtopObj, maxn = 2000)
 #' checkVario(rtopObj,
 #'     compVars = list(first = vgm(5e-6, "Sph", 30000,5e-8),
 #'                    second = vgm(2e-6, "Sph", 30000,5e-8)))
-#' 
-#' rtopObj = checkVario(rtopObj, acor = 0.000001,
+#'
+#' rtopObj <- checkVario(rtopObj, acor = 0.000001,
 #'           acomp = data.frame(acl1 = c(2,2,2,2,3,3,3,4,4),
 #'           acl2 = c(2,3,4,5,3,4,5,4,5)))
-#' rtopObj = checkVario(rtopObj, cloud = TRUE, identify = TRUE,
+#' rtopObj <- checkVario(rtopObj, cloud = TRUE, identify = TRUE,
 #'           acor = 0.000001)
 #' }
-#' 
+#'
 #' @export
 checkVario <- function(object, ...) UseMethod("checkVario")
 
@@ -360,30 +357,30 @@ checkVario <- function(object, ...) UseMethod("checkVario")
 #' @examples
 #'
 #' \donttest{
-#' rpath = system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' gDist = gDist(observations)
+#' observations <- st_read(rpath, "observations")
+#' gDist <- gDist(observations)
 #' }
 #'
 #' @export
-gDist      <- function(object, ...) UseMethod("gDist")
+gDist <- function(object, ...) UseMethod("gDist")
 
 
 #' Discretize areas
-#' 
+#'
 #' \code{rtopDisc} will discretize an area for regularization or calculation of
 #' Ghosh-distance
-#' 
+#'
 #' There are different options for discretizing the objects. When the areas
 #' from the bins are discretized, the options are \code{random} or
 #' \code{regular} sampling, \code{regular} sampling is the default.
-#' 
+#'
 #' For the real areas, regular sampling appears to have computational
 #' advantages compared with random sampling. In addition to the traditional
 #' regular sampling, \code{rtop} also offers a third type of sampling which
 #' assures that the same discretization points are used for overlapping areas.
-#' 
+#'
 #' Starting with a coarse grid covering the region of interest, this will for a
 #' certain support be refined till a requested minimum number of points from
 #' the grid is within the support.  In this way, for areal supports, the number
@@ -392,7 +389,7 @@ gDist      <- function(object, ...) UseMethod("gDist")
 #' methods also assure that points used to discretize a large support will be
 #' reused when discretizing smaller supports within the large one, e.g.
 #' subcatchments within larger catchments.
-#' 
+#'
 #' @aliases rtopDisc rtopDisc.rtop rtopDisc.SpatialPolygonsDataFrame
 #' rtopDisc.SpatialPolygons rtopDisc.rtopVariogram
 #' @param object object of class \code{\link[sp]{SpatialPolygons}} or
@@ -421,7 +418,7 @@ gDist      <- function(object, ...) UseMethod("gDist")
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
@@ -512,10 +509,10 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #'
 #' \dontrun{
 #' library(sf)
-#' rpath = system.file("extdata",package="rtopng")
-#' observations = st_read(rpath,"observations")
-#' vmod = list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
-#' vm = varMat(observations, variogramModel = vmod)
+#' rpath <- system.file("extdata",package="rtopng")
+#' observations <- st_read(rpath,"observations")
+#' vmod <- list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
+#' vm <- varMat(observations, variogramModel = vmod)
 #' }
 #'
 #' @export
@@ -523,38 +520,38 @@ varMat <- function(object, ...) UseMethod("varMat")
 
 
 #' Spatial interpolation of data with spatial support
-#' 
+#'
 #' rtopKrige perform spatial interpolation or cross validation of data with
 #' areal support.
-#' 
+#'
 #' This function is the interpolation routine of the rtopng-package. The
 #' simplest way of calling the function is with an rtop-object that contains
 #' the fitted variogram model and all the other necessary data (see
 #' \code{\link{createRtopObject}} or \code{\link{rtopng-package}}).
-#' 
+#'
 #' The function will, if called with covariance matrices between observations
 #' and between observations and prediction locations, use these for the
 #' interpolation. If the function is called without these matrices,
 #' \code{\link{varMat}} will be called to create them. These matrices can
 #' therefore be reused if necessary, an advantage as it is computationally
 #' expensive to create them.
-#' 
+#'
 #' The interpolation that takes part within \code{rtopKrige.default} is based
 #' on the semivariance matrices between observations and between observations
 #' and prediction locations. It is therefore possible to use this function also
 #' to interpolate data where the matrices have been created in other ways, e.g.
 #' based on distances in physiographical space or distances along a stream.
-#' 
+#'
 #' The function returns the weights rather than the predictions if \code{wret =
 #' TRUE}. This is useful for batch processing of time series, e.g. once the
 #' weights are created, they can be used to compute the interpolated values for
 #' each time step.
-#' 
+#'
 #' rtop is able to take some advantage of multiple CPUs, which can be invoked
 #' with the parameter \code{nclus}. When it gets a number larger than one,
 #' \code{rtopKrige} will start a cluster with \code{nclus} workers, if the
 #' \code{\link{parallel}}-package has been installed.
-#' 
+#'
 #' The parameter \code{singularSolve} can be used when some areas are almost
 #' completely overlapping. In this case, the discretization of them might be
 #' equal, and the covariances to other areas will also be equal. The kriging
@@ -562,7 +559,7 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' \code{rtopKrige} will remove one of the neighbours, and instead work with
 #' the mean of the two observations. An overview of removed neighbours can be
 #' seen in the resulting object, under the name \code{removed}.
-#' 
+#'
 #' Kriging of time series is possible when \code{observations} and
 #' \code{predictionLocations} are spatiotemporal objects of type
 #' \code{\link[spacetime]{STSDF}}. The interpolation is still spatial, in the
@@ -576,18 +573,18 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' prediction location, earlier time steps would be picked for neighbours with
 #' shorter travel time and later time steps for neighbours with slower travel
 #' times.
-#' 
+#'
 #' The lagExact parameter indicates whether to use a weighted average of two
 #' time steps, or just the time step which is closest to the difference in lag
 #' times.
-#' 
+#'
 #' The use of lag times should in theory increase the computation time, but
 #' might, due to different computation methods, even speed up the computation
 #' when the number of neighbours to be used (parameter nmax) is small compared
 #' to the number of observations. If computation is slow, it can be useful to
 #' test olags = rep(0, `dim(observations)[1]`) and similar for
 #' predictionLocations.
-#' 
+#'
 #' @aliases rtopKrige rtopKrige.rtop rtopKrige.SpatialPolygonsDataFrame
 #' rtopKrige.STSDF rtopKrige.default
 #' @param object object of class \code{rtop} or
@@ -634,66 +631,66 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' predictions, either at the locations defined in \cr
 #' \code{predictionLocations}, or as leave-one-out cross-validation predicitons
 #' at the same locations as in object if \code{cv = TRUE}
-#' 
+#'
 #' If called with an rtop-object, the function returns the same object with the
 #' predictions added to the object.
 #' @author Jon Olav Skoien
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O. and G. Bloschl. Spatio-Temporal Top-Kriging of Runoff Time
 #' Series. Water Resources Research 43:W09419, 2007.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
 #' Geosciences, 67.
 #' @keywords spatial
 #' @examples
-#' 
+#'
 #' \donttest{
 #' # The following command will download  the complete example data set
 #' # downloadRtopExampleData()
 #' # observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
-#' rpath = system.file("extdata",package="rtopng")
+#'
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' predictionLocations = st_read(rpath,"predictionLocations")
-#' 
+#' observations <- st_read(rpath, "observations")
+#' predictionLocations <- st_read(rpath,"predictionLocations")
+#'
 #' # Setting some parameters; nclus > 1 will start a cluster with nclus
 #' # workers for parallel processing
-#' params = list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
-#' 
+#' params <- list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
+#'
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#'
 #' # Build an object
-#' rtopObj = createRtopObject(observations, predictionLocations,
-#'            params = params)
-#' 
+#' rtopObj <- createRtopObject(observations, predictionLocations,
+#'                            params = params)
+#'
 #' # Fit a variogram (function also creates it)
-#' rtopObj = rtopFitVariogram(rtopObj)
-#' 
+#' rtopObj <- rtopFitVariogram(rtopObj)
+#'
 #' # Predicting at prediction locations
-#' rtopObj = rtopKrige(rtopObj)
-#' 
+#' rtopObj <- rtopKrige(rtopObj)
+#'
 #' # Cross-validation
-#' rtopObj = rtopKrige(rtopObj,cv=TRUE)
+#' rtopObj <- rtopKrige(rtopObj,cv=TRUE)
 #' cor(rtopObj$predictions$observed,rtopObj$predictions$var1.pred)
 #' }
-#' 
+#'
 #' @export
 rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 
 
 #' Spatial simulation of data with spatial support
-#' 
+#'
 #' rtopSim will conditionally or unconditionally simulate data with areal
 #' support. This function should be seen as experimental, some issues are
 #' described below.
-#' 
+#'
 #' This function can do constrained or unconstrained simulation for areas. The
 #' simplest way of calling the function is with an rtop-object that contains
 #' the fitted variogram model and all the other necessary data (see
@@ -701,10 +698,10 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' \code{rtopSim} is the only function in \code{rtop} which does not need
 #' observations. However, a variogram model is still necessary to perform
 #' simulations.
-#' 
+#'
 #' The arguments \code{beta} and \code{largeFirst} are only used for
 #' unconditional simulations.
-#' 
+#'
 #' The function is still in an experimental stage, and might change in the
 #' future. There are some issues with the current implementation:
 #' - Numerical issues can in some cases give negative estimation variances,
@@ -714,7 +711,7 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #'   catchments) will be relatively high based on the statistical uncertainty.
 #'   This could be overestimated compared to the uncertainty which is possible
 #'   based on rainfall.
-#' 
+#'
 #' @aliases rtopSim rtopSim.rtop rtopSim.default
 #' @param object object of class \code{rtop} or
 #' \code{\link[sp]{SpatialPolygonsDataFrame}} or \code{sf}
@@ -759,62 +756,62 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' observations, the function returns a\cr
 #' \code{\link[sp]{SpatialPolygonsDataFrame}} or \code{sf} with simulations at
 #' the locations defined in \cr \code{predictionLocations}
-#' 
+#'
 #' If called with an rtop-object, the function returns the same object with the
 #' simulations added to the object.
 #' @author Jon Olav Skoien
 #' @references Skoien J. O., R. Merz, and G. Bloschl. Top-kriging -
 #' geostatistics on stream networks. Hydrology and Earth System Sciences,
 #' 10:277-287, 2006.
-#' 
+#'
 #' Skoien, J. O., Bloschl, G., Laaha, G., Pebesma, E., Parajka, J., Viglione,
 #' A., 2014. Rtop: An R package for interpolation of data with a variable
 #' spatial support, with an example from river networks. Computers &
 #' Geosciences, 67.
 #' @keywords spatial
 #' @examples
-#' 
+#'
 #' \donttest{
 #' # The following command will download  the complete example data set
 #' # downloadRtopExampleData()
-#' 
-#' rpath = system.file("extdata",package="rtopng")
+#'
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' predictionLocations = st_read(rpath,"predictionLocations")
-#' 
+#' observations <- st_read(rpath, "observations")
+#' predictionLocations <- st_read(rpath,"predictionLocations")
+#'
 #' # Setting some parameters; nclus > 1 will start a cluster with nclus
 #' # workers for parallel processing
-#' params = list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
-#' 
+#' params <- list(gDist = TRUE, cloud = FALSE, nclus = 1, rresol = 25)
+#'
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#'
 #' # Build an object
-#' rtopObj = createRtopObject(observations, predictionLocations,
+#' rtopObj <- createRtopObject(observations, predictionLocations,
 #'                            params = params, formulaString = "obs~1")
-#' 
+#'
 #' # Fit a variogram (function also creates it)
-#' rtopObj = rtopFitVariogram(rtopObj)
-#' 
+#' rtopObj <- rtopFitVariogram(rtopObj)
+#'
 #' # Conditional simulations for two new locations
-#' rtopObj10 = rtopSim(rtopObj, nsim = 5)
-#' rtopObj11 = rtopObj
-#' 
+#' rtopObj10 <- rtopSim(rtopObj, nsim = 5)
+#' rtopObj11 <- rtopObj
+#'
 #' # Unconditional simulation at the observation locations
 #' # (These are moved to the predictionLocations)
-#' rtopObj11$predictionLocations = rtopObj11$observations
-#' rtopObj11$observations = NULL
+#' rtopObj11$predictionLocations <- rtopObj11$observations
+#' rtopObj11$observations <- NULL
 #' # Setting varMatUpdate to TRUE, to make sure that covariance
 #' # matrices are recomputed
-#' rtopObj12 = rtopSim(rtopObj11, nsim = 10, beta = 0.01,
+#' rtopObj12 <- rtopSim(rtopObj11, nsim = 10, beta = 0.01,
 #'                     varMatUpdate = TRUE)
-#' 
+#'
 #' summary(data.frame(rtopObj10$simulations))
 #' summary(data.frame(rtopObj12$simulations))
-#' 
+#'
 #' }
-#' 
+#'
 #' @export
 rtopSim <- function(object, ...) UseMethod("rtopSim")
 #' @export

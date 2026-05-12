@@ -38,123 +38,159 @@
 #'
 #' \dontrun{
 #' library(sf)
-#' rpath = system.file("extdata",package="rtopng")
-#' observations = st_read(rpath,"observations")
+#' rpath <- system.file("extdata",package="rtopng")
+#' observations <- st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' predictionLocations = st_read(rpath,"predictionLocations")
-#' rtopObj = createRtopObject(observations,predictionLocations)
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#' predictionLocations <- st_read(rpath,"predictionLocations")
+#' rtopObj <- createRtopObject(observations,predictionLocations)
 #'  # Fit a variogram (function also creates it)
-#' rtopObj = rtopFitVariogram(rtopObj)
-#' rtopObj = updateRtopVariogram(rtopObj, exp = 1.5, action = "mult",
+#' rtopObj <- rtopFitVariogram(rtopObj)
+#' rtopObj <- updateRtopVariogram(rtopObj, exp = 1.5, action = "mult",
 #'               checkVario = TRUE)
 #' }
 #' @export
-rtopVariogramModel = function(model = "Ex1", sill = NULL, range = NULL, exp = NULL,
-    nugget = NULL, exp0 = NULL,
-    observations = NULL, formulaString = obs~1) {
-if (tolower(model) == "ex1") {
-  model = "Ex1"
-  if (!is.null(observations)) {
-    parInit = findParInit(formulaString, observations, model)$par0
-    if (is.null(sill)) sill = parInit[1]
-    if (is.null(range)) range = parInit[2]
-    if (is.null(nugget)) nugget = parInit[3]
-    if (is.null(exp)) exp = parInit[4]
-    if (is.null(exp0)) exp0 = parInit[5]
-  } else {
-    if (is.null(sill)) sill = 1
-    if (is.null(range)) range = 1
-    if (is.null(exp)) exp = 0
-    if (is.null(nugget)) nugget = 0
-    if (is.null(exp0)) exp0 = 1
-  }
+rtopVariogramModel <- function(
+  model = "Ex1",
+  sill = NULL,
+  range = NULL,
+  exp = NULL,
+  nugget = NULL,
+  exp0 = NULL,
+  observations = NULL,
+  formulaString = obs ~ 1
+) {
+  if (tolower(model) == "ex1") {
+    model <- "Ex1"
+    if (!is.null(observations)) {
+      parInit <- findParInit(formulaString, observations, model)$par0
+      if (is.null(sill)) {
+        sill <- parInit[1]
+      }
+      if (is.null(range)) {
+        range <- parInit[2]
+      }
+      if (is.null(nugget)) {
+        nugget <- parInit[3]
+      }
+      if (is.null(exp)) {
+        exp <- parInit[4]
+      }
+      if (is.null(exp0)) exp0 <- parInit[5]
+    } else {
+      if (is.null(sill)) {
+        sill <- 1
+      }
+      if (is.null(range)) {
+        range <- 1
+      }
+      if (is.null(exp)) {
+        exp <- 0
+      }
+      if (is.null(nugget)) {
+        nugget <- 0
+      }
+      if (is.null(exp0)) exp0 <- 1
+    }
 
-
-  variogramModel = list(model = model, params = c(sill, range, nugget, exp, exp0))
-  class(variogramModel) = "rtopVariogramModel"
+    variogramModel <- list(
+      model = model,
+      params = c(sill, range, nugget, exp, exp0)
+    )
+    class(variogramModel) <- "rtopVariogramModel"
   }
   variogramModel
 }
 
 #' @rdname rtopVariogramModel
 #' @export
-updateRtopVariogram.rtop = function(object, ...) {
-object$variogramModel = updateRtopVariogram(object$variogramModel, sampleVariogram = object$variogram,
-observations = object$observations, ...)
-object
+updateRtopVariogram.rtop <- function(object, ...) {
+  object$variogramModel <- updateRtopVariogram(
+    object$variogramModel,
+    sampleVariogram = object$variogram,
+    observations = object$observations,
+    ...
+  )
+  object
 }
 
 #' @rdname rtopVariogramModel
 #' @export
-updateRtopVariogram.rtopVariogramModel = function(object, action = "mult", ..., checkVario = FALSE, 
-sampleVariogram = NULL, observations = NULL){
-  variogramModel = object
-  dots = list(...)
+updateRtopVariogram.rtopVariogramModel <- function(
+  object,
+  action = "mult",
+  ...,
+  checkVario = FALSE,
+  sampleVariogram = NULL,
+  observations = NULL
+) {
+  variogramModel <- object
+  dots <- list(...)
 
   if (variogramModel$model == "Ex1") {
     if ("sill" %in% names(dots)) {
       if (action == "mult") {
-        variogramModel$params[1] = variogramModel$params[1]*dots$sill
+        variogramModel$params[1] <- variogramModel$params[1] * dots$sill
       } else if (action == "add") {
-        variogramModel$params[1] = variogramModel$params[1]*dots$sill
+        variogramModel$params[1] <- variogramModel$params[1] * dots$sill
       } else if (action == "replace") {
-        variogramModel$params[1] = dots$sill
+        variogramModel$params[1] <- dots$sill
       }
     }
     if ("range" %in% names(dots)) {
       if (action == "mult") {
-        variogramModel$params[2] = variogramModel$params[2]*dots$range
+        variogramModel$params[2] <- variogramModel$params[2] * dots$range
       } else if (action == "add") {
-        variogramModel$params[2] = variogramModel$params[2]*dots$range
+        variogramModel$params[2] <- variogramModel$params[2] * dots$range
       } else if (action == "replace") {
-        variogramModel$params[2] = dots$range
+        variogramModel$params[2] <- dots$range
       }
     }
     if ("nugget" %in% names(dots)) {
       if (action == "mult") {
-        variogramModel$params[3] = variogramModel$params[3]*dots$nugget
+        variogramModel$params[3] <- variogramModel$params[3] * dots$nugget
       } else if (action == "add") {
-        variogramModel$params[3] = variogramModel$params[3]*dots$nugget
+        variogramModel$params[3] <- variogramModel$params[3] * dots$nugget
       } else if (action == "replace") {
-        variogramModel$params[3] = dots$nugget
+        variogramModel$params[3] <- dots$nugget
       }
     }
     if ("exp" %in% names(dots)) {
       if (action == "mult") {
-        variogramModel$params[4] = variogramModel$params[4]*dots$exp
+        variogramModel$params[4] <- variogramModel$params[4] * dots$exp
       } else if (action == "add") {
-        variogramModel$params[4] = variogramModel$params[4]*dots$exp
+        variogramModel$params[4] <- variogramModel$params[4] * dots$exp
       } else if (action == "replace") {
-        variogramModel$params[4] = dots$exp
+        variogramModel$params[4] <- dots$exp
       }
     }
     if ("exp0" %in% names(dots)) {
       if (action == "mult") {
-        variogramModel$params[5] = variogramModel$params[5]*dots$exp0
+        variogramModel$params[5] <- variogramModel$params[5] * dots$exp0
       } else if (action == "add") {
-        variogramModel$params[5] = variogramModel$params[5]*dots$exp0
+        variogramModel$params[5] <- variogramModel$params[5] * dots$exp0
       } else if (action == "replace") {
-        variogramModel$params[5] = dots$exp0
+        variogramModel$params[5] <- dots$exp0
       }
     }
-    if (checkVario) checkVario(variogramModel, sampleVariogram = sampleVariogram, observations = observations)  
+    if (checkVario) {
+      checkVario(
+        variogramModel,
+        sampleVariogram = sampleVariogram,
+        observations = observations
+      )
+    }
   }
-  variogramModel    
+  variogramModel
 }
 
 
-
-
-
-
-
 #' Plot and Identify Data Pairs on Sample Variogram Cloud
-#' 
+#'
 #' Plot a sample variogram cloud, possibly with identification of individual
 #' point pairs
-#' 
-#' 
+#'
+#'
 #' @param x object of class \code{variogramCloud}
 #' @param ...  parameters that are passed through to
 #' \code{\link[gstat]{plot.variogramCloud}} The most important are: \describe{
@@ -178,24 +214,24 @@ sampleVariogram = NULL, observations = NULL){
 #' @references \url{http://www.gstat.org/}
 #' @keywords dplot
 #' @examples
-#' 
+#'
 #' \donttest{
-#' rpath = system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="rtopng")
 #' library(sf)
-#' observations = st_read(rpath, "observations")
-#' 
-#' observations$obs = observations$QSUMMER_OB/observations$AREASQKM
-#' 
+#' observations <- st_read(rpath, "observations")
+#'
+#' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
+#'
 #' # Create the sample variogram
-#' rtopVario = rtopVariogram(observations, params = list(cloud = TRUE))
+#' rtopVario <- rtopVariogram(observations, params = list(cloud = TRUE))
 #' plot(rtopVario)
-#' 
+#'
 #' }
-#' 
+#'
 #' @method plot rtopVariogramCloud
 #' @exportS3Method plot rtopVariogramCloud
-plot.rtopVariogramCloud = function(x,  ...) {
-x$np = x$ord
-class(x) = "variogramCloud"
-plot(x, ...)
+plot.rtopVariogramCloud <- function(x, ...) {
+  x$np <- x$ord
+  class(x) <- "variogramCloud"
+  plot(x, ...)
 }

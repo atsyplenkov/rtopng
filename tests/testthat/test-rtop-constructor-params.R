@@ -24,7 +24,10 @@ test_that("constructor and parameter flow cover inference, coercion, and project
   expect_s3_class(coerced$formulaString, "formula")
   expect_identical(deparse(coerced$formulaString), "obs ~ 1")
 
-  updated <- createRtopObject(coerced, params = list(gDist = FALSE, model = "Ex1"))
+  updated <- createRtopObject(
+    coerced,
+    params = list(gDist = FALSE, model = "Ex1")
+  )
   expect_s3_class(updated, "rtop")
   expect_false(isTRUE(updated$params$gDistEst))
   expect_false(isTRUE(updated$params$gDistPred))
@@ -79,7 +82,11 @@ test_that("constructor and parameter flow cover inference, coercion, and project
   sf_pred <- sf_fixtures$prediction_locations
 
   obs_crs <- sf::st_crs(sf_obs)
-  mismatch_crs <- if (!is.na(obs_crs$epsg) && obs_crs$epsg == 4326) 3857 else 4326
+  mismatch_crs <- if (!is.na(obs_crs$epsg) && obs_crs$epsg == 4326) {
+    3857
+  } else {
+    4326
+  }
 
   expect_error(
     createRtopObject(

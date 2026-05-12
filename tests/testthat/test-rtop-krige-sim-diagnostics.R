@@ -3,7 +3,10 @@ unfit_base <- createRtopObject(
   spatial$observations,
   spatial$prediction_locations,
   formulaString = "obs ~ 1",
-  params = modifyList(spatial$params, list(nugget = FALSE, model = "Ex1", gDist = FALSE))
+  params = modifyList(
+    spatial$params,
+    list(nugget = FALSE, model = "Ex1", gDist = FALSE)
+  )
 )
 fit_base <- rtopFitVariogram(unfit_base, iprint = -1)
 
@@ -13,7 +16,10 @@ fit_cloud <- rtopFitVariogram(
     spatial_small$observations,
     spatial_small$prediction_locations,
     formulaString = "obs ~ 1",
-    params = modifyList(spatial_small$params, list(nugget = FALSE, model = "Ex1", gDist = FALSE))
+    params = modifyList(
+      spatial_small$params,
+      list(nugget = FALSE, model = "Ex1", gDist = FALSE)
+    )
   ),
   iprint = -1
 )
@@ -41,15 +47,24 @@ test_that("rtopSim covers error paths and the missing-area augmentation branch",
     params = modifyList(spatial$params, list(nugget = FALSE, model = "Ex1"))
   )
 
-  expect_error(rtopSim(unfit, nsim = 1, debug.level = -1), "Cannot do simulations without a variogram model")
+  expect_error(
+    rtopSim(unfit, nsim = 1, debug.level = -1),
+    "Cannot do simulations without a variogram model"
+  )
 
   fit <- rtopFitVariogram(unfit, iprint = -1)
 
-  expect_error(rtopSim(fit, nsim = 1, replace = TRUE, debug.level = -1), "replaceNumber")
+  expect_error(
+    rtopSim(fit, nsim = 1, replace = TRUE, debug.level = -1),
+    "replaceNumber"
+  )
 
   bad_replace <- fit
   bad_replace$predictionLocations <- bad_replace$observations[1:2, ]
-  bad_replace$predictionLocations$replaceNumber <- c(1, nrow(bad_replace$observations) + 1)
+  bad_replace$predictionLocations$replaceNumber <- c(
+    1,
+    nrow(bad_replace$observations) + 1
+  )
   expect_error(
     rtopSim(bad_replace, nsim = 1, replace = TRUE, debug.level = -1),
     "does not correspond"
@@ -57,13 +72,18 @@ test_that("rtopSim covers error paths and the missing-area augmentation branch",
 
   sim_input <- fit
   sim_input$predictionLocations <- sim_input$observations
-  sim_input$predictionLocations$replaceNumber <- seq_len(nrow(sim_input$predictionLocations))
+  sim_input$predictionLocations$replaceNumber <- seq_len(nrow(
+    sim_input$predictionLocations
+  ))
   sim_input$predictionLocations$area <- NULL
 
   set.seed(1501)
-  sim <- suppressWarnings(
-    rtopSim(sim_input, nsim = 1, replace = FALSE, debug.level = -1)
-  )
+  sim <- suppressWarnings(rtopSim(
+    sim_input,
+    nsim = 1,
+    replace = FALSE,
+    debug.level = -1
+  ))
 
   expect_s4_class(sim$simulations, "SpatialPolygonsDataFrame")
   expect_true("area" %in% names(sim$simulations))

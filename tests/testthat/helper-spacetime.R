@@ -16,7 +16,10 @@ rtopng_spacetime_fixtures <- function(n_obs = 8, n_pred = 4, n_time = 3) {
     sp::SpatialPolygonsDataFrame(
       sp::SpatialPolygons(polys),
       data = data.frame(
-        area = sapply(methods::slot(sp::SpatialPolygons(polys), "polygons"), function(i) methods::slot(i, "area")),
+        area = sapply(
+          methods::slot(sp::SpatialPolygons(polys), "polygons"),
+          function(i) methods::slot(i, "area")
+        ),
         row.names = paste0(prefix, seq_len(n))
       )
     )

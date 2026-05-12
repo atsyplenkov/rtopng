@@ -7,7 +7,12 @@ test_that("spacetime STSDF objects work end-to-end", {
     fixtures$observations,
     fixtures$prediction_locations,
     formulaString = "obs ~ 1",
-    params = list(rresol = 4, rstype = "regular", debug.level = -1, nugget = FALSE)
+    params = list(
+      rresol = 4,
+      rstype = "regular",
+      debug.level = -1,
+      nugget = FALSE
+    )
   )
 
   expect_s3_class(rtop_obj, "rtop")
@@ -44,7 +49,12 @@ test_that("spacetime pipeline tolerates nugget=TRUE", {
     fixtures$observations,
     fixtures$prediction_locations,
     formulaString = "obs ~ 1",
-    params = list(rresol = 4, rstype = "regular", debug.level = -1, nugget = TRUE)
+    params = list(
+      rresol = 4,
+      rstype = "regular",
+      debug.level = -1,
+      nugget = TRUE
+    )
   )
 
   expect_s3_class(rtop_obj, "rtop")

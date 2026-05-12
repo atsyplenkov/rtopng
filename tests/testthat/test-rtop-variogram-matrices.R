@@ -5,24 +5,61 @@ sp_obs <- spatial$observations
 sp_pred <- spatial$prediction_locations
 sf_obs <- sf_fixtures$observations
 
-params_sp <- modifyList(spatial$params, list(nugget = FALSE, model = "Ex1", gDist = TRUE))
-params_sf_cloud <- modifyList(sf_fixtures$params, list(cloud = TRUE, nugget = FALSE, model = "Ex1", gDist = TRUE))
-params_sf_cloud_false <- modifyList(sf_fixtures$params, list(cloud = FALSE, nugget = FALSE, model = "Ex1", gDist = FALSE))
+params_sp <- modifyList(
+  spatial$params,
+  list(nugget = FALSE, model = "Ex1", gDist = TRUE)
+)
+params_sf_cloud <- modifyList(
+  sf_fixtures$params,
+  list(cloud = TRUE, nugget = FALSE, model = "Ex1", gDist = TRUE)
+)
+params_sf_cloud_false <- modifyList(
+  sf_fixtures$params,
+  list(cloud = FALSE, nugget = FALSE, model = "Ex1", gDist = FALSE)
+)
 
 vario_sp <- rtopVariogram(sp_obs, formulaString = "obs ~ 1", params = params_sp)
-vario_sp_cloud <- rtopVariogram(sp_obs, formulaString = "obs ~ 1", params = modifyList(params_sp, list(cloud = TRUE)))
-vario_sf <- rtopVariogram(sf_obs, formulaString = "obs ~ 1", params = params_sf_cloud_false)
-vario_sf_cloud <- rtopVariogram(sf_obs, formulaString = "obs ~ 1", params = params_sf_cloud)
+vario_sp_cloud <- rtopVariogram(
+  sp_obs,
+  formulaString = "obs ~ 1",
+  params = modifyList(params_sp, list(cloud = TRUE))
+)
+vario_sf <- rtopVariogram(
+  sf_obs,
+  formulaString = "obs ~ 1",
+  params = params_sf_cloud_false
+)
+vario_sf_cloud <- rtopVariogram(
+  sf_obs,
+  formulaString = "obs ~ 1",
+  params = params_sf_cloud
+)
 
-disc_sp <- rtopDisc(sp_obs, params = list(rstype = "regular", rresol = 4, debug.level = -1))
-disc_sf <- rtopDisc(sf_obs, params = list(rstype = "regular", rresol = 4, debug.level = -1))
+disc_sp <- rtopDisc(
+  sp_obs,
+  params = list(rstype = "regular", rresol = 4, debug.level = -1)
+)
+disc_sf <- rtopDisc(
+  sf_obs,
+  params = list(rstype = "regular", rresol = 4, debug.level = -1)
+)
 
 fit_sp <- rtopFitVariogram(
-  createRtopObject(sp_obs, sp_pred, formulaString = "obs ~ 1", params = params_sp),
+  createRtopObject(
+    sp_obs,
+    sp_pred,
+    formulaString = "obs ~ 1",
+    params = params_sp
+  ),
   iprint = -1
 )
 fit_sf <- rtopFitVariogram(
-  createRtopObject(sf_obs, sf_fixtures$prediction_locations, formulaString = "obs ~ 1", params = params_sf_cloud),
+  createRtopObject(
+    sf_obs,
+    sf_fixtures$prediction_locations,
+    formulaString = "obs ~ 1",
+    params = params_sf_cloud
+  ),
   iprint = -1
 )
 
@@ -42,8 +79,20 @@ test_that("variogram model construction and updates cover default and mutation b
   expect_s3_class(vm_from_obs, "rtopVariogramModel")
   expect_length(vm_from_obs$params, 5)
 
-  vm_mult <- updateRtopVariogram(vm_default_local, sill = 2, range = 3, nugget = 4, exp = 5, exp0 = 6, action = "mult")
-  vm_replace <- updateRtopVariogram(vm_default_local, sill = 99, action = "replace")
+  vm_mult <- updateRtopVariogram(
+    vm_default_local,
+    sill = 2,
+    range = 3,
+    nugget = 4,
+    exp = 5,
+    exp0 = 6,
+    action = "mult"
+  )
+  vm_replace <- updateRtopVariogram(
+    vm_default_local,
+    sill = 99,
+    action = "replace"
+  )
   vm_add <- updateRtopVariogram(vm_default_local, exp = 1.5, action = "add")
 
   expect_equal(vm_mult$params[1], vm_default_local$params[1] * 2)
@@ -58,7 +107,10 @@ test_that("variogram fitting, discretization, and matrices cover spatial and sf 
   expect_s3_class(vario_sf, "rtopVariogram")
   expect_s3_class(vario_sf_cloud, "rtopVariogramCloud")
 
-  disc_from_vario <- rtopDisc(vario_sp, params = list(hresol = 2, hstype = "regular", debug.level = -1))
+  disc_from_vario <- rtopDisc(
+    vario_sp,
+    params = list(hresol = 2, hstype = "regular", debug.level = -1)
+  )
   expect_length(disc_from_vario, nrow(vario_sp))
   expect_length(disc_from_vario[[1]], 2)
 
@@ -117,14 +169,12 @@ test_that("overlap and wrapper helpers cover their direct branches", {
   expect_equal(dim(overlap_cross), c(4, 2))
   expect_true(all(overlap_cross >= 0))
 
-  est <- rtopng:::estimateParameters.rtop(
-    createRtopObject(
-      sp_obs,
-      spatial$prediction_locations,
-      formulaString = "obs ~ 1",
-      params = modifyList(spatial$params, list(nugget = FALSE, gDist = FALSE))
-    )
-  )
+  est <- rtopng:::estimateParameters.rtop(createRtopObject(
+    sp_obs,
+    spatial$prediction_locations,
+    formulaString = "obs ~ 1",
+    params = modifyList(spatial$params, list(nugget = FALSE, gDist = FALSE))
+  ))
   mp <- rtopng:::methodParameters.rtop(est)
 
   expect_s3_class(est, "rtop")

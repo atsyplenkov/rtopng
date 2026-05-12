@@ -42,11 +42,11 @@ varMat.rtop <- function(
   predComp <- FALSE
   if ("varMatObs" %in% names(object) && !varMatUpdate) {
     if (
-      !identical(attr(object$varMatObs, "variogramModel"), variogramModel) |
-        !nObs == dim(object$varMatObs)[1] |
+      !identical(attr(object$varMatObs, "variogramModel"), variogramModel) ||
+        !nObs == dim(object$varMatObs)[1] ||
         ("varMatPredObs" %in%
           names(object) &&
-          (dim(object$varMatPredObs)[2] != dim(predictionLocations)[1] |
+          (dim(object$varMatPredObs)[2] != dim(predictionLocations)[1] ||
             !identical(
               attr(object$varMatObs, "variogramModel"),
               variogramModel
@@ -58,7 +58,7 @@ varMat.rtop <- function(
   if (params$cv && "varMatObs" %in% names(object) && !varMatUpdate) {
     return(object)
   }
-  if (!"varMatObs" %in% names(object) | varMatUpdate) {
+  if (!"varMatObs" %in% names(object) || varMatUpdate) {
     if (
       !"dObs" %in% names(object) &&
         !(lgDistPred && "gDistObs" %in% names(object))
@@ -344,7 +344,7 @@ varMat.matrix <- function(
   if (diag) {
     sub1 <- sub2 <- diag(varMatrix)
   }
-  if (!missing(sub1) & !missing(sub2)) {
+  if (!missing(sub1) && !missing(sub2)) {
     for (ia in 1:ndim) {
       for (ib in 1:mdim) {
         if (!(diag & ia == ib)) {
@@ -425,7 +425,7 @@ varMatDefault <- function(
     return(varMatObs)
   }
 
-  if (params$gDistPred & !is.null(object2)) {
+  if (params$gDistPred && !is.null(object2)) {
     gDistPred <- gDist(d2, diag = TRUE, params = params)
     # Calling varMat.matrix
     varMatPred <- varMat(
@@ -620,12 +620,14 @@ varMat.list <- function(
       }
       t2 <- proc.time()[[3]]
       if (debug.level > 0) {
-        print(
-          paste(
-            "varMat - Finished element ", ia, " in ", round(t2 - t1, 3),
-            "PID:", Sys.getpid()
-          )
-        )
+        print(paste(
+          "varMat - Finished element ",
+          ia,
+          " in ",
+          round(t2 - t1, 3),
+          "PID:",
+          Sys.getpid()
+        ))
       }
       list(lmat, lorder)
     }
@@ -712,7 +714,7 @@ varMat.list <- function(
       }
     }
   }
-  if (equal & variogramModel$model != "Gho") {
+  if (equal && variogramModel$model != "Gho") {
     vDiag <- diag(varMatrix)
     for (ia in 1:(ndim - 1)) {
       for (ib in (ia + 1):ndim) {
@@ -720,7 +722,7 @@ varMat.list <- function(
         varMatrix[ib, ia] <- varMatrix[ia, ib]
       }
     }
-  } else if (!missing(sub1) & !missing(sub2)) {
+  } else if (!missing(sub1) && !missing(sub2)) {
     for (ia in 1:ndim) {
       for (ib in 1:mdim) {
         varMatrix[ia, ib] <- varMatrix[ia, ib] - 0.5 * (sub1[ia] + sub2[ib])
