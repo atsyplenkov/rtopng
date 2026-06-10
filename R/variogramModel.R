@@ -209,7 +209,7 @@ updateRtopVariogram.rtopVariogramModel <- function(
 #' \code{\link[gstat]{plot.variogramCloud}}.
 #' @author Jon Olav Skoien
 #' @seealso \link[gstat]{plot.gstatVariogram}
-#' @references \url{http://www.gstat.org/}
+#' @references \url{https://r-spatial.github.io/gstat/}
 #' @keywords dplot
 #' @examples
 #'
