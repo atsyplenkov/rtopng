@@ -32,6 +32,10 @@
   formulaString,
   sel,
   wret = FALSE,
+  dObs = NULL,
+  dPred = NULL,
+  trendObs = NULL,
+  trendPred = NULL,
   ...
 )
 
@@ -96,6 +100,21 @@ locations are to be interpolated/crossvalidated}
 
 \item{wret}{logical; if TRUE, return a matrix of weights instead of the
 predictions, useful for batch processing of time series, see also details}
+
+\item{dObs}{list of discretisation points for the observation areas from
+\code{\link{rtopDisc}}, used for block-averaging of coordinate-based trend
+basis functions when \code{ukTrendSupport = "block"}; computed internally
+when needed and not supplied}
+
+\item{dPred}{list of discretisation points for the prediction areas, see
+\code{dObs}}
+
+\item{trendObs}{matrix of trend basis functions evaluated at the
+observation supports (one row per observation, including the intercept);
+mainly for internal use, computed from \code{formulaString} when missing}
+
+\item{trendPred}{matrix of trend basis functions evaluated at the
+prediction supports, see \code{trendObs}}
 
 \item{olags}{A vector describing the relative lag which should be applied
 for the observation locations. See also details}
@@ -174,6 +193,19 @@ times.
 The lagExact parameter indicates whether to use a weighted average of two
 time steps, or just the time step which is closest to the difference in lag
 times.
+
+Universal kriging is invoked by giving \code{formulaString} a non-trivial
+right hand side, e.g. \code{obs ~ elev} or \code{obs ~ x + y}, where the
+trend variables are attribute columns of the observations and prediction
+locations and/or the reserved coordinate names \code{x} and \code{y}. The
+kriging system is then augmented with the trend basis functions instead of
+only the unbiasedness constraint of ordinary kriging. The basis functions
+are evaluated at the centroid of each support area, or block-averaged over
+the discretisation points of \code{\link{rtopDisc}}, controlled by the
+parameter \code{ukTrendSupport} (see \code{\link{getRtopParams}}). The
+sample variogram is in this case computed from the residuals against an
+OLS fit of the trend. For spatiotemporal interpolation the trend variables
+have to be time-invariant columns of the \code{sp}-slot.
 
 The use of lag times should in theory increase the computation time, but
 might, due to different computation methods, even speed up the computation

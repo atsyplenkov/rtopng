@@ -28,9 +28,13 @@ model of independent variables; suppose the dependent variable has name
 universal kriging, suppose \code{z} is linearly dependent on \code{x} and
 \code{y}, use the formula \code{z~x+y}. The formulaString defaults to
 \code{"value~1"} if \code{value} is a part of the data set.  If not, the
-first column of the data set is used. Universal kriging is not yet properly
-implemented in the \code{rtopng}-package, this element is mainly used for
-defining the dependent variable.}
+first column of the data set is used. The trend variables on the RHS can
+be attribute columns of the observations and prediction locations and/or
+the reserved coordinate names \code{x} and \code{y}. The trend basis
+functions are evaluated either at the centroids of the areas or
+block-averaged over the discretisation points from \code{\link{rtopDisc}},
+controlled by the parameter \code{ukTrendSupport}, see
+\code{\link{getRtopParams}}.}
 
 \item{params}{parameters to modify the default parameters of the
 rtopng-package, set internally in this function by a call to

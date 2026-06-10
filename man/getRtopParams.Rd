@@ -95,7 +95,14 @@ reduces negative weights and large weights more than the smallest weights }
 attempt to solve singular kriging matrices by removing catchments that have
 the same correlations. This will usually happen when two catchments are
 almost overlapping, and they are discretized with the same points. See also
-\code{\link{rtopKrige}}.} \item{cv = FALSE}{ - logical; for cross-validation
+\code{\link{rtopKrige}}.} \item{ukTrendSupport = "centroid"}{ - how the
+universal kriging trend basis functions (the RHS of \code{formulaString})
+are evaluated for each support area. \code{"centroid"} evaluates them at
+the area centroid, \code{"block"} averages them over the discretisation
+points of the area from \code{\link{rtopDisc}}. The difference only
+matters for basis functions that vary within an area, i.e., terms using
+the reserved coordinate names \code{x} and \code{y}; attribute covariates
+are constant within an area.} \item{cv = FALSE}{ - logical; for cross-validation
 of observations} \item{debug.level = 1}{ - used in some functions for giving
 additional output. See individual functions for more information.}
 \item{partialOverlap = FALSE}{whether to work with partially overlapping

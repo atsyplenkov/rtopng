@@ -9,9 +9,9 @@
 \alias{rtopVariogram}
 \title{create variogram for data with spatial support}
 \usage{
-\method{rtopVariogram}{sf}(object, ...)
+\method{rtopVariogram}{sf}(object, formulaString, params = list(), discPoints = NULL, ...)
 
-\method{rtopVariogram}{SpatialPolygonsDataFrame}(object, ...)
+\method{rtopVariogram}{SpatialPolygonsDataFrame}(object, formulaString, params = list(), discPoints = NULL, ...)
 
 \method{rtopVariogram}{SpatialPointsDataFrame}(object, formulaString, params = list(), cloud, abins, dbins, ...)
 
@@ -25,6 +25,7 @@
   abins,
   dbins,
   data.table = FALSE,
+  discPoints = NULL,
   ...
 )
 
@@ -38,11 +39,6 @@ about observations. If \cr \code{object} is a \cr
 \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}}, it must have a
 column with name \code{area}.}
 
-\item{...}{parameters to other functions called, e.g. gstat's
-\code{\link[gstat]{variogram}}-function and to
-\code{\link{rtopVariogram.SpatialPointsDataFrame}} when the method is called
-with an object of a different class}
-
 \item{formulaString}{formula that defines the dependent variable as a linear
 model of independent variables; suppose the dependent variable has name
 \code{z}, for ordinary and simple kriging use the formula \code{z~1}; for
@@ -53,6 +49,17 @@ first column of the data set is used.}
 
 \item{params}{a set of parameters, used to modify the default parameters for
 the \code{rtop} package, set in \code{\link{getRtopParams}}.}
+
+\item{discPoints}{list of discretisation points of the observation areas
+from \code{\link{rtopDisc}}, only used for block-averaging of
+coordinate-based trend basis functions when the formula describes
+universal kriging and \code{ukTrendSupport = "block"}; computed internally
+when needed and not supplied}
+
+\item{...}{parameters to other functions called, e.g. gstat's
+\code{\link[gstat]{variogram}}-function and to
+\code{\link{rtopVariogram.SpatialPointsDataFrame}} when the method is called
+with an object of a different class}
 
 \item{cloud}{logical; if TRUE, calculate the semivariogram cloud, can be
 used to overrule the cloud parameter in params.}
