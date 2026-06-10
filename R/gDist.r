@@ -1,19 +1,19 @@
 #' @export
 #' @rdname gDist
-gDist.rtop = function(object, params = list(), ...) {
-  params = getRtopParams(object$params, newPar = params, ...)
+gDist.rtop <- function(object, params = list(), ...) {
+  params <- getRtopParams(object$params, newPar = params, ...)
   if (params$debug.level > 1) {
-    debug.level = params$debug.level
+    debug.level <- params$debug.level
   } else {
-    debug.level = 0
+    debug.level <- 0
   }
   if (!"dObs" %in% names(object)) {
-    object$dObs = rtopDisc(object$observations, params = params, ...)
+    object$dObs <- rtopDisc(object$observations, params = params, ...)
   }
   if (!"dPred" %in% names(object) & "predictionLocations" %in% names(object)) {
-    object$dPred = rtopDisc(object$predictionLocations, params = params, ...)
+    object$dPred <- rtopDisc(object$predictionLocations, params = params, ...)
   }
-  object$gDistObs = gDist(
+  object$gDistObs <- gDist(
     object$dObs,
     object$dObs,
     debug.level = debug.level,
@@ -21,7 +21,7 @@ gDist.rtop = function(object, params = list(), ...) {
     ...
   )
   if ("dPred" %in% names(object)) {
-    object$gDistPredObs = gDist(
+    object$gDistPredObs <- gDist(
       object$dObs,
       object$dPred,
       debug.level = debug.level,
@@ -30,7 +30,7 @@ gDist.rtop = function(object, params = list(), ...) {
     )
   }
   if ("dPred" %in% names(object)) {
-    object$gDistPred = gDist(
+    object$gDistPred <- gDist(
       object$dPred,
       object$dPred,
       diag = TRUE,
@@ -45,9 +45,9 @@ gDist.rtop = function(object, params = list(), ...) {
 
 #' @export
 #' @rdname gDist
-gDist.SpatialPolygonsDataFrame = function(object, object2 = NULL, ...) {
+gDist.SpatialPolygonsDataFrame <- function(object, object2 = NULL, ...) {
   if (is(object2, "SpatialPolygonsDataFrame")) {
-    object2 = as(object2, "SpatialPolygons")
+    object2 <- as(object2, "SpatialPolygons")
   }
   gDist(as(object, "SpatialPolygons"), object2, ...)
 }
@@ -55,13 +55,13 @@ gDist.SpatialPolygonsDataFrame = function(object, object2 = NULL, ...) {
 
 #' @export
 #' @rdname gDist
-gDist.SpatialPolygons = function(object, object2 = NULL, ...) {
-  dObs = rtopDisc(object, ...)
-  gDistObs = gDist(dObs, ...)
+gDist.SpatialPolygons <- function(object, object2 = NULL, ...) {
+  dObs <- rtopDisc(object, ...)
+  gDistObs <- gDist(dObs, ...)
   if (!is.null(object2)) {
-    dPred = rtopDisc(object2, ...)
-    gDistPredObs = gDist(dObs, dPred, ...)
-    gDistPred = gDist(dPred, dPred, diag = TRUE, ...)
+    dPred <- rtopDisc(object2, ...)
+    gDistPredObs <- gDist(dObs, dPred, ...)
+    gDistPred <- gDist(dPred, dPred, diag = TRUE, ...)
     list(
       gDistObs = gDistObs,
       gDistPred = gDistPred,
@@ -75,13 +75,13 @@ gDist.SpatialPolygons = function(object, object2 = NULL, ...) {
 
 #' @export
 #' @rdname gDist
-gDist.sf = function(object, object2 = NULL, ...) {
-  dObs = rtopDisc(object, ...)
-  gDistObs = gDist(dObs, ...)
+gDist.sf <- function(object, object2 = NULL, ...) {
+  dObs <- rtopDisc(object, ...)
+  gDistObs <- gDist(dObs, ...)
   if (!is.null(object2)) {
-    dPred = rtopDisc(object2, ...)
-    gDistPredObs = gDist(dObs, dPred, ...)
-    gDistPred = gDist(dPred, dPred, diag = TRUE, ...)
+    dPred <- rtopDisc(object2, ...)
+    gDistPredObs <- gDist(dObs, dPred, ...)
+    gDistPred <- gDist(dPred, dPred, diag = TRUE, ...)
     list(
       gDistObs = gDistObs,
       gDistPred = gDistPred,
@@ -95,19 +95,19 @@ gDist.sf = function(object, object2 = NULL, ...) {
 
 #' @export
 #' @rdname gDist
-gDist.list = function(
+gDist.list <- function(
   object,
   object2 = NULL,
   diag = FALSE,
   debug.level = 0,
   ...
 ) {
-  variogramModel = list(model = "Gho", params = 0)
+  variogramModel <- list(model = "Gho", params = 0)
   if (debug.level == 1) {
     print("Creating Ghos distances. This can take some time")
   }
   if (inherits(object[[1]], "SpatialPoints") | inherits(object[[1]], "sf")) {
-    gDist = varMat(
+    gDist <- varMat(
       object,
       object2,
       diag = diag,
@@ -117,20 +117,20 @@ gDist.list = function(
     )
   } else {
     # These are the discretized points for hypotetical areas from binned variograms
-    gDist = data.frame(c1 = c(rep(0, length(object))), c2 = 0, cb = 0)
-    lAreas = lapply(object, FUN = function(aa) aa[[1]])
-    gDist[, 1] = mapply(
+    gDist <- data.frame(c1 = c(rep(0, length(object))), c2 = 0, cb = 0)
+    lAreas <- lapply(object, FUN = function(aa) aa[[1]])
+    gDist[, 1] <- mapply(
       vred,
       lAreas,
       MoreArgs = list(vredTyp = "ind", variogramModel = variogramModel)
     )
-    lAreas = lapply(object, FUN = function(aa) aa[[2]])
-    gDist[, 2] = mapply(
+    lAreas <- lapply(object, FUN = function(aa) aa[[2]])
+    gDist[, 2] <- mapply(
       vred,
       lAreas,
       MoreArgs = list(vredTyp = "ind", variogramModel = variogramModel)
     )
-    gDist[, 3] = mapply(
+    gDist[, 3] <- mapply(
       vred,
       object,
       MoreArgs = list(vredTyp = "ind", variogramModel = variogramModel)

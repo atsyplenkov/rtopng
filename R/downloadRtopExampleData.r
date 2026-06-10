@@ -22,16 +22,16 @@
 #'
 #' \dontrun{
 #'   downloadRtopExampleData()
-#'   rpath = system.file("extdata",package="rtopng")
+#'   rpath <- system.file("extdata",package="rtopng")
 #'   library(sf)
-#'   observations = st_read(rpath,"observations")
+#'   observations <- st_read(rpath,"observations")
 #' }
 #'
 #' @export
 downloadRtopExampleData <- function(
   folder = system.file("extdata", package = "rtopng")
 ) {
-  wd = getwd()
+  wd <- getwd()
   setwd(folder)
   download.file(
     "http://www.hydro.tuwien.ac.at/fileadmin/mediapool-hydro/Downloads/rtopData.zip",
