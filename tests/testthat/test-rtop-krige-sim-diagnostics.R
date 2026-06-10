@@ -1,3 +1,9 @@
+if (!identical(Sys.getenv("RTONG_DIAGNOSTICS"), "true")) {
+  test_that("kriging and simulation diagnostics are enabled", {
+    skip("Set RTONG_DIAGNOSTICS=true to run diagnostic integration tests")
+  })
+} else {
+
 spatial <- rtopng_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
 unfit_base <- createRtopObject(
   spatial$observations,
@@ -140,3 +146,4 @@ test_that("checkVario and rtopCluster cover direct dispatch paths", {
   expect_true(!is.null(cl))
   expect_true(!is.null(cl_restart))
 })
+}

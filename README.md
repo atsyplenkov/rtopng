@@ -23,6 +23,21 @@ You can install the development version of `rtopng` from GitHub with:
 pak::pak("atsyplenkov/rtopng")
 ```
 
+## Testing
+
+Run the regular test suite with:
+
+``` r
+devtools::test()
+```
+
+Some slower diagnostic integration tests are skipped by default. To include
+them, set `RTONG_DIAGNOSTICS=true` before running tests, for example:
+
+``` sh
+RTONG_DIAGNOSTICS=true Rscript -e "devtools::test()"
+```
+
 ## Roadmap
 
 - [x] Migrate tests to `testthat`
