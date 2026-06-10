@@ -11,5 +11,5 @@ air.toml
 jarl.toml
 AGENTS.md
 
-*.Rcheck
-*.tar.gz
+^.*[.]Rcheck$
+^.*[.]tar[.]gz$
