@@ -1,6 +1,7 @@
 .Rprofile
 ^\.Renviron$
 ^\.R($|/)
+^\.pi$
 docs/
 ^LICENSE\.md$
 ^\.github$
@@ -9,3 +10,6 @@ docs/
 air.toml
 jarl.toml
 AGENTS.md
+
+*.Rcheck
+*.tar.gz

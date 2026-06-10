@@ -794,5 +794,6 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #'
 #' @export
 rtopSim <- function(object, ...) UseMethod("rtopSim")
+#' @rdname rtopVariogramModel
 #' @export
 updateRtopVariogram <- function(object, ...) UseMethod("updateRtopVariogram")

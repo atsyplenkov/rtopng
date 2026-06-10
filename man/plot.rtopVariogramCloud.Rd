@@ -50,7 +50,7 @@ plot(rtopVario)
 
 }
 \references{
-\url{http://www.gstat.org/}
+\url{https://r-spatial.github.io/gstat/}
 }
 \seealso{
 \link[gstat]{plot.gstatVariogram}

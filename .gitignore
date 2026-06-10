@@ -10,4 +10,5 @@ src/*.gcno
 
 # Agent artefacts
 docs/
+.pi/
 AGENTS.md

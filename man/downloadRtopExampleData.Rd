@@ -22,9 +22,9 @@ Download additional example data from Vienna University of Technology
 
 \dontrun{
   downloadRtopExampleData()
-  rpath = system.file("extdata",package="rtopng")
+  rpath <- system.file("extdata",package="rtopng")
   library(sf)
-  observations = st_read(rpath,"observations")
+  observations <- st_read(rpath,"observations")
 }
 
 }
