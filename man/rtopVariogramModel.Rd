@@ -2,8 +2,6 @@
 % Please edit documentation in R/variogramModel.R
 \name{rtopVariogramModel}
 \alias{rtopVariogramModel}
-\alias{variogramModel}
-\alias{updateRtopVariogram}
 \alias{updateRtopVariogram.rtop}
 \alias{updateRtopVariogram.rtopVariogramModel}
 \title{create or update variogram model}

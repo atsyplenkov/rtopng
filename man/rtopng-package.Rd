@@ -114,6 +114,7 @@ Geosciences, 67.
 
 Authors:
 \itemize{
+  \item Jon Olav Skøien \email{jon.skoien@gmail.com}
   \item Anatoly Tsyplenkov \email{sharp.couch9400@fastmail.com}
 }
 

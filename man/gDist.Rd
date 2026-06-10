@@ -23,8 +23,6 @@ gDist(object, ...)
 }
 \arguments{
 \item{object}{object of class \code{\link[sp]{SpatialPolygons}} or
-\code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} with boundaries
-of areas; or list of discretized areas, typically from a call to \cr
 \code{\link{rtopDisc}}; or object of class \code{rtop} with such boundaries
 and/or discretized elements (the individual areas)}
 

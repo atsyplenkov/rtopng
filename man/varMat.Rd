@@ -40,8 +40,6 @@ varMat(object, ...)
 \arguments{
 \item{object}{either: 1) an object of class \code{rtop} (see
 \link{rtopng-package}) or 2) a \cr
-\code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}}, or
-\code{\link[sp:SpatialPolygons]{SpatialPolygons}}, or 3) a \cr
 \code{\link{matrix}} with geostatistical distances (see \code{\link{gDist}}
 or 4) a \code{\link{list}} with discretized supports}
 

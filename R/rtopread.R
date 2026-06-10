@@ -157,7 +157,10 @@ readAreas <- function(object, adir = ".", ftype = "xy", projection = NA, ...) {
       cat(paste(" Finished polygon\n"))
       Srl[[i]] <- sp::Polygons(list(boun), ID = as.character(i))
     }
-    Sr <- sp::SpatialPolygons(Srl, proj4string = sp::CRS(as.character(projection)))
+    Sr <- sp::SpatialPolygons(
+      Srl,
+      proj4string = sp::CRS(as.character(projection))
+    )
     #  } else if (ftype == "shp") {
     # This part is when each file has a single shape
     # NOT PROPERLY IMPLEMENTED - need testing with real shapes

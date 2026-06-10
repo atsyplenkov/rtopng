@@ -32,7 +32,8 @@ parameters for the \code{rtop} package, set in \code{\link{getRtopParams}}.
 Typical parameters to modify for this function are:
 \itemize{
 \item rresol = 100; minimum number of discretization points in areas
-\item hresol = 5; number of discretization points in one direction for areas in binned variograms
+\item hresol = 5; number of discretization points in one direction for areas
+in binned variograms
 \item hstype = "regular"; sampling type for binned variograms
 \item rstype = "rtop"; sampling type for real areas
 }}

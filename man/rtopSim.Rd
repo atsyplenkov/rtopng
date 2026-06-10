@@ -116,10 +116,10 @@ future. There are some issues with the current implementation:
 \item Numerical issues can in some cases give negative estimation variances,
 which will result in an invalid distribution for the simulation. This will
 result in simulated NA values for these locations.
-\item The variability of simulated values for small areas (such as small headwater
-catchments) will be relatively high based on the statistical uncertainty.
-This could be overestimated compared to the uncertainty which is possible
-based on rainfall.
+\item The variability of simulated values for small areas (such as small
+headwater catchments) will be relatively high based on the statistical
+uncertainty. This could be overestimated compared to the uncertainty which
+is possible based on rainfall.
 }
 }
 \examples{

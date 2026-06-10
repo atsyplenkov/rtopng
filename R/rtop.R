@@ -153,7 +153,10 @@ createRtopObject <- function(
       !"area" %in% names(predictionLocations) &&
         inherits(predictionLocations, "sf")
     ) {
-      predictionLocations$area <- units::set_units(sf::st_area(predictionLocations), NULL)
+      predictionLocations$area <- units::set_units(
+        sf::st_area(predictionLocations),
+        NULL
+      )
     }
     if ((inherits(observations, "Spatial") | inherits(observations, "STS"))) {
       p4o <- proj4string(observations)
@@ -171,7 +174,9 @@ createRtopObject <- function(
                           sp-objects. Please convert to sf"
         ))
       }
-    } else if (inherits(observations, "sf") && !is.na(sf::st_crs(observations))) {
+    } else if (
+      inherits(observations, "sf") && !is.na(sf::st_crs(observations))
+    ) {
       if (
         !isTRUE(all.equal(
           is.na(sf::st_crs(observations)),

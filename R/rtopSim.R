@@ -120,7 +120,9 @@ rtopSim.rtop <- function(
       if (inherits(observations, "Spatial")) {
         obscors <- sp::coordinates(observations)
       } else {
-        obscors <- suppressWarnings(sf::st_coordinates(sf::st_centroid(observations)))
+        obscors <- suppressWarnings(sf::st_coordinates(sf::st_centroid(
+          observations
+        )))
       }
       #      if (params$unc && "unc" %in% names(observations)) {
       #        unc0 = observations$unc

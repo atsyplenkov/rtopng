@@ -6,9 +6,6 @@
 #' an areal support.
 #'
 #'
-#' @aliases rtopVariogram rtopVariogram.rtop
-#' rtopVariogram.SpatialPolygonsDataFrame rtopVariogram.SpatialPointsDataFrame
-#' rtopVariogram.STSDF
 #' @param object object of class \code{rtop} (see \link{rtopng-package}) or a
 #' \cr \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} or
 #' \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} with information
@@ -87,10 +84,6 @@ rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 #' variogram or cloud variogram of data with an areal support.
 #'
 #'
-#' @aliases rtopFitVariogram rtopFitVariogram.rtop
-#' rtopFitVariogram.SpatialPolygonsDataFrame
-#' rtopFitVariogram.SpatialPointsDataFrame rtopFitVariogram.rtopVariogram
-#' rtopFitVariogram.rtopVariogramCloud
 #' @param object object of class \code{rtopVariogram} or
 #' \code{rtopVariogramCloud}, or an object with class \code{rtop} that includes
 #' the sample variograms.
@@ -174,7 +167,7 @@ rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 #'
 #' @export
 rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
-#estimateParameters      <- function(object, ...) UseMethod("estimateParameters")
+#estimateParameters <- function(object, ...) UseMethod("estimateParameters")
 #spatialPredict      <- function(object, ...) UseMethod("spatialPredict")
 
 #' Plot variogram fitted to data with support
@@ -183,7 +176,6 @@ rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #' fitted to sample variograms of data with support
 #'
 #'
-#' @aliases checkVario checkVario.rtop checkVario.rtopVariogramModel
 #' @param object either: object of class \code{rtop} (see
 #' \code{\link{rtopng-package}}), or an object of type \cr \code{rtopVariogram}
 #' @param acor unit correction factor in the key, e.g. to see numbers more
@@ -279,11 +271,7 @@ checkVario <- function(object, ...) UseMethod("checkVario")
 #' Calculate geostatistical distances (Ghosh-distances) between areas
 #'
 #'
-#' @aliases gDist gDist.rtop gDist.SpatialPolygonsDataFrame
-#' gDist.SpatialPolygons gDist.list
 #' @param object object of class \code{\link[sp]{SpatialPolygons}} or
-#' \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} with boundaries
-#' of areas; or list of discretized areas, typically from a call to \cr
 #' \code{\link{rtopDisc}}; or object of class \code{rtop} with such boundaries
 #' and/or discretized elements (the individual areas)
 #' @param params a set of parameters, used to modify the default parameters for
@@ -390,8 +378,6 @@ gDist <- function(object, ...) UseMethod("gDist")
 #' reused when discretizing smaller supports within the large one, e.g.
 #' subcatchments within larger catchments.
 #'
-#' @aliases rtopDisc rtopDisc.rtop rtopDisc.SpatialPolygonsDataFrame
-#' rtopDisc.SpatialPolygons rtopDisc.rtopVariogram
 #' @param object object of class \code{\link[sp]{SpatialPolygons}} or
 #' \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} or
 #' \code{rtopVariogram}, or an object with class \code{rtop} that includes one
@@ -402,7 +388,8 @@ gDist <- function(object, ...) UseMethod("gDist")
 #' parameters for the \code{rtop} package, set in \code{\link{getRtopParams}}.
 #' Typical parameters to modify for this function are:
 #' - rresol = 100; minimum number of discretization points in areas
-#' - hresol = 5; number of discretization points in one direction for areas in binned variograms
+#' - hresol = 5; number of discretization points in one direction for areas
+#'   in binned variograms
 #' - hstype = "regular"; sampling type for binned variograms
 #' - rstype = "rtop"; sampling type for real areas
 #' @param ... Possibility to pass individual parameters
@@ -436,12 +423,8 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #' between them.
 #'
 #'
-#' @aliases varMat varMat.rtop varMat.SpatialPolygonsDataFrame
-#' varMat.SpatialPolygons varMat.matrix varMat.list
 #' @param object either: 1) an object of class \code{rtop} (see
 #' \link{rtopng-package}) or 2) a \cr
-#' \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}}, or
-#' \code{\link[sp:SpatialPolygons]{SpatialPolygons}}, or 3) a \cr
 #' \code{\link{matrix}} with geostatistical distances (see \code{\link{gDist}}
 #' or 4) a \code{\link{list}} with discretized supports
 #' @param varMatUpdate logical; if TRUE, also existing variance matrices will
@@ -585,8 +568,6 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' test olags = rep(0, `dim(observations)[1]`) and similar for
 #' predictionLocations.
 #'
-#' @aliases rtopKrige rtopKrige.rtop rtopKrige.SpatialPolygonsDataFrame
-#' rtopKrige.STSDF rtopKrige.default
 #' @param object object of class \code{rtop} or
 #' \code{\link[sp]{SpatialPolygonsDataFrame}} or \code{\link[spacetime]{STSDF}}
 #' @param varMatUpdate logical; if TRUE, also existing variance matrices will
@@ -707,12 +688,11 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' - Numerical issues can in some cases give negative estimation variances,
 #'   which will result in an invalid distribution for the simulation. This will
 #'   result in simulated NA values for these locations.
-#' - The variability of simulated values for small areas (such as small headwater
-#'   catchments) will be relatively high based on the statistical uncertainty.
-#'   This could be overestimated compared to the uncertainty which is possible
-#'   based on rainfall.
+#' - The variability of simulated values for small areas (such as small
+#'   headwater catchments) will be relatively high based on the statistical
+#'   uncertainty. This could be overestimated compared to the uncertainty which
+#'   is possible based on rainfall.
 #'
-#' @aliases rtopSim rtopSim.rtop rtopSim.default
 #' @param object object of class \code{rtop} or
 #' \code{\link[sp]{SpatialPolygonsDataFrame}} or \code{sf}
 #' (\code{\link[sf]{st_sf}}) or \code{NULL}

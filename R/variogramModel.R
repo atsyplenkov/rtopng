@@ -3,8 +3,6 @@
 #' This gives an easier interface to the parameters of the variogram model
 #'
 #'
-#' @aliases variogramModel rtopVariogramModel updateRtopVariogram updateRtopVariogram.rtop
-#' updateRtopVariogram.rtopVariogramModel
 #' @param model variogram model, currently "Ex1" is the only implemented, see
 #' Skoien et al (2006)
 #' @param sill sill of variogram

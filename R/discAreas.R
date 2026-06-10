@@ -161,6 +161,7 @@ rtopDisc.sf <- function(
       }
       print(paste("Sampling points from ", nps, "areas"))
       for (ip in 1:nps) {
+        # fmt: skip
         spp[[ip]] <-
           lfun(
             sf::st_geometry(object)[ip], resol, ires0, bbdia, small

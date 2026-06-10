@@ -5,7 +5,9 @@ rtopVariogram.sf <- function(object, ...) {
     stop("rtopVariogram: Observations are missing")
   }
   obs <- sf::st_drop_geometry(object)
-  sp::coordinates(obs) <- suppressWarnings(sf::st_coordinates(sf::st_centroid(object)))
+  sp::coordinates(obs) <- suppressWarnings(sf::st_coordinates(sf::st_centroid(
+    object
+  )))
   if (!"area" %in% names(obs)) {
     obs$area <- units::set_units(sf::st_area(object), NULL)
   }
