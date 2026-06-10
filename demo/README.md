@@ -17,6 +17,16 @@ Runs MAF top-kriging using [`rtop`](https://cran.r-project.org/package=rtop). Th
 4. Run leave-one-out CV for gauged catchments.
 5. Print metrics with `yardstick::metric_set()` and `tidyhydro` metrics.
 
+### `demo_utk.R`
+
+Runs universal top-kriging using the local `rtopng` development package loaded with `devtools::load_all("..")`, with altitude as an external drift term:
+
+```r
+obs ~ Altitude
+```
+
+This is the same area-scaled MAF workflow as `demo_rtop.R`: `obs = MAF / Area^c2` is kriged over catchment supports and predictions are rescaled by target catchment area. The `ungauged_catchments` layer has no altitude field, so the script assigns each target the nearest gauged-station altitude as a placeholder.
+
 ### `demo_ok.R`
 
 Runs an ordinary-kriging baseline using [`automap`](https://cran.r-project.org/package=automap) on gauging station **points**.
@@ -44,16 +54,17 @@ The `ungauged_catchments` layer has no altitude field. For this standalone demo,
 | Method | KGE2012 | PBIAS | RMSE | NSE | NSElog |
 |---|---:|---:|---:|---:|---:|
 | Top-Kriging | 0.963 | 2.45 | 0.697 | 0.978 | 0.945 |
+| Universal Top-Kriging | 0.971 | 2.04 | 0.673 | 0.979 | 0.940 |
 | Ordinary Kriging | 0.960 | 0.162 | 0.916 | 0.961 | 0.929 |
 | Universal Kriging | 0.978 | -1.60 | 0.816 | 0.969 | 0.955 |
 
-## Ungauged MAF predictions (approximate as the ungauged stations altitude is unkown :-\ )
+## Ungauged MAF predictions (approximate because ungauged target altitude is unknown)
 
-| Target | Top-Kriging | Ordinary Kriging | Universal Kriging |
-|---|---:|---:|---:|
-| Ahr_3 | 10.436 | 11.454 | 10.766 |
-| Gader_1 | 6.178 | 5.789 | 5.512 |
-| Isel_4 | 2.226 | 2.153 | 2.245 |
+| Target | Top-Kriging | Universal Top-Kriging | Ordinary Kriging | Universal Kriging |
+|---|---:|---:|---:|---:|
+| Ahr_3 | 10.436 | 10.442 | 11.454 | 10.766 |
+| Gader_1 | 6.178 | 6.303 | 5.789 | 5.512 |
+| Isel_4 | 2.226 | 2.303 | 2.153 | 2.245 |
 
 
 ## References
