@@ -24,6 +24,8 @@ rtopKrige.rtop <- function(object, varMatUpdate = FALSE, params = list(), ...) {
     varMatPredObs = varMatPredObs,
     params = params,
     formulaString = object$formulaString,
+    dObs = object$dObs,
+    dPred = object$dPred,
     ...
   )
   object$predictions <- krigeRes$predictions
@@ -79,6 +81,10 @@ rtopKrige.default <- function(
   formulaString,
   sel,
   wret = FALSE,
+  dObs = NULL,
+  dPred = NULL,
+  trendObs = NULL,
+  trendPred = NULL,
   ...
 ) {
   params <- getRtopParams(params, ...)
@@ -153,16 +159,43 @@ rtopKrige.default <- function(
     unc0 <- array(0, nobs)
   }
   #
+  # Universal kriging trend basis functions from the RHS of formulaString,
+  # evaluated at centroids or block-averaged over the rtopDisc()
+  # discretisation, according to params$ukTrendSupport.
+  if (is.null(trendObs)) {
+    trendObs <- ukTrendMatrix(formulaString, observations, params, dObs)
+  }
+  if (is.null(trendPred)) {
+    if (cv) {
+      trendPred <- trendObs
+    } else {
+      trendPred <- ukTrendMatrix(
+        formulaString,
+        predictionLocations,
+        params,
+        dPred
+      )
+    }
+  } else if (!is.matrix(trendPred)) {
+    trendPred <- matrix(trendPred, nrow = 1)
+  }
+  ptrend <- dim(trendObs)[2]
+  if (dim(trendPred)[2] != ptrend) {
+    stop(paste(
+      "Different number of trend basis functions for observations",
+      "and prediction locations"
+    ))
+  }
+  #
   if (inherits(observations, "Spatial")) {
     mdist <- sqrt(bbArea(sp::bbox(observations)))
   } else {
     mdist <- sqrt(bbArea(sf::st_bbox(observations)))
   }
   if (nobs < nmax && mdist < maxdist && !cv) {
-    varMat <- rbind(varMatObs, 1)
-    diag(varMat) <- unc0
-    varMat <- cbind(varMat, 1)
-    varMat[nobs + 1, nobs + 1] <- 0
+    varMat <- rbind(varMatObs, t(trendObs))
+    varMat <- cbind(varMat, rbind(trendObs, matrix(0, ptrend, ptrend)))
+    diag(varMat)[1:nobs] <- unc0
     varInv <- solve(varMat)
     singMat <- TRUE
   } else {
@@ -278,7 +311,9 @@ rtopKrige.default <- function(
       wlim,
       debug.level,
       wlimMethod,
-      BLUE
+      BLUE = BLUE,
+      trendObs = trendObs,
+      trendPred = trendPred[inew, ]
     )
 
     predictions$var1.pred[inew] <- ret$pred[1]
@@ -288,8 +323,8 @@ rtopKrige.default <- function(
     nneigh <- ret$nneigh
     lambda <- ret$lambda
     neigh <- ret$neigh
-    if (wret) {
-      weight[inew, neigh] <- lambda[1:(length(lambda) - 1)]
+    if (wret && !is.na(nneigh)) {
+      weight[inew, neigh] <- lambda[1:nneigh]
     }
     obs <- ret$obs
     unc <- ret$unc
@@ -303,11 +338,11 @@ rtopKrige.default <- function(
         data.frame(
           id = c(neigh, 0),
           edist = c(distm, 0),
-          lambda = lambda,
-          c0 = c0arr,
+          lambda = lambda[1:(nneigh + 1)],
+          c0 = c0arr[1:(nneigh + 1)],
           obs = c(obs, 1),
           unc = c(unc, 0),
-          lambda_times_obs = lambda * c(obs, 0)
+          lambda_times_obs = lambda[1:(nneigh + 1)] * c(obs, 0)
         )
       )
       print("neighbours")

@@ -46,6 +46,14 @@ rtopKrige.STSDF <- function(
 
     varMatPredObs <- varMatObs
   }
+  # Universal kriging trend basis functions, evaluated once on the spatial
+  # supports (covariates must be time-invariant columns of the @sp slot).
+  tObs <- ukTrendMatrix(formulaString, object@sp, params)
+  tPred <- if (cv) {
+    tObs
+  } else {
+    ukTrendMatrix(formulaString, predictionLocations@sp, params)
+  }
   ntime <- dim(object)[2]
   nspace <- dim(object)[1]
   indx <- predictionLocations@index
@@ -87,7 +95,9 @@ rtopKrige.STSDF <- function(
       varMat,
       params,
       formulaString,
-      wret = TRUE
+      wret = TRUE,
+      trendObs = tObs,
+      trendPred = tPred
     ) #,
     #sel, ...)
     weight <- ret$weight
@@ -189,7 +199,9 @@ rtopKrige.STSDF <- function(
             params = params,
             formulaString = formulaString,
             wret = TRUE,
-            debug.level = 0
+            debug.level = 0,
+            trendObs = tObs[newind, , drop = FALSE],
+            trendPred = if (cv) NULL else tPred
           ) #,
           weight <- ret$weight
           wvar <- ret$predictions$var1.var
@@ -315,7 +327,9 @@ rtopKrige.STSDF <- function(
               formulaString = intvar ~ 1,
               wret = TRUE,
               debug.level = 0,
-              cv = FALSE
+              cv = FALSE,
+              trendObs = tObs[newind, , drop = FALSE],
+              trendPred = tPred[istat, , drop = FALSE]
             ) #,
             weight <- ret$weight
             wvar <- ret$predictions$var1.var

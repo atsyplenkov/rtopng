@@ -1,8 +1,32 @@
+# Replace the dependent variable by its OLS residuals against the trend
+# basis functions of formulaString, so that the sample variogram describes
+# the residual (detrended) field used by the universal kriging system.
+#' @noRd
+ukDetrendForVariogram <- function(object, formulaString, params, discPoints) {
+  if (!inherits(params, "rtopParams")) {
+    params <- getRtopParams(params)
+  }
+  object$ukResidual <- ukResiduals(formulaString, object, params, discPoints)
+  list(object = object, formulaString = ukResidual ~ 1)
+}
+
+
 #' @export
 #' @rdname rtopVariogram
-rtopVariogram.sf <- function(object, ...) {
+rtopVariogram.sf <- function(
+  object,
+  formulaString,
+  params = list(),
+  discPoints = NULL,
+  ...
+) {
   if (missing(object)) {
     stop("rtopVariogram: Observations are missing")
+  }
+  if (!missing(formulaString) && hasUkTrend(formulaString)) {
+    detr <- ukDetrendForVariogram(object, formulaString, params, discPoints)
+    object <- detr$object
+    formulaString <- detr$formulaString
   }
   obs <- sf::st_drop_geometry(object)
   sp::coordinates(obs) <- suppressWarnings(sf::st_coordinates(sf::st_centroid(
@@ -11,15 +35,30 @@ rtopVariogram.sf <- function(object, ...) {
   if (!"area" %in% names(obs)) {
     obs$area <- units::set_units(sf::st_area(object), NULL)
   }
-  rtopVariogram(obs, ...)
+  if (missing(formulaString)) {
+    rtopVariogram(obs, params = params, ...)
+  } else {
+    rtopVariogram(obs, formulaString, params = params, ...)
+  }
 }
 
 
 #' @export
 #' @rdname rtopVariogram
-rtopVariogram.SpatialPolygonsDataFrame <- function(object, ...) {
+rtopVariogram.SpatialPolygonsDataFrame <- function(
+  object,
+  formulaString,
+  params = list(),
+  discPoints = NULL,
+  ...
+) {
   if (missing(object)) {
     stop("rtopVariogram: Observations are missing")
+  }
+  if (!missing(formulaString) && hasUkTrend(formulaString)) {
+    detr <- ukDetrendForVariogram(object, formulaString, params, discPoints)
+    object <- detr$object
+    formulaString <- detr$formulaString
   }
   obs <- object@data
   sp::coordinates(obs) <- sp::coordinates(object)
@@ -28,7 +67,11 @@ rtopVariogram.SpatialPolygonsDataFrame <- function(object, ...) {
   } else {
     obs$area <- unlist(lapply(object@polygons, FUN = function(poly) poly@area))
   }
-  rtopVariogram(obs, ...)
+  if (missing(formulaString)) {
+    rtopVariogram(obs, params = params, ...)
+  } else {
+    rtopVariogram(obs, formulaString, params = params, ...)
+  }
 }
 
 
@@ -158,7 +201,13 @@ rtopVariogram.rtop <- function(object, params = list(), ...) {
   formulaString <- object$formulaString
 
   #calling rtopVariogram.SpatialPolygonsDataFrame
-  var3d <- rtopVariogram(observations, formulaString, params, ...)
+  var3d <- rtopVariogram(
+    observations,
+    formulaString,
+    params,
+    discPoints = object$dObs,
+    ...
+  )
   if (inherits(var3d, "rtopVariogramCloud")) {
     object$variogramCloud <- var3d
   } else {
@@ -180,6 +229,7 @@ rtopVariogram.STSDF <- function(
   abins,
   dbins,
   data.table = FALSE,
+  discPoints = NULL,
   ...
 ) {
   if (!requireNamespace("spacetime")) {
@@ -231,6 +281,16 @@ rtopVariogram.STSDF <- function(
   ntime <- dim(observations)[2]
   observations@sp$vindex <- vindex <- 1:nspace
   obsdf <- as.data.frame(observations)[, c("timeIndex", "vindex", depvar)]
+  # For universal kriging formulas, compute the sample variogram from the
+  # OLS residuals against the (time-invariant) spatial trend basis.
+  if (hasUkTrend(formulaString)) {
+    Fsp <- ukTrendMatrix(formulaString, observations@sp, params, discPoints)
+    obsdf[[depvar]] <- ukResiduals(
+      formulaString,
+      depValues = obsdf[[depvar]],
+      trendMatrix = Fsp[obsdf$vindex, , drop = FALSE]
+    )
+  }
   vmat <- matrix(0, nrow = nspace, ncol = nspace)
   indmat <- vmat
   if (interactive() && debug.level) {

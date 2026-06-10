@@ -22,8 +22,23 @@ rkrige <- function(
   BLUE = FALSE,
   varClean = FALSE,
   corlines = NULL,
-  remNeigh = FALSE
+  remNeigh = FALSE,
+  trendObs = NULL,
+  trendPred = NULL
 ) {
+  # Universal kriging trend basis; defaults to intercept only (ordinary
+  # kriging). trendObs is the nobs x p matrix of basis functions evaluated
+  # at the observation supports, trendPred the p-vector at the prediction
+  # support.
+  if (is.null(trendObs)) {
+    trendObs <- matrix(1, nrow = length(obs0), ncol = 1)
+  }
+  if (is.null(trendPred)) {
+    trendPred <- rep(1, dim(trendObs)[2])
+  }
+  trendPred <- as.vector(trendPred)
+  ptrend <- dim(trendObs)[2]
+
   naobs <- which(is.na(obs0))
   naobs <- unique(c(naobs, corlines))
 
@@ -36,6 +51,7 @@ rkrige <- function(
     vObs <- vObs[-naobs, -naobs]
     c0arr <- c0arr[-naobs]
     unc0 <- unc0[-naobs]
+    trendObs <- trendObs[-naobs, , drop = FALSE]
   }
   nobs <- length(obs0)
   nneigh <- nobs
@@ -94,21 +110,27 @@ rkrige <- function(
         unc <- unc0[neigh]
       }
     }
+    tMat <- trendObs[neigh, , drop = FALSE]
     nneigh <- length(c0arr)
     if (BLUE) {
       vInv <- try(solve(vMat), silent = TRUE)
     }
-    vMat <- rbind(vMat, 1)
-    vMat <- cbind(vMat, 1)
+    # Augment the semivariance matrix with the trend basis functions; for
+    # an intercept-only trend this is the ordinary kriging system.
+    vMat <- rbind(vMat, t(tMat))
+    vMat <- cbind(vMat, rbind(tMat, matrix(0, ptrend, ptrend)))
 
     diag(vMat)[1:nneigh] <- -unc
-    vMat[nneigh + 1, nneigh + 1] <- 0
 
     repeat {
       varInv <- try(solve(vMat), silent = TRUE)
       if (is(varInv, "try-error") && singularSolve) {
         dd <- which(vMat == 0, arr.ind = TRUE)
-        dd <- dd[dd[, 2] > dd[, 1], , drop = FALSE]
+        dd <- dd[
+          dd[, 2] > dd[, 1] & dd[, 2] <= nneigh & dd[, 1] <= nneigh,
+          ,
+          drop = FALSE
+        ]
         if (dim(dd)[1] == 0) {
           break
         }
@@ -161,9 +183,9 @@ rkrige <- function(
         break
       }
 
-      lambda <- varInv %*% c(c0arr, 1)
-      slambda <- sum(abs(lambda[1:(length(lambda) - 1)]))
+      lambda <- varInv %*% c(c0arr, trendPred)
       nneigh <- length(c0arr)
+      slambda <- sum(abs(lambda[1:nneigh]))
 
       if (slambda < wlim) {
         break
@@ -192,12 +214,12 @@ rkrige <- function(
     obs <- obs0
     unc <- unc0
   }
-  c0arr[nneigh + 1] <- 1
+  c0arr[(nneigh + 1):(nneigh + ptrend)] <- trendPred
   lambda <- varInv %*% c0arr
   krigingError <- sum(lambda * c0arr)
   slambda <- sum(abs(lambda[1:nneigh]))
   if (BLUE) {
-    BLUE <- sum(vInv %*% c0arr) / sum(vInv)
+    BLUE <- if (singMat) NA else sum(vInv %*% c0arr[1:nneigh]) / sum(vInv)
   }
   oslambda <- slambda
   while (slambda > wlim) {
@@ -243,11 +265,11 @@ rkrige <- function(
       data.frame(
         id = c(neigh, 0),
         edist = c(distm, 0),
-        lambda = lambda,
-        c0 = c0arr,
+        lambda = lambda[1:(nneigh + 1)],
+        c0 = c0arr[1:(nneigh + 1)],
         obs = c(obs, 1),
         unc = c(unc, 0),
-        lambda_times_obs = lambda * c(obs, 0)
+        lambda_times_obs = lambda[1:(nneigh + 1)] * c(obs, 0)
       )
     )
     print("neighbours")

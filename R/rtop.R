@@ -19,9 +19,13 @@
 #' universal kriging, suppose \code{z} is linearly dependent on \code{x} and
 #' \code{y}, use the formula \code{z~x+y}. The formulaString defaults to
 #' \code{"value~1"} if \code{value} is a part of the data set.  If not, the
-#' first column of the data set is used. Universal kriging is not yet properly
-#' implemented in the \code{rtopng}-package, this element is mainly used for
-#' defining the dependent variable.
+#' first column of the data set is used. The trend variables on the RHS can
+#' be attribute columns of the observations and prediction locations and/or
+#' the reserved coordinate names \code{x} and \code{y}. The trend basis
+#' functions are evaluated either at the centroids of the areas or
+#' block-averaged over the discretisation points from \code{\link{rtopDisc}},
+#' controlled by the parameter \code{ukTrendSupport}, see
+#' \code{\link{getRtopParams}}.
 #' @param params parameters to modify the default parameters of the
 #' rtopng-package, set internally in this function by a call to
 #' \code{\link{getRtopParams}}
@@ -329,7 +333,14 @@ createRtopObject <- function(
 #' attempt to solve singular kriging matrices by removing catchments that have
 #' the same correlations. This will usually happen when two catchments are
 #' almost overlapping, and they are discretized with the same points. See also
-#' \code{\link{rtopKrige}}.} \item{cv = FALSE}{ - logical; for cross-validation
+#' \code{\link{rtopKrige}}.} \item{ukTrendSupport = "centroid"}{ - how the
+#' universal kriging trend basis functions (the RHS of \code{formulaString})
+#' are evaluated for each support area. \code{"centroid"} evaluates them at
+#' the area centroid, \code{"block"} averages them over the discretisation
+#' points of the area from \code{\link{rtopDisc}}. The difference only
+#' matters for basis functions that vary within an area, i.e., terms using
+#' the reserved coordinate names \code{x} and \code{y}; attribute covariates
+#' are constant within an area.} \item{cv = FALSE}{ - logical; for cross-validation
 #' of observations} \item{debug.level = 1}{ - used in some functions for giving
 #' additional output. See individual functions for more information.}
 #' \item{partialOverlap = FALSE}{whether to work with partially overlapping
@@ -507,6 +518,7 @@ getRtopDefaultParams <- function(
   wlim = 1.5,
   wlimMethod = "all",
   singularSolve = FALSE,
+  ukTrendSupport = "centroid",
   cv = FALSE,
   debug.level = if (interactive()) 1 else 0,
   observations,
@@ -544,6 +556,7 @@ getRtopDefaultParams <- function(
     wlim = wlim,
     wlimMethod = wlimMethod,
     singularSolve = singularSolve,
+    ukTrendSupport = ukTrendSupport,
     cv = cv,
     debug.level = debug.level
   )
@@ -603,10 +616,17 @@ findParInit <- function(formulaString, observations, model) {
     # ST* indexing is [space, time]; sampling only time preserves all
     # spatial locations, which is required for a valid sample variogram.
     observations <- observations[, sample(1:ntime, min(20, ntime))]
+    # rtopVariogram.STSDF detrends universal kriging formulas internally
     vario <- rtopVariogram(observations, formulaString = formulaString)
     # $area does not fall through to @sp for ST* objects.
     aObs <- observations@sp$area
   } else {
+    if (hasUkTrend(formulaString)) {
+      # Initial variogram parameters from the residual (detrended) field;
+      # centroid evaluation is sufficient at this stage.
+      observations$ukResidual <- ukResiduals(formulaString, observations)
+      formulaString <- ukResidual ~ 1
+    }
     vario <- gstat::variogram(formulaString, observations)
     aObs <- observations$area
   }

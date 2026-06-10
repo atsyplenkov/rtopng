@@ -27,6 +27,11 @@
 #' @param dbins possibility to set distance bins (not yet implemented)
 #' @param data.table an option to use data.table internally for the variogram
 #' computation for \code{\link[spacetime]{STSDF}}-objects
+#' @param discPoints list of discretisation points of the observation areas
+#' from \code{\link{rtopDisc}}, only used for block-averaging of
+#' coordinate-based trend basis functions when the formula describes
+#' universal kriging and \code{ukTrendSupport = "block"}; computed internally
+#' when needed and not supplied
 #' @param ... parameters to other functions called, e.g. gstat's
 #' \code{\link[gstat]{variogram}}-function and to
 #' \code{\link{rtopVariogram.SpatialPointsDataFrame}} when the method is called
@@ -561,6 +566,19 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' time steps, or just the time step which is closest to the difference in lag
 #' times.
 #'
+#' Universal kriging is invoked by giving \code{formulaString} a non-trivial
+#' right hand side, e.g. \code{obs ~ elev} or \code{obs ~ x + y}, where the
+#' trend variables are attribute columns of the observations and prediction
+#' locations and/or the reserved coordinate names \code{x} and \code{y}. The
+#' kriging system is then augmented with the trend basis functions instead of
+#' only the unbiasedness constraint of ordinary kriging. The basis functions
+#' are evaluated at the centroid of each support area, or block-averaged over
+#' the discretisation points of \code{\link{rtopDisc}}, controlled by the
+#' parameter \code{ukTrendSupport} (see \code{\link{getRtopParams}}). The
+#' sample variogram is in this case computed from the residuals against an
+#' OLS fit of the trend. For spatiotemporal interpolation the trend variables
+#' have to be time-invariant columns of the \code{sp}-slot.
+#'
 #' The use of lag times should in theory increase the computation time, but
 #' might, due to different computation methods, even speed up the computation
 #' when the number of neighbours to be used (parameter nmax) is small compared
@@ -593,6 +611,17 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' locations are to be interpolated/crossvalidated
 #' @param wret logical; if TRUE, return a matrix of weights instead of the
 #' predictions, useful for batch processing of time series, see also details
+#' @param dObs list of discretisation points for the observation areas from
+#' \code{\link{rtopDisc}}, used for block-averaging of coordinate-based trend
+#' basis functions when \code{ukTrendSupport = "block"}; computed internally
+#' when needed and not supplied
+#' @param dPred list of discretisation points for the prediction areas, see
+#' \code{dObs}
+#' @param trendObs matrix of trend basis functions evaluated at the
+#' observation supports (one row per observation, including the intercept);
+#' mainly for internal use, computed from \code{formulaString} when missing
+#' @param trendPred matrix of trend basis functions evaluated at the
+#' prediction supports, see \code{trendObs}
 #' @param olags A vector describing the relative lag which should be applied
 #' for the observation locations. See also details
 #' @param plags A vector describing the relative lag which should be applied
