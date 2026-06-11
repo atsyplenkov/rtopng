@@ -3,7 +3,7 @@
 The current demo workflow is based on the TNDTK example by Simone Persiano and collaborators:
 
 - GitHub repository: <https://github.com/SimonePersiano/TNDTK>
-- Original tutorial <>
+- Original tutorial <https://rpubs.com/simone_persiano/927821>
 
 The demo uses the Tyrol / South Tyrol subset distributed with the TNDTK tutorial: 27 gauged catchments, 27 gauging stations, 3 ungauged target catchments, and daily streamflow. Daily streamflow were used to estimate MAF. The `demo.gpkg` is a complete copy of the shapefiles used by Persiano et al. with the only difference of hardcoded MAF values. 
 
