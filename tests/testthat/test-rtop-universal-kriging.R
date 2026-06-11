@@ -1,3 +1,5 @@
+# jarl-ignore-file internal_function: testing internal functions
+
 fixtures <- rtopng_spatial_fixtures()
 
 set.seed(1501)

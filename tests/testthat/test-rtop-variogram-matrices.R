@@ -1,3 +1,5 @@
+# jarl-ignore-file internal_function: testing internal functions
+
 spatial <- rtopng_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
 sf_fixtures <- rtopng_sf_subset_fixtures(n_obs = 6, n_pred = 2)
 
