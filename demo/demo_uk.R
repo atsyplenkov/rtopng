@@ -37,19 +37,27 @@ nselog.data.frame <- function(data, truth, estimate, na_rm = TRUE, ...) {
 
 input_gpkg <- "demo.gpkg"
 
-GaugedCatchments <- st_read(input_gpkg, layer = "gauged_catchments", quiet = TRUE)
-UngaugedCatchments <- st_read(input_gpkg, layer = "ungauged_catchments", quiet = TRUE)
+GaugedCatchments <- st_read(
+  input_gpkg,
+  layer = "gauged_catchments",
+  quiet = TRUE
+)
+UngaugedCatchments <- st_read(
+  input_gpkg,
+  layer = "ungauged_catchments",
+  quiet = TRUE
+)
 GaugedStations <- st_read(input_gpkg, layer = "gauged_stations", quiet = TRUE)
 
 # Re-compute areas with sf. The streamflow-kriging baseline works with unit
 # streamflow, so the kriged variable is log(MAF / drainage area).
-GaugedCatchments$Area_km2 <- as.numeric(st_area(GaugedCatchments)) / (1000 * 1000)
-UngaugedCatchments$Are_km2 <- as.numeric(st_area(UngaugedCatchments)) / (1000 * 1000)
+GaugedCatchments$Area_km2 <- as.numeric(st_area(GaugedCatchments)) / 10^6
+UngaugedCatchments$Are_km2 <- as.numeric(st_area(UngaugedCatchments)) / 10^6
 
-GaugedStations <- GaugedStations %>%
-  select(-any_of("MAF")) %>%
+GaugedStations <- GaugedStations |>
+  select(-any_of("MAF")) |>
   left_join(
-    st_drop_geometry(GaugedCatchments) %>% select(Cod, Area_km2, MAF),
+    st_drop_geometry(GaugedCatchments) |> dplyr::select(Cod, Area_km2, MAF),
     by = "Cod"
   )
 GaugedStations$log_unit_maf <- log(GaugedStations$MAF / GaugedStations$Area_km2)
@@ -65,21 +73,29 @@ UngaugedPoints <- st_as_sf(
 # provide the required UK covariate by assigning the nearest gauged-station
 # altitude to each target point. A production analysis should replace this with
 # target-site or catchment-mean altitude from a DEM or metadata source.
-UngaugedPoints$Altitud <- GaugedStations$Altitud[st_nearest_feature(UngaugedPoints, GaugedStations)]
+UngaugedPoints$Altitud <- GaugedStations$Altitud[st_nearest_feature(
+  UngaugedPoints,
+  GaugedStations
+)]
 
 # automap uses Spatial* objects internally.
 gauged_sp <- as(GaugedStations, "Spatial")
 ungauged_sp <- as(UngaugedPoints, "Spatial")
 
 # Universal kriging: altitude enters as a deterministic covariate/drift.
-uk_model <- autoKrige(log_unit_maf ~ Altitud, gauged_sp, ungauged_sp, verbose = FALSE)
+uk_model <- autoKrige(
+  log_unit_maf ~ Altitud,
+  gauged_sp,
+  ungauged_sp,
+  verbose = FALSE
+)
 
-ungauged_maf <- st_drop_geometry(UngaugedPoints) %>%
+ungauged_maf <- st_drop_geometry(UngaugedPoints) |>
   mutate(
     log_unit_maf_pred = uk_model$krige_output@data$var1.pred,
     log_unit_maf_var = uk_model$krige_output@data$var1.var,
     MAF_pred = exp(log_unit_maf_pred) * Are_km2
-  ) %>%
+  ) |>
   select(Locatin, Altitud, MAF_pred, log_unit_maf_pred, log_unit_maf_var)
 
 print(ungauged_maf)
@@ -92,13 +108,13 @@ uk_cv <- autoKrige.cv(
   verbose = c(FALSE, FALSE)
 )
 
-gauged_cv <- st_drop_geometry(GaugedStations) %>%
+gauged_cv <- st_drop_geometry(GaugedStations) |>
   transmute(
     Cod = as.character(Cod),
     MAF_obs = MAF,
     MAF_pred = exp(uk_cv$krige.cv_output@data$var1.pred) * Area_km2,
     MAF_resid = MAF_pred - MAF_obs
-  ) %>%
+  ) |>
   filter(is.finite(MAF_obs), is.finite(MAF_pred), MAF_obs > 0, MAF_pred > 0)
 
 maf_metrics <- metric_set(kge2012, pbias, rmse, nse, nselog)

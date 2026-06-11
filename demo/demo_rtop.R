@@ -32,14 +32,22 @@ nselog.data.frame <- function(data, truth, estimate, na_rm = TRUE, ...) {
 
 input_gpkg <- "demo.gpkg"
 
-GaugedCatchments <- st_read(input_gpkg, layer = "gauged_catchments", quiet = TRUE)
-UngaugedCatchments <- st_read(input_gpkg, layer = "ungauged_catchments", quiet = TRUE)
+GaugedCatchments <- st_read(
+  input_gpkg,
+  layer = "gauged_catchments",
+  quiet = TRUE
+)
+UngaugedCatchments <- st_read(
+  input_gpkg,
+  layer = "ungauged_catchments",
+  quiet = TRUE
+)
 GaugedStations <- st_read(input_gpkg, layer = "gauged_stations", quiet = TRUE)
 
 # Re-compute catchment areas with sf, replacing rgeos::gArea(..., byid = TRUE).
 # The tutorial uses Area_km2 for gauged catchments and Are_km2 for targets.
-GaugedCatchments$Area_km2 <- as.numeric(st_area(GaugedCatchments)) / (1000 * 1000)
-UngaugedCatchments$Are_km2 <- as.numeric(st_area(UngaugedCatchments)) / (1000 * 1000)
+GaugedCatchments$Area_km2 <- as.numeric(st_area(GaugedCatchments)) / 10^6
+UngaugedCatchments$Are_km2 <- as.numeric(st_area(UngaugedCatchments)) / 10^6
 
 # 6(a). Scaling relationship between MAF and drainage area for gauged catchments.
 loglin.mod <- lm(log(GaugedCatchments$MAF) ~ log(GaugedCatchments$Area_km2))
@@ -72,7 +80,7 @@ rtopObj.MAF <- rtopFitVariogram(rtopObj.MAF)
 rtopObj.MAF <- checkVario(rtopObj.MAF)
 rtopObj.MAF <- rtopKrige(rtopObj.MAF)
 
-ungauged_maf <- st_drop_geometry(UngaugedCatchments) %>%
+ungauged_maf <- st_drop_geometry(UngaugedCatchments) |>
   transmute(
     Locatin,
     MAF_pred = rtopObj.MAF$predictions$var1.pred * (Are_km2^c2)
@@ -86,13 +94,13 @@ print(ungauged_maf)
 rtopObj.MAF.cv <- rtopKrige(rtopObj.MAF, cv = TRUE)
 cv_pred_obs <- rtopObj.MAF.cv$predictions$var1.pred
 
-gauged_cv <- st_drop_geometry(GaugedCatchments) %>%
+gauged_cv <- st_drop_geometry(GaugedCatchments) |>
   transmute(
     Cod = as.character(Cod),
     MAF_obs = MAF,
     MAF_pred = cv_pred_obs * (Area_km2^c2),
     MAF_resid = MAF_pred - MAF_obs
-  ) %>%
+  ) |>
   filter(is.finite(MAF_obs), is.finite(MAF_pred), MAF_obs > 0, MAF_pred > 0)
 
 maf_metrics <- metric_set(kge2012, pbias, rmse, nse, nselog)
