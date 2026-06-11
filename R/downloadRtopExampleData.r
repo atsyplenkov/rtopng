@@ -35,7 +35,8 @@ downloadRtopExampleData <- function(
   setwd(folder)
   download.file(
     "http://www.hydro.tuwien.ac.at/fileadmin/mediapool-hydro/Downloads/rtopData.zip",
-    "rtopData.zip"
+    "rtopData.zip",
+    mode = "wb"
   )
   unzip("rtopData.zip")
   setwd(wd)
