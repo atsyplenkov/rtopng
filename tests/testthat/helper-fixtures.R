@@ -42,17 +42,6 @@ rtopng_spatial_fixtures <- function() {
   )
 }
 
-rtopng_sf_fixtures <- function() {
-  observations <- rtopng_read_sf("observations")
-  prediction_locations <- rtopng_read_sf("predictionLocations")
-  observations$obs <- observations$QSUMMER_OB / observations$AREASQKM
-
-  list(
-    observations = observations,
-    prediction_locations = prediction_locations,
-    params = list(gDist = TRUE, cloud = FALSE)
-  )
-}
 
 rtopng_sf_subset_fixtures <- function(
   n_obs = 10,
