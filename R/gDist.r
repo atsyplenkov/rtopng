@@ -10,7 +10,7 @@ gDist.rtop <- function(object, params = list(), ...) {
   if (!"dObs" %in% names(object)) {
     object$dObs <- rtopDisc(object$observations, params = params, ...)
   }
-  if (!"dPred" %in% names(object) & "predictionLocations" %in% names(object)) {
+  if (!"dPred" %in% names(object) && "predictionLocations" %in% names(object)) {
     object$dPred <- rtopDisc(object$predictionLocations, params = params, ...)
   }
   object$gDistObs <- gDist(
@@ -106,7 +106,7 @@ gDist.list <- function(
   if (debug.level == 1) {
     print("Creating Ghos distances. This can take some time")
   }
-  if (inherits(object[[1]], "SpatialPoints") | inherits(object[[1]], "sf")) {
+  if (inherits(object[[1]], "SpatialPoints") || inherits(object[[1]], "sf")) {
     gDist <- varMat(
       object,
       object2,
