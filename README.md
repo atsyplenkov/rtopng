@@ -46,7 +46,7 @@ RTONG_DIAGNOSTICS=true Rscript -e "devtools::test()"
 - [ ] Add example data with timeseries
 - [ ] Remove data.table and reshape2 deps
 - [ ] Add mirai for parallel processing (?)
-- [ ] Add universal kriging support (!!)
+- [x] Add universal kriging support (!!)
 - [ ] Add a proper OOP structure through S7 (?)
 
 ## Acknowledgements
