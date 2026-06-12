@@ -12,3 +12,7 @@ src/*.gcno
 docs/
 .pi/
 AGENTS.md
+
+# artefacts
+*.tar.gz
+*.Rcheck

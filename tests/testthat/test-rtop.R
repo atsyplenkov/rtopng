@@ -1,4 +1,4 @@
-fixtures <- rtopng_spatial_fixtures()
+fixtures <- utop_spatial_fixtures()
 
 set.seed(1501)
 rtop_fitted <- createRtopObject(

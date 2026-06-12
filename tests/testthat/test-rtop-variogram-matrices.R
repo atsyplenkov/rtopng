@@ -1,7 +1,7 @@
 # jarl-ignore-file internal_function: testing internal functions
 
-spatial <- rtopng_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
-sf_fixtures <- rtopng_sf_subset_fixtures(n_obs = 6, n_pred = 2)
+spatial <- utop_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
+sf_fixtures <- utop_sf_subset_fixtures(n_obs = 6, n_pred = 2)
 
 sp_obs <- spatial$observations
 sp_pred <- spatial$prediction_locations
@@ -171,13 +171,13 @@ test_that("overlap and wrapper helpers cover their direct branches", {
   expect_equal(dim(overlap_cross), c(4, 2))
   expect_true(all(overlap_cross >= 0))
 
-  est <- rtopng:::estimateParameters.rtop(createRtopObject(
+  est <- utop:::estimateParameters.rtop(createRtopObject(
     sp_obs,
     spatial$prediction_locations,
     formulaString = "obs ~ 1",
     params = modifyList(spatial$params, list(nugget = FALSE, gDist = FALSE))
   ))
-  mp <- rtopng:::methodParameters.rtop(est)
+  mp <- utop:::methodParameters.rtop(est)
 
   expect_s3_class(est, "rtop")
   expect_s3_class(est$variogramModel, "rtopVariogramModel")

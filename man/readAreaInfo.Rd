@@ -50,7 +50,7 @@ The function is of particular use when data are not available as
 shape-files, or when the observations are not part of the shape-files. This
 function is mainly for compatibility with the former FORTRAN-version. The
 simplest way to read the data in that case is through
-\code{\link[sf]{st_read}}. See also \code{\link{rtopng-package}}.
+\code{\link[sf]{st_read}}. See also \code{\link{utop-package}}.
 }
 \author{
 Jon Olav Skoien

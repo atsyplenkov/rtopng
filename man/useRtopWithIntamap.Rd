@@ -2,7 +2,7 @@
 % Please edit documentation in R/useRtopWithIntamap.R
 \name{useRtopWithIntamap}
 \alias{useRtopWithIntamap}
-\title{Integrates the rtopng package with the \code{intamap} package}
+\title{Integrates the utop package with the \code{intamap} package}
 \usage{
 useRtopWithIntamap()
 }

@@ -25,19 +25,19 @@
 #' description can be found in \code{\link{getRtopParams}}. The changes below
 #' means that the functions will use geostatistical distance instead of full
 #' regularization, and that the variogram model will be fitted to the variogram
-#' cloud. Most other functions in the \code{rtopng}-package can take this
+#' cloud. Most other functions in the \code{utop}-package can take this
 #' object as an argument, and will add the results as one or more new
 #' element(s) to this object.
 #'
 #' The data in the example below are stored as shape-files in the
-#' extdata-directory of the rtopng-package, use the directory of your own data
+#' extdata-directory of the utop-package, use the directory of your own data
 #' instead. The observations consist of mean summer runoff from 138 catchments
 #' in Upper Austria. The predictionLocations are 863 catchments in the same
 #' region. observations and predictionLocations can either be stored as
 #' \code{\link[sp]{SpatialPolygonsDataFrame}}-objects, or as
 #' \code{\link[sf]{sf}}-polygons.
 #'
-#' \preformatted{ rpath = system.file("extdata",package="rtopng") library(sf)
+#' \preformatted{ rpath = system.file("extdata",package="utop") library(sf)
 #' observations = st_read(rpath, "observations") predictionLocations =
 #' st_read(rpath,"predictionLocations")
 #'
@@ -101,7 +101,7 @@
 #' Geosciences, 67.
 #' @keywords spatial
 #'
-#' @useDynLib rtopng, .registration = TRUE
+#' @useDynLib utop, .registration = TRUE
 #' @import graphics
 #' @import gstat
 #' @import sp

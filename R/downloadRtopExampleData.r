@@ -22,14 +22,14 @@
 #'
 #' \dontrun{
 #'   downloadRtopExampleData()
-#'   rpath <- system.file("extdata",package="rtopng")
+#'   rpath <- system.file("extdata",package="utop")
 #'   library(sf)
 #'   observations <- st_read(rpath,"observations")
 #' }
 #'
 #' @export
 downloadRtopExampleData <- function(
-  folder = system.file("extdata", package = "rtopng")
+  folder = system.file("extdata", package = "utop")
 ) {
   wd <- getwd()
   setwd(folder)

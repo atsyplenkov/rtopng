@@ -32,7 +32,7 @@
 rtopVariogram(object, ...)
 }
 \arguments{
-\item{object}{object of class \code{rtop} (see \link{rtopng-package}) or a
+\item{object}{object of class \code{rtop} (see \link{utop-package}) or a
 \cr \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} or
 \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} with information
 about observations. If \cr \code{object} is a \cr
@@ -104,7 +104,7 @@ gravity.
 
 \dontrun{
 library(sf)
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 observations <- sf::st_read(rpath,"observations")
 # Create a column with the specific runoff:
 observations$obs <- observations$QSUMMER_OB/observations$AREASQKM

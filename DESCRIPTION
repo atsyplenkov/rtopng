@@ -1,4 +1,4 @@
-Package: rtopng
+Package: utop
 Type: Package
 Title: Interpolation of Data with Variable Spatial Support
 Version: 0.1.0.9000
@@ -24,7 +24,7 @@ Suggests:
         reshape2,
         testthat
 Config/testthat/edition: 3
-Description: Data with irregular spatial support, such as runoff related data or data from administrative units, can with 'rtopng' be interpolated to locations without observations with the top-kriging method. A description of the original package is given by Skøien et al (2014) <doi:10.1016/j.cageo.2014.02.009>.
+Description: Data with irregular spatial support, such as runoff related data or data from administrative units, can with 'utop' be interpolated to locations without observations with the top-kriging method. A description of the original package is given by Skøien et al (2014) <doi:10.1016/j.cageo.2014.02.009>.
 License: GPL (>= 3)
 NeedsCompilation: yes
 Encoding: UTF-8

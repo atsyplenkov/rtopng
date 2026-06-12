@@ -1,4 +1,4 @@
-rtopng_spacetime_fixtures <- function(n_obs = 8, n_pred = 4, n_time = 3) {
+utop_spacetime_fixtures <- function(n_obs = 8, n_pred = 4, n_time = 3) {
   if (!requireNamespace("spacetime", quietly = TRUE)) {
     stop("spacetime not available")
   }

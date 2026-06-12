@@ -94,7 +94,7 @@ variogram or cloud variogram of data with an areal support.
 \note{
 There are several options for fitting of the variogramModel, where the
 parameters can be set in \code{params}, which is a list of parameters for
-modification of the default parameters of the rtopng-package given in a call
+modification of the default parameters of the utop-package given in a call
 to \code{\link{getRtopParams}}. The first choice is between individual
 fitting and binned fitting. This is based on the type of variogram
 submitted, individual fitting is done if a cloud variogram (of class
@@ -107,7 +107,7 @@ the variogram which is consistent with the parameter \code{cloud}.
 \examples{
 
 \donttest{
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 predictionLocations <- sf::st_read(rpath,"predictionLocations")

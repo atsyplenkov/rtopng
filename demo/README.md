@@ -19,7 +19,7 @@ Runs MAF top-kriging using [`rtop`](https://cran.r-project.org/package=rtop). Th
 
 ### `demo_utk.R`
 
-Runs universal top-kriging using the local `rtopng` development package loaded with `devtools::load_all("..")`, with altitude as an external drift term:
+Runs universal top-kriging using the local `utop` development package loaded with `devtools::load_all("..")`, with altitude as an external drift term:
 
 ```r
 obs ~ Altitude

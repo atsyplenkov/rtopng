@@ -1,4 +1,4 @@
-fixtures <- rtopng_sf_subset_fixtures(n_obs = 12, n_pred = 5)
+fixtures <- utop_sf_subset_fixtures(n_obs = 12, n_pred = 5)
 
 set.seed(1)
 rtop_fitted <- createRtopObject(

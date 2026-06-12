@@ -39,7 +39,7 @@ varMat(object, ...)
 }
 \arguments{
 \item{object}{either: 1) an object of class \code{rtop} (see
-\link{rtopng-package}) or 2) a \cr
+\link{utop-package}) or 2) a \cr
 \code{\link{matrix}} with geostatistical distances (see \code{\link{gDist}}
 or 4) a \code{\link{list}} with discretized supports}
 
@@ -53,7 +53,7 @@ for the predictions, mainly used for simulations}
 the \code{rtop} package, set in \code{\link{getRtopParams}}.}
 
 \item{...}{typical parameters to modify from the default parameters of the
-rtopng-package (or modifications of the previously set parameters for the
+utop-package (or modifications of the previously set parameters for the
 \code{rtop}-object), see also \code{\link{getRtopParams}}. These can also be
 passed in a list named params, as for the rtop-method. Typical parameters to
 modify for this function: \describe{ \item{rresol = 100}{miminum number of
@@ -122,7 +122,7 @@ on the spatial properties of the object.
 
 \dontrun{
 library(sf)
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 observations <- sf::st_read(rpath,"observations")
 vmod <- list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
 vm <- varMat(observations, variogramModel = vmod)

@@ -12,7 +12,7 @@
 #' shape-files, or when the observations are not part of the shape-files. This
 #' function is mainly for compatibility with the former FORTRAN-version. The
 #' simplest way to read the data in that case is through
-#' \code{\link[sf]{st_read}}. See also \code{\link{rtopng-package}}.
+#' \code{\link[sf]{st_read}}. See also \code{\link{utop-package}}.
 #'
 #' @param fname name of file with areal information
 #' @param id name of column with observation id
@@ -105,7 +105,7 @@ readAreaInfo <- function(
 #' shape-files, or when the observations are not part of the shape-files. This
 #' function is mainly for compatibility with the former FORTRAN-version. The
 #' simplest way to read the data in that case is through
-#' \code{\link[sf]{st_read}}. See also \code{\link{rtopng-package}}.
+#' \code{\link[sf]{st_read}}. See also \code{\link{utop-package}}.
 #'
 #' @param object either name of file with areal information or
 #' \code{\link[sp]{SpatialPointsDataFrame}} with observations

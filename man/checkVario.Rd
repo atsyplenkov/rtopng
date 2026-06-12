@@ -46,7 +46,7 @@ checkVario(object, ...)
 }
 \arguments{
 \item{object}{either: object of class \code{rtop} (see
-\code{\link{rtopng-package}}), or an object of type \cr \code{rtopVariogram}}
+\code{\link{utop-package}}), or an object of type \cr \code{rtopVariogram}}
 
 \item{acor}{unit correction factor in the key, e.g. to see numbers more
 easily interpretable for large areas. As an example, ucor = 0.000001 when
@@ -121,7 +121,7 @@ fitted to sample variograms of data with support
 
 \donttest{
 library(gstat)
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 predictionLocations <- sf::st_read(rpath,"predictionLocations")

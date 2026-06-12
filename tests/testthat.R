@@ -1,1 +1,1 @@
-testthat::test_check("rtopng")
+testthat::test_check("utop")

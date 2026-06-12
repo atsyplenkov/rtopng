@@ -140,10 +140,10 @@ rtopKrige perform spatial interpolation or cross validation of data with
 areal support.
 }
 \details{
-This function is the interpolation routine of the rtopng-package. The
+This function is the interpolation routine of the utop-package. The
 simplest way of calling the function is with an rtop-object that contains
 the fitted variogram model and all the other necessary data (see
-\code{\link{createRtopObject}} or \code{\link{rtopng-package}}).
+\code{\link{createRtopObject}} or \code{\link{utop-package}}).
 
 The function will, if called with covariance matrices between observations
 and between observations and prediction locations, use these for the
@@ -221,7 +221,7 @@ predictionLocations.
 # downloadRtopExampleData()
 # observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 predictionLocations <- sf::st_read(rpath,"predictionLocations")

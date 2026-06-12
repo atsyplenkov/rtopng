@@ -1,7 +1,7 @@
 test_that("spacetime STSDF objects work end-to-end", {
   skip_if_not_installed("spacetime")
 
-  fixtures <- rtopng_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
+  fixtures <- utop_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
 
   rtop_obj <- createRtopObject(
     fixtures$observations,
@@ -32,7 +32,7 @@ test_that("spacetime STSDF objects work end-to-end", {
 test_that("rtopVariogram dispatches correctly for STSDF", {
   skip_if_not_installed("spacetime")
 
-  fixtures <- rtopng_spacetime_fixtures(n_obs = 6, n_pred = 3, n_time = 2)
+  fixtures <- utop_spacetime_fixtures(n_obs = 6, n_pred = 3, n_time = 2)
   vario <- rtopVariogram(fixtures$observations, formulaString = "obs ~ 1")
 
   expect_s3_class(vario, "rtopVariogram")
@@ -43,7 +43,7 @@ test_that("rtopVariogram dispatches correctly for STSDF", {
 test_that("spacetime pipeline tolerates nugget=TRUE", {
   skip_if_not_installed("spacetime")
 
-  fixtures <- rtopng_spacetime_fixtures(n_obs = 6, n_pred = 3, n_time = 2)
+  fixtures <- utop_spacetime_fixtures(n_obs = 6, n_pred = 3, n_time = 2)
 
   rtop_obj <- createRtopObject(
     fixtures$observations,

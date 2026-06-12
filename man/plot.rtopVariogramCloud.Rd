@@ -36,7 +36,7 @@ value can therefore be found in the help page of
 \examples{
 
 \donttest{
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 

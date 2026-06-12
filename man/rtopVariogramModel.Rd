@@ -54,7 +54,7 @@ model of independent variables, see e.g. \code{\link{createRtopObject}} for
 more details.}
 
 \item{object}{either: object of class \code{rtop} (see
-\link{rtopng-package}), or an rtopVariogramModel.}
+\link{utop-package}), or an rtopVariogramModel.}
 
 \item{...}{parameters to lower level functions}
 
@@ -80,7 +80,7 @@ This gives an easier interface to the parameters of the variogram model
 
 \dontrun{
 library(sf)
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 observations <- sf::st_read(rpath,"observations")
 # Create a column with the specific runoff:
 observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -93,7 +93,7 @@ rtopObj <- updateRtopVariogram(rtopObj, exp = 1.5, action = "mult",
 }
 }
 \seealso{
-\code{\link{rtopng-package}}
+\code{\link{utop-package}}
 }
 \author{
 Jon Olav Skoien

@@ -1,5 +1,5 @@
 # demo_utk.R
-# Universal top-kriging MAF application using the local rtopng development
+# Universal top-kriging MAF application using the local utop development
 # package and altitude as a covariate.
 #
 # This follows demo_rtop.R, but loads the package source with

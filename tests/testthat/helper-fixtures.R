@@ -1,5 +1,5 @@
-rtopng_extdata_path <- function() {
-  extdata_path <- system.file("extdata", package = "rtopng")
+utop_extdata_path <- function() {
+  extdata_path <- system.file("extdata", package = "utop")
   if (nzchar(extdata_path)) {
     return(extdata_path)
   }
@@ -11,16 +11,16 @@ rtopng_extdata_path <- function() {
     }
   }
 
-  stop("Could not locate rtopng extdata for tests")
+  stop("Could not locate utop extdata for tests")
 }
 
-rtopng_read_sf <- function(layer) {
-  sf::st_read(rtopng_extdata_path(), layer, quiet = TRUE)
+utop_read_sf <- function(layer) {
+  sf::st_read(utop_extdata_path(), layer, quiet = TRUE)
 }
 
-rtopng_spatial_fixtures <- function() {
-  observations <- rtopng_read_sf("observations")
-  prediction_locations <- rtopng_read_sf("predictionLocations")
+utop_spatial_fixtures <- function() {
+  observations <- utop_read_sf("observations")
+  prediction_locations <- utop_read_sf("predictionLocations")
 
   observations <- as(observations, "Spatial")
   prediction_locations <- as(prediction_locations, "Spatial")
@@ -43,13 +43,13 @@ rtopng_spatial_fixtures <- function() {
 }
 
 
-rtopng_sf_subset_fixtures <- function(
+utop_sf_subset_fixtures <- function(
   n_obs = 10,
   n_pred = 5,
   params = list(gDist = TRUE, cloud = FALSE)
 ) {
-  observations <- rtopng_read_sf("observations")
-  prediction_locations <- rtopng_read_sf("predictionLocations")
+  observations <- utop_read_sf("observations")
+  prediction_locations <- utop_read_sf("predictionLocations")
   observations$obs <- observations$QSUMMER_OB / observations$AREASQKM
 
   list(
@@ -59,7 +59,7 @@ rtopng_sf_subset_fixtures <- function(
   )
 }
 
-rtopng_spatial_subset_fixtures <- function(
+utop_spatial_subset_fixtures <- function(
   n_obs = 10,
   n_pred = 2,
   params = list(
@@ -70,7 +70,7 @@ rtopng_spatial_subset_fixtures <- function(
     debug.level = -1
   )
 ) {
-  fixtures <- rtopng_spatial_fixtures()
+  fixtures <- utop_spatial_fixtures()
 
   list(
     observations = fixtures$observations[seq_len(n_obs), ],

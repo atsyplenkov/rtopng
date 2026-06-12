@@ -1,10 +1,10 @@
 # For compiling the Fortran file:
 # R CMD SHLIB vred.f
 
-#' Create an object for interpolation within the rtopng package
+#' Create an object for interpolation within the utop package
 #'
 #' This is a help function for creating an object (see
-#' \code{\link{rtopng-package}} to be used for interpolation within the rtopng
+#' \code{\link{utop-package}} to be used for interpolation within the utop
 #' package
 #'
 #'
@@ -27,7 +27,7 @@
 #' controlled by the parameter \code{ukTrendSupport}, see
 #' \code{\link{getRtopParams}}.
 #' @param params parameters to modify the default parameters of the
-#' rtopng-package, set internally in this function by a call to
+#' utop-package, set internally in this function by a call to
 #' \code{\link{getRtopParams}}
 #' @param overlapObs matrix with observations that overlap each other
 #' @param overlapPredObs matrix with \code{observations} and
@@ -36,7 +36,7 @@
 #' to pass depreceted arguments
 #' @return An object of class \code{rtop} with observations, prediction
 #' locations, parameters and possible other elements useful for interpolation
-#' in the rtopng-package. Most other externally visible functions in the
+#' in the utop-package. Most other externally visible functions in the
 #' package will be able to work with this object, and add the results as a new
 #' element.
 #' @author Jon Olav Skoien
@@ -53,7 +53,7 @@
 #' @examples
 #'
 #' \donttest{
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' predictionLocations <- sf::st_read(rpath,"predictionLocations")
@@ -252,7 +252,7 @@ createRtopObject <- function(
 #' Setting parameters for the intamap package
 #'
 #' This function sets a range of the parameters for the intamap package, to be
-#' included in the object described in \code{\link{rtopng-package}}
+#' included in the object described in \code{\link{utop-package}}
 #'
 #'
 #' @param params An existing set of parameters for the interpolation process,
@@ -356,13 +356,13 @@ createRtopObject <- function(
 #' supplied} \item{formulaString}{ - used for initial values of parameters if
 #' supplied} }
 #' @return A list of the parameters with class \code{rtopParams} to be included
-#' in the \code{object} described in \link{rtopng-package}
+#' in the \code{object} described in \link{utop-package}
 #' @note This function will mainly be called by \code{\link{createRtopObject}},
 #' but can also be called by the user to create a parameter set or update an
 #' existing parameter set. If none of the arguments is a list of class
 #' \code{rtopParams}, the function will assume that the argument(s) are
 #' modifications to the default set of parameters. The function can also be
-#' called by other functions in the rtopng-package if the users chooses not to
+#' called by other functions in the utop-package if the users chooses not to
 #' work with an object of class \code{rtop}.
 #'
 #' If the function is called with two lists of parameters (but the first one is
@@ -376,7 +376,7 @@ createRtopObject <- function(
 #' the size of the job. The default limit might not be the best for every
 #' system.
 #' @author Jon Olav Skoien
-#' @seealso \code{\link{createRtopObject}} and \code{\link{rtopng-package}}
+#' @seealso \code{\link{createRtopObject}} and \code{\link{utop-package}}
 #' @references Cressie, N. 1985. Fitting variogram models by weighted least
 #' squares. Mathematical Geology, 17 (5), 563-586
 #'

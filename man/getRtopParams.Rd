@@ -120,11 +120,11 @@ supplied} }}
 }
 \value{
 A list of the parameters with class \code{rtopParams} to be included
-in the \code{object} described in \link{rtopng-package}
+in the \code{object} described in \link{utop-package}
 }
 \description{
 This function sets a range of the parameters for the intamap package, to be
-included in the object described in \code{\link{rtopng-package}}
+included in the object described in \code{\link{utop-package}}
 }
 \note{
 This function will mainly be called by \code{\link{createRtopObject}},
@@ -132,7 +132,7 @@ but can also be called by the user to create a parameter set or update an
 existing parameter set. If none of the arguments is a list of class
 \code{rtopParams}, the function will assume that the argument(s) are
 modifications to the default set of parameters. The function can also be
-called by other functions in the rtopng-package if the users chooses not to
+called by other functions in the utop-package if the users chooses not to
 work with an object of class \code{rtop}.
 
 If the function is called with two lists of parameters (but the first one is
@@ -170,7 +170,7 @@ spatial support, with an example from river networks. Computers &
 Geosciences, 67.
 }
 \seealso{
-\code{\link{createRtopObject}} and \code{\link{rtopng-package}}
+\code{\link{createRtopObject}} and \code{\link{utop-package}}
 }
 \author{
 Jon Olav Skoien

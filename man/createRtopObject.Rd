@@ -2,7 +2,7 @@
 % Please edit documentation in R/rtop.R
 \name{createRtopObject}
 \alias{createRtopObject}
-\title{Create an object for interpolation within the rtopng package}
+\title{Create an object for interpolation within the utop package}
 \usage{
 createRtopObject(
   observations,
@@ -37,7 +37,7 @@ controlled by the parameter \code{ukTrendSupport}, see
 \code{\link{getRtopParams}}.}
 
 \item{params}{parameters to modify the default parameters of the
-rtopng-package, set internally in this function by a call to
+utop-package, set internally in this function by a call to
 \code{\link{getRtopParams}}}
 
 \item{overlapObs}{matrix with observations that overlap each other}
@@ -51,19 +51,19 @@ to pass depreceted arguments}
 \value{
 An object of class \code{rtop} with observations, prediction
 locations, parameters and possible other elements useful for interpolation
-in the rtopng-package. Most other externally visible functions in the
+in the utop-package. Most other externally visible functions in the
 package will be able to work with this object, and add the results as a new
 element.
 }
 \description{
 This is a help function for creating an object (see
-\code{\link{rtopng-package}} to be used for interpolation within the rtopng
+\code{\link{utop-package}} to be used for interpolation within the utop
 package
 }
 \examples{
 
 \donttest{
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 predictionLocations <- sf::st_read(rpath,"predictionLocations")

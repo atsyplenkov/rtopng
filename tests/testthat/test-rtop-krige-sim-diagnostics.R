@@ -1,9 +1,9 @@
-if (!identical(Sys.getenv("RTONG_DIAGNOSTICS"), "true")) {
+if (!identical(Sys.getenv("UTOP_DIAGNOSTICS"), "true")) {
   test_that("kriging and simulation diagnostics are enabled", {
-    skip("Set RTONG_DIAGNOSTICS=true to run diagnostic integration tests")
+    skip("Set UTOP_DIAGNOSTICS=true to run diagnostic integration tests")
   })
 } else {
-  spatial <- rtopng_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
+  spatial <- utop_spatial_subset_fixtures(n_obs = 12, n_pred = 2)
   unfit_base <- createRtopObject(
     spatial$observations,
     spatial$prediction_locations,
@@ -15,7 +15,7 @@ if (!identical(Sys.getenv("RTONG_DIAGNOSTICS"), "true")) {
   )
   fit_base <- rtopFitVariogram(unfit_base, iprint = -1)
 
-  spatial_small <- rtopng_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
+  spatial_small <- utop_spatial_subset_fixtures(n_obs = 8, n_pred = 2)
   fit_cloud <- rtopFitVariogram(
     createRtopObject(
       spatial_small$observations,

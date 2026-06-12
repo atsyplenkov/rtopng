@@ -102,7 +102,7 @@ described below.
 This function can do constrained or unconstrained simulation for areas. The
 simplest way of calling the function is with an rtop-object that contains
 the fitted variogram model and all the other necessary data (see
-\code{\link{createRtopObject}} or \code{\link{rtopng-package}}).
+\code{\link{createRtopObject}} or \code{\link{utop-package}}).
 \code{rtopSim} is the only function in \code{rtop} which does not need
 observations. However, a variogram model is still necessary to perform
 simulations.
@@ -128,7 +128,7 @@ is possible based on rainfall.
 # The following command will download  the complete example data set
 # downloadRtopExampleData()
 
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 predictionLocations <- sf::st_read(rpath,"predictionLocations")

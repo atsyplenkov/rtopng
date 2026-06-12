@@ -6,7 +6,7 @@
 #' an areal support.
 #'
 #'
-#' @param object object of class \code{rtop} (see \link{rtopng-package}) or a
+#' @param object object of class \code{rtop} (see \link{utop-package}) or a
 #' \cr \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} or
 #' \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} with information
 #' about observations. If \cr \code{object} is a \cr
@@ -71,7 +71,7 @@
 #'
 #' \dontrun{
 #' library(sf)
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' observations <- sf::st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -125,7 +125,7 @@ rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 #' \code{varFit} added to the object, in addition to other objects created.
 #' @note There are several options for fitting of the variogramModel, where the
 #' parameters can be set in \code{params}, which is a list of parameters for
-#' modification of the default parameters of the rtopng-package given in a call
+#' modification of the default parameters of the utop-package given in a call
 #' to \code{\link{getRtopParams}}. The first choice is between individual
 #' fitting and binned fitting. This is based on the type of variogram
 #' submitted, individual fitting is done if a cloud variogram (of class
@@ -150,7 +150,7 @@ rtopVariogram <- function(object, ...) UseMethod("rtopVariogram")
 #' @examples
 #'
 #' \donttest{
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' predictionLocations <- sf::st_read(rpath,"predictionLocations")
@@ -182,7 +182,7 @@ rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #'
 #'
 #' @param object either: object of class \code{rtop} (see
-#' \code{\link{rtopng-package}}), or an object of type \cr \code{rtopVariogram}
+#' \code{\link{utop-package}}), or an object of type \cr \code{rtopVariogram}
 #' @param acor unit correction factor in the key, e.g. to see numbers more
 #' easily interpretable for large areas. As an example, ucor = 0.000001 when
 #' area is given in square meters and should rather be shown as square
@@ -244,7 +244,7 @@ rtopFitVariogram <- function(object, ...) UseMethod("rtopFitVariogram")
 #'
 #' \donttest{
 #' library(gstat)
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' predictionLocations <- sf::st_read(rpath,"predictionLocations")
@@ -350,7 +350,7 @@ checkVario <- function(object, ...) UseMethod("checkVario")
 #' @examples
 #'
 #' \donttest{
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' gDist <- gDist(observations)
@@ -429,7 +429,7 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #'
 #'
 #' @param object either: 1) an object of class \code{rtop} (see
-#' \link{rtopng-package}) or 2) a \cr
+#' \link{utop-package}) or 2) a \cr
 #' \code{\link{matrix}} with geostatistical distances (see \code{\link{gDist}}
 #' or 4) a \code{\link{list}} with discretized supports
 #' @param varMatUpdate logical; if TRUE, also existing variance matrices will
@@ -444,7 +444,7 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #' @param variogramModel variogramModel to be used in calculation of the
 #' semivariogram matrix (matrices)
 #' @param ... typical parameters to modify from the default parameters of the
-#' rtopng-package (or modifications of the previously set parameters for the
+#' utop-package (or modifications of the previously set parameters for the
 #' \code{rtop}-object), see also \code{\link{getRtopParams}}. These can also be
 #' passed in a list named params, as for the rtop-method. Typical parameters to
 #' modify for this function: \describe{ \item{rresol = 100}{miminum number of
@@ -497,7 +497,7 @@ rtopDisc <- function(object, ...) UseMethod("rtopDisc")
 #'
 #' \dontrun{
 #' library(sf)
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' observations <- sf::st_read(rpath,"observations")
 #' vmod <- list(model = "Ex1", params = c(0.00001,0.007,350000,0.9,1000))
 #' vm <- varMat(observations, variogramModel = vmod)
@@ -512,10 +512,10 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' rtopKrige perform spatial interpolation or cross validation of data with
 #' areal support.
 #'
-#' This function is the interpolation routine of the rtopng-package. The
+#' This function is the interpolation routine of the utop-package. The
 #' simplest way of calling the function is with an rtop-object that contains
 #' the fitted variogram model and all the other necessary data (see
-#' \code{\link{createRtopObject}} or \code{\link{rtopng-package}}).
+#' \code{\link{createRtopObject}} or \code{\link{utop-package}}).
 #'
 #' The function will, if called with covariance matrices between observations
 #' and between observations and prediction locations, use these for the
@@ -664,7 +664,7 @@ varMat <- function(object, ...) UseMethod("varMat")
 #' # downloadRtopExampleData()
 #' # observations$obs = observations$QSUMMER_OB/observations$AREASQKM
 #'
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' predictionLocations <- sf::st_read(rpath,"predictionLocations")
@@ -704,7 +704,7 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' This function can do constrained or unconstrained simulation for areas. The
 #' simplest way of calling the function is with an rtop-object that contains
 #' the fitted variogram model and all the other necessary data (see
-#' \code{\link{createRtopObject}} or \code{\link{rtopng-package}}).
+#' \code{\link{createRtopObject}} or \code{\link{utop-package}}).
 #' \code{rtopSim} is the only function in \code{rtop} which does not need
 #' observations. However, a variogram model is still necessary to perform
 #' simulations.
@@ -784,7 +784,7 @@ rtopKrige <- function(object, ...) UseMethod("rtopKrige")
 #' # The following command will download  the complete example data set
 #' # downloadRtopExampleData()
 #'
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #' predictionLocations <- sf::st_read(rpath,"predictionLocations")

@@ -1,4 +1,4 @@
-#' Integrates the rtopng package with the \code{intamap} package
+#' Integrates the utop package with the \code{intamap} package
 #'
 #' This function makes it possible to use \code{rtop}-objects in the functions
 #' of the package. It is necessary to load the \code{intamap}-package before

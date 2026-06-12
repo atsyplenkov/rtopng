@@ -1,6 +1,6 @@
 # jarl-ignore-file internal_function: testing internal functions
 
-fixtures <- rtopng_spatial_fixtures()
+fixtures <- utop_spatial_fixtures()
 
 set.seed(1501)
 uk_base <- createRtopObject(
@@ -19,20 +19,20 @@ test_that("ukTrendMatrix builds the trend basis from the RHS", {
   observations <- fixtures$observations
   observations$elev <- obs_xy[, 2] / 1e5
 
-  f_ok <- rtopng:::ukTrendMatrix(obs ~ 1, observations)
+  f_ok <- utop:::ukTrendMatrix(obs ~ 1, observations)
   expect_equal(dim(f_ok), c(30, 1))
   expect_true(all(f_ok == 1))
 
-  f_attr <- rtopng:::ukTrendMatrix(obs ~ elev, observations)
+  f_attr <- utop:::ukTrendMatrix(obs ~ elev, observations)
   expect_equal(dim(f_attr), c(30, 2))
   expect_equal(unname(f_attr[, 2]), observations$elev)
 
-  f_cor <- rtopng:::ukTrendMatrix(obs ~ x + y, observations)
+  f_cor <- utop:::ukTrendMatrix(obs ~ x + y, observations)
   expect_equal(unname(f_cor[, 2]), unname(obs_xy[, 1]))
   expect_equal(unname(f_cor[, 3]), unname(obs_xy[, 2]))
 
   expect_error(
-    rtopng:::ukTrendMatrix(obs ~ missingVar, observations),
+    utop:::ukTrendMatrix(obs ~ missingVar, observations),
     "not found in data"
   )
 })
@@ -43,12 +43,12 @@ test_that("block-averaged coordinate basis matches centroids for supports", {
     rresol = 25,
     debug.level = -1
   ))
-  f_block <- rtopng:::ukTrendMatrix(
+  f_block <- utop:::ukTrendMatrix(
     obs ~ x + y,
     fixtures$observations,
     params_block
   )
-  f_cent <- rtopng:::ukTrendMatrix(obs ~ x + y, fixtures$observations)
+  f_cent <- utop:::ukTrendMatrix(obs ~ x + y, fixtures$observations)
 
   # the centroid is the mean coordinate, so the block average of x and y
   # should be close to, but not identical with, the centroid evaluation
@@ -125,8 +125,8 @@ test_that("block-support trend reproduces a trend in block-averaged basis", {
     rresol = 25,
     debug.level = -1
   ))
-  f_obs <- rtopng:::ukTrendMatrix(obs ~ x, observations, params_block)
-  f_pred <- rtopng:::ukTrendMatrix(obs ~ x, predictionLocations, params_block)
+  f_obs <- utop:::ukTrendMatrix(obs ~ x, observations, params_block)
+  f_pred <- utop:::ukTrendMatrix(obs ~ x, predictionLocations, params_block)
   observations$obs <- 4 + 5e-6 * f_obs[, 2]
 
   ret <- rtopKrige(
@@ -199,7 +199,7 @@ test_that("sample variogram is computed from trend residuals", {
 test_that("spatiotemporal universal kriging reproduces an exact trend", {
   skip_if_not_installed("spacetime")
 
-  st_fixtures <- rtopng_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
+  st_fixtures <- utop_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
   st_obs <- st_fixtures$observations
   st_pred <- st_fixtures$prediction_locations
   st_obs@sp$cov <- seq_len(8) / 2
@@ -251,7 +251,7 @@ test_that("spatiotemporal universal kriging reproduces an exact trend", {
 test_that("spatiotemporal sample variogram uses trend residuals", {
   skip_if_not_installed("spacetime")
 
-  st_fixtures <- rtopng_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
+  st_fixtures <- utop_spacetime_fixtures(n_obs = 8, n_pred = 4, n_time = 3)
   st_obs <- st_fixtures$observations
   st_obs@sp$cov <- seq_len(8) * 2
   st_obs@data$obs <- st_obs@data$obs + 3 * st_obs@sp$cov[st_obs@index[, 1]]

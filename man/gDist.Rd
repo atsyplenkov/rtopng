@@ -92,7 +92,7 @@ within each of the two areas.
 \examples{
 
 \donttest{
-rpath <- system.file("extdata",package="rtopng")
+rpath <- system.file("extdata",package="utop")
 library(sf)
 observations <- sf::st_read(rpath, "observations")
 gDist <- gDist(observations)

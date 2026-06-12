@@ -16,7 +16,7 @@
 #' model of independent variables, see e.g. \code{\link{createRtopObject}} for
 #' more details.
 #' @param object either: object of class \code{rtop} (see
-#' \link{rtopng-package}), or an rtopVariogramModel.
+#' \link{utop-package}), or an rtopVariogramModel.
 #' @param action character variable defining whether the new parameters should
 #' be \code{add}(-ed), \code{mult}(-iplied) or \code{replace} the former
 #' parameters.  Leaving the parameters equal to NULL will cause no change.
@@ -30,13 +30,13 @@
 #' for manual fitting of the variogram. The automatic call to checkVario makes
 #' it easier to visualize the effect of the changes to the variogram
 #' @author Jon Olav Skoien
-#' @seealso \code{\link{rtopng-package}}
+#' @seealso \code{\link{utop-package}}
 #' @keywords spatial
 #' @examples
 #'
 #' \dontrun{
 #' library(sf)
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' observations <- sf::st_read(rpath,"observations")
 #' # Create a column with the specific runoff:
 #' observations$obs <- observations$QSUMMER_OB/observations$AREASQKM
@@ -214,7 +214,7 @@ updateRtopVariogram.rtopVariogramModel <- function(
 #' @examples
 #'
 #' \donttest{
-#' rpath <- system.file("extdata",package="rtopng")
+#' rpath <- system.file("extdata",package="utop")
 #' library(sf)
 #' observations <- sf::st_read(rpath, "observations")
 #'

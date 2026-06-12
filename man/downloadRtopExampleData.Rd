@@ -4,7 +4,7 @@
 \alias{downloadRtopExampleData}
 \title{Download additional example data}
 \usage{
-downloadRtopExampleData(folder = system.file("extdata", package = "rtopng"))
+downloadRtopExampleData(folder = system.file("extdata", package = "utop"))
 }
 \arguments{
 \item{folder}{the folder to which the downloaded data set will be copied}
@@ -22,7 +22,7 @@ Download additional example data from Vienna University of Technology
 
 \dontrun{
   downloadRtopExampleData()
-  rpath <- system.file("extdata",package="rtopng")
+  rpath <- system.file("extdata",package="utop")
   library(sf)
   observations <- st_read(rpath,"observations")
 }
